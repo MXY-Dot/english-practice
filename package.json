@@ -1,0 +1,13 @@
+{
+  "name": "elementary-practice",
+  "private": true,
+  "type": "module",
+  "description": "Static student/teacher practice site for Elementary English units (GitHub Pages + optional Supabase).",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "validate": "node tools/validate.mjs",
+    "test": "node --test tools/grading.test.mjs",
+    "e2e": "node tools/e2e.mjs",
+    "check": "node --test tools/grading.test.mjs && node tools/validate.mjs"
+  }
+}
