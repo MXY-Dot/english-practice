@@ -10,6 +10,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PORT = 8765;
 const DEBUG_PORT = 9333;
+// BASE_URL=https://… runs the checks against the published site instead of a local server.
+const BASE = process.env.BASE_URL || `http://localhost:${PORT}/`;
 const BROWSERS = [
   process.env.CHROME_PATH,
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -106,11 +108,11 @@ try {
   await send('Emulation.setFocusEmulationEnabled', { enabled: true });
   await resetView();
   // Real (Supabase) mode: the login page loads and offers registration. No account is created.
-  await send('Page.navigate', { url: `http://localhost:${PORT}/` });
+  await send('Page.navigate', { url: BASE });
   await sleep(2500);
   check(await evaluate(`return !!document.querySelector('.login-card') && [...document.querySelectorAll('.seg-btn')].some(b => b.textContent.includes('Регистрация'))`), 'live site connects to Supabase (login page with registration)');
   // Everything below runs in demo mode.
-  await send('Page.navigate', { url: `http://localhost:${PORT}/?demo` });
+  await send('Page.navigate', { url: BASE + '?demo' });
   await sleep(1500);
   await evaluate(HELPERS);
 
