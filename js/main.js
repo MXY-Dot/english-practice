@@ -51,7 +51,6 @@ window.addEventListener('beforeunload', (e) => {
 // ---------- boot & routing ----------
 
 async function boot() {
-  document.title = CONFIG.SITE_TITLE;
   try {
     store = await createStore(CONFIG);
     user = await store.currentUser();

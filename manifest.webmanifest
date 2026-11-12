@@ -1,7 +1,7 @@
 {
   "name": "Elementary Practice",
   "short_name": "English",
-  "description": "Задания по английскому для ученика и учителя",
+  "description": "Задания по английскому для ученика и учителя: 36 уроков, 1800 заданий",
   "lang": "ru",
   "start_url": "./",
   "scope": "./",
@@ -9,8 +9,11 @@
   "orientation": "portrait",
   "background_color": "#f6f3ff",
   "theme_color": "#7c5cff",
+  "categories": ["education"],
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }

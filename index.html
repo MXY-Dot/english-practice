@@ -4,24 +4,81 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f6f3ff">
-  <title>Elementary Practice</title>
-  <meta name="description" content="Задания по юнитам уровня Elementary для ученика и учителя.">
+
+  <!-- SEO -->
+  <title>Elementary Practice — задания по английскому для ученика и учителя</title>
+  <meta name="description" content="1800 интерактивных заданий по английскому уровня Elementary (A1–A2): грамматика, лексика, произношение, аудирование и тексты. 36 уроков, проверка и оценки от учителя онлайн.">
+  <meta name="keywords" content="английский язык, English File Elementary, задания по английскому, грамматика, аудирование, произношение, A1, A2, онлайн-тесты, учитель, ученик">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Elementary Practice">
+  <link rel="canonical" href="https://mxy-dot.github.io/english-practice/">
+
+  <!-- Link previews (Telegram, WhatsApp, Facebook, VK) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Elementary Practice">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:url" content="https://mxy-dot.github.io/english-practice/">
+  <meta property="og:title" content="Elementary Practice — задания по английскому">
+  <meta property="og:description" content="36 уроков, 1800 заданий: грамматика, аудирование, произношение и тексты. Учитель проверяет работы и ставит оценки онлайн.">
+  <meta property="og:image" content="https://mxy-dot.github.io/english-practice/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Elementary Practice — задания по английскому для ученика и учителя">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Elementary Practice — задания по английскому">
+  <meta name="twitter:description" content="36 уроков, 1800 заданий. Учитель проверяет работы и ставит оценки онлайн.">
+  <meta name="twitter:image" content="https://mxy-dot.github.io/english-practice/og-image.png">
+
+  <!-- Icons and app install -->
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <!-- "Add to Home Screen" on iPhone opens the site like an app -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="English">
-  <link rel="apple-touch-icon" href="icon.svg">
+
+  <!-- Structured data for search engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Elementary Practice",
+    "url": "https://mxy-dot.github.io/english-practice/",
+    "image": "https://mxy-dot.github.io/english-practice/og-image.png",
+    "description": "1800 интерактивных заданий по английскому уровня Elementary: грамматика, лексика, произношение, аудирование и тексты. Учитель проверяет работы и ставит оценки онлайн.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any (web browser)",
+    "inLanguage": ["ru", "en"],
+    "educationalLevel": "Elementary (CEFR A1–A2)",
+    "learningResourceType": "Exercise",
+    "audience": { "@type": "EducationalAudience", "educationalRole": ["student", "teacher"] },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="modulepreload" href="js/main.js">
 </head>
 <body>
-  <div id="app"><div class="boot">Загрузка…</div></div>
-  <noscript>Для работы сайта включите JavaScript.</noscript>
+  <div id="app">
+    <!-- Shown until the app starts (and read by search engines that do not run JavaScript). -->
+    <div class="boot">
+      <h1>Elementary Practice</h1>
+      <p>Задания по английскому языку уровня Elementary для ученика и учителя: 36 уроков по 50 заданий —
+        грамматика, лексика, произношение, аудирование, тексты и теория грамматики.
+        Ученик выполняет задания онлайн, учитель проверяет, оставляет комментарии (в том числе голосовые) и ставит оценки.</p>
+      <p>Загрузка…</p>
+    </div>
+  </div>
+  <noscript>
+    <p style="text-align:center;padding:20px;font-family:sans-serif">Для работы сайта включите JavaScript в настройках браузера.</p>
+  </noscript>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
