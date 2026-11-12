@@ -1,5 +1,5 @@
 // Unit 7 — past simple: was / were, regular verbs, go / have / get.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 7,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about where you were yesterday at 8 a.m., 2 p.m. and 9 p.m.', 'At 8 a.m. I was on the bus. At 2 p.m. I was at school. At 9 p.m. I was at home with my family.')]),
         ...sec('writing', [wr('Write about a famous person from your country: who they were, where and when they were born, why they were famous.', 35)]),
+        ...sec('grammar', [
+          gap('Complete with **was** or **were**.', 'Where ___ you last night?', 'were'),
+          tr('Make a question.', 'She was at the cinema.', 'Was she at the cinema?'),
+          fix('They was very famous.', 'They were very famous.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the person.', 'art → ___', 'artist'),
+          gap('Write the person.', 'dance → ___', 'dancer'),
+          gap('Write the person.', 'visit → ___', 'visitor'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has the sound /ɜː/ as in **bird**?', ['were', 'where', 'wear'], 0),
+        ]),
+        ...sec('listening', [
+          lch([['Woman', 'Were you at the match on Saturday?'], ['Man', 'Yes, I was. It was fantastic!']], 'Listen. How was the match?', ['boring', 'fantastic', 'terrible'], 1),
+          lgap('My first teacher was Mrs Green. She was very kind.', 'Listen and complete.', 'His first teacher was Mrs ___. She was very ___.', 'Green', 'kind'),
+        ]),
       ],
       theory: [
         ch('The past of **am** and **is** is…', ['was', 'were', 'been'], 0),
@@ -65,6 +82,7 @@ export default {
           [['The weather was good.', false], ['Her friends were at home.', false], ['The TV was broken.', true], ['She was bored.', true]]),
         rd('Ulugh Beg', "Ulugh Beg was a famous astronomer and a leader. He was born in 1394. He was the grandson of Amir Temur. He built an observatory in Samarkand. His star tables were very accurate and they were famous in Europe too.",
           [['Ulugh Beg was…', ['a painter', 'an astronomer', 'a writer'], 1], ['Who was his grandfather?', ['Amir Temur', 'Babur', 'Navoi'], 0], ['Where was his observatory?', ['in Bukhara', 'in Samarkand', 'in Khiva'], 1]]),
+        rd('Alisher Navoi', "Alisher Navoi was a famous poet and thinker. He was born in Herat in 1441. He was a friend of the ruler Husayn Bayqara. His poems were in the Chagatai language. Today many streets, parks and a theatre in Tashkent have his name.", [['What was Navoi?', ['a painter', 'a poet', 'a scientist'], 1], ['When was he born?', ['1441', '1414', '1541'], 0], ['What has his name today?', ['streets, parks and a theatre', 'only a university', 'nothing'], 0]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about your last weekend. Use 5 regular verbs.', 'Last weekend I stayed at home on Saturday. I cleaned my room and watched a film. On Sunday I visited my aunt and played chess with my cousin.')]),
         ...sec('writing', [wr('Write a diary entry about yesterday. Use regular past simple verbs and time expressions.', 40)]),
+        ...sec('grammar', [
+          gap('Write the past simple.', 'travel → ___ · try → ___', ['travelled', 'traveled'], 'tried'),
+          tr('Make a question.', 'She visited Paris.', 'Did she visit Paris?'),
+          fix("I didn't watched TV yesterday.", "I didn't watch TV yesterday.", 'I did not watch TV yesterday.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'This year is 2026. ___ year was 2025.', 'Last'),
+          gap('Complete.', 'My grandparents got married fifty years ___.', 'ago'),
+          gap('Complete.', 'yesterday ___ (= before lunch yesterday)', 'morning'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which verb ends in /d/?', ['cooked', 'played', 'wanted'], 1),
+        ]),
+        ...sec('listening', [
+          lch('I finished school in 2019 and then I started work.', 'Listen. When did she finish school?', ['2009', '2019', '2016'], 1),
+          lgap('Last summer we stayed in a hotel near the sea.', 'Listen and complete.', 'They ___ in a hotel near the ___.', 'stayed', 'sea'),
+        ]),
       ],
       theory: [
         ch('Regular verbs make the past simple with…', ['-ed', '-ing', '-s'], 0),
@@ -125,6 +160,7 @@ export default {
           [['They moved last winter.', false], ['Dad carried the heavy boxes.', true], ['The brother cleaned the kitchen.', false], ['They finished at midnight.', true]]),
         rd('The first flight', "On 17th December 1903, the Wright brothers, Orville and Wilbur, flew the first plane in North Carolina, USA. The first flight lasted only twelve seconds. Later that day they tried again and the plane stayed in the air for 59 seconds.",
           [['When was the first flight?', ['1903', '1930', '1803'], 0], ['How long was the first flight?', ['12 seconds', '59 seconds', '12 minutes'], 0], ['Where did they fly?', ['in England', 'in the USA', 'in France'], 1]]),
+        tf('Read. True or false?', "Last Saturday I helped my dad in the garden. We started at nine and we worked all morning. We planted some trees and painted the fence. In the afternoon it rained, so we stayed inside and played chess. Dad won!", [['They started at nine.', true], ['They painted the house.', false], ['In the afternoon it rained.', true], ['The writer won the chess game.', false]]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe a great night out: where you went, what you had, how you got home.', 'Last month I went to a concert with my cousins. We had pizza before the concert. We got home at midnight by taxi.')]),
         ...sec('writing', [wr('Write about your last birthday. Use **went, had, got** and other past verbs.', 40)]),
+        ...sec('grammar', [
+          gap('Complete with the past simple.', 'We ___ (get) to the airport at six.', 'got'),
+          tr('Make the sentence negative.', 'I had lunch.', "I didn't have lunch.", 'I did not have lunch.'),
+          fix('Did they had a good time?', 'Did they have a good time?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete with **go, have** or **get**.', '___ a shower', 'have'),
+          gap('Complete with **go, have** or **get**.', '___ out with friends', 'go'),
+          gap('Complete with **go, have** or **get**.', '___ up early', 'get'),
+        ]),
+        ...sec('pronunciation', [
+          st('res-tau-rant', 0),
+        ]),
+        ...sec('listening', [
+          lch([['Man', 'What did you have for dinner?'], ['Woman', 'We had fish and chips.']], 'Listen. What did they have?', ['pizza', 'fish and chips', 'pasta'], 1),
+          lgap('I went to bed at midnight and got up at six.', 'Listen and complete.', 'He went to bed at ___ and got up at ___.', 'midnight', ['six', '6']),
+        ]),
       ],
       theory: [
         ch('Irregular verbs…', ["don't end in -ed in the past", 'always end in -ed'], 0),
@@ -185,6 +238,7 @@ export default {
           [['Dan got up at seven.', false], ['He got the train at six.', false], ['He had three classes.', true], ['He went to the library.', true]]),
         rd('Holiday in Khiva', "Last spring we went to Khiva for three days. We got there by train from Tashkent. We stayed in a small hotel in the old city. We had lunch in a traditional restaurant and we got some beautiful souvenirs. We had a great time!",
           [['How long did they stay?', ['two days', 'three days', 'a week'], 1], ['How did they get to Khiva?', ['by plane', 'by train', 'by car'], 1], ['What did they get?', ['souvenirs', 'a car', 'tickets'], 0]]),
+        cloze('A day out', 'Last Sunday we ___ (go) to the zoo. We ___ (get) there by bus. We ___ (have) a picnic near the lake. We ___ (see) lions and elephants. We ___ (get) home very late.', 'went', 'got', 'had', 'saw', 'got'),
       ],
     },
   ],

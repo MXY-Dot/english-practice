@@ -1,5 +1,5 @@
 // Unit 12 — present perfect, present perfect or past simple, revision of tenses.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 12,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Ask three "Have you ever…?" questions and answer them.', 'Have you ever been to Turkey? Yes, I have. Have you ever eaten Indian food? No, I haven\'t. Have you ever met a famous person? No, never.')]),
         ...sec('writing', [wr('Write about 6 experiences: 3 things you have done and 3 things you have never done.', 40)]),
+        ...sec('grammar', [
+          gap('Complete with the present perfect.', 'We ___ (finish) our homework.', ['have finished', "'ve finished"]),
+          tr('Make the sentence negative.', 'She has seen the sea.', "She hasn't seen the sea.", 'She has not seen the sea.'),
+          fix("I've never went to Moscow.", "I've never been to Moscow.", 'I have never been to Moscow.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the past participle.', 'write → ___ · read → ___', 'written', 'read'),
+          gap('Write the past participle.', 'give → ___ · forget → ___', 'given', 'forgotten'),
+          gap('Write the past participle.', 'sing → ___ · drive → ___', 'sung', 'driven'),
+        ]),
+        ...sec('pronunciation', [
+          st('ex-pe-ri-ence', 1),
+        ]),
+        ...sec('listening', [
+          lch([['Woman', 'Have you ever seen a famous person?'], ['Man', 'Yes, I have. I saw Messi at the airport!']], 'Listen. Who did he see?', ['Ronaldo', 'Messi', 'a singer'], 1),
+          lgap("I've never eaten sushi, but I've tried Korean food.", 'Listen and complete.', 'She has never eaten ___. She has tried ___ food.', 'sushi', 'Korean'),
+        ]),
       ],
       theory: [
         ch('How do we make the present perfect?', ['have/has + past participle', 'had + infinitive', 'have + -ing'], 0),
@@ -65,6 +82,7 @@ export default {
           [['Aziz has lived in three countries.', true], ['He speaks two languages.', false], ['He has driven a car.', false]]),
         rd('Extreme experiences', "We asked people about their most exciting experience. Kate has jumped out of a plane. Omar has climbed Kilimanjaro. Lin has swum with sharks. And Pedro? He has never done anything dangerous, but he has eaten the hottest chilli in the world!",
           [['Who has climbed Kilimanjaro?', ['Kate', 'Omar', 'Lin'], 1], ['Who has swum with sharks?', ['Lin', 'Pedro', 'Kate'], 0], ['What has Pedro done?', ['jumped from a plane', 'eaten a very hot chilli', 'climbed a mountain'], 1]]),
+        tf('Read. True or false?', "My grandfather is 85 and he has had an interesting life. He has worked as a pilot, a teacher and a farmer. He has flown to more than 40 countries. He has never used a smartphone, but he has written three books about his life.", [['He has worked as a pilot.', true], ['He has used a smartphone.', false], ['He has written three books.', true]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about an interesting place you have been to. When did you go? What did you do?', "I've been to Khiva. I went there last spring with my class. We visited the old city and took a lot of photos.")]),
         ...sec('writing', [wr('Write about the most exciting thing you have ever done. Then say when and where it happened (past simple).', 45)]),
+        ...sec('grammar', [
+          gap('Present perfect or past simple? Complete.', "I ___ (lose) my keys! I can't find them.", ['have lost', "'ve lost"]),
+          gap('Present perfect or past simple? Complete.', 'He ___ (go) to Spain in 2019.', 'went'),
+          fix('Have you seen the film last night?', 'Did you see the film last night?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', "Your flight is ___ — it isn't going to leave today. (c _ _ _ _ _ _ _ d)", 'cancelled'),
+          gap('Complete.', 'Your suitcases and bags are your ___. (l _ _ _ _ _ e)', 'luggage'),
+          gap('Complete.', 'At the airport you can buy cheaper things in the ___-free shop. (d _ _ y)', 'duty'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['plane', 'train', 'gate', 'flat'], 3),
+        ]),
+        ...sec('listening', [
+          lch([['Man', 'Have you ever lost your luggage?'], ['Woman', 'Yes, once. In 2020, in Rome.']], 'Listen. When did she lose her luggage?', ['2010', '2020', 'last year'], 1),
+          lgap("We've just landed. We're waiting for our bags.", 'Listen and complete.', "They've just ___. They're waiting for their ___.", 'landed', 'bags'),
+        ]),
       ],
       theory: [
         ch('Present perfect = experience, **no** specific time:', ["I've been to Rome.", 'I went to Rome in 2020.'], 0),
@@ -125,6 +160,7 @@ export default {
           [['Ben has worked as a tour guide for ten years.', true], ['He has visited Uzbekistan many times.', false], ['He went to Uzbekistan last year.', true]]),
         rd('Lost luggage', "Last month I flew from Tashkent to London. When I arrived, my suitcase wasn't there! I've travelled a lot, but this has never happened to me before. The airline found it two days later. It arrived at my hotel — but it was in Paris first!",
           [['Where did the writer fly to?', ['Paris', 'London', 'Tashkent'], 1], ['When did the airline find the suitcase?', ['the same day', 'two days later', 'never'], 1], ['Has this happened to the writer before?', ['Yes, many times.', 'No, never.'], 1]]),
+        cloze('A holiday message', 'Hi Ben! We ___ (arrive) in Istanbul yesterday. We ___ (already / see) the Blue Mosque and we ___ (eat) a lot of great food. Yesterday we ___ (take) a boat on the Bosphorus. I ___ (never / be) to such a beautiful city!', 'arrived', ['have already seen', "'ve already seen"], ['have eaten', "'ve eaten"], 'took', ['have never been', "'ve never been"]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about yourself: what you do every day, what you did last weekend, what you have never done and what you are going to do next summer.', "Every day I go to school. Last weekend I visited my cousins. I've never been abroad. Next summer I'm going to learn to swim.")]),
         ...sec('writing', [wr('Write a short biography of yourself: present, past, experiences and future plans. Use at least 4 different tenses.', 50)]),
+        ...sec('grammar', [
+          gap('Complete with the correct tense.', 'Right now my mum ___ (cook) dinner.', ['is cooking', "'s cooking"]),
+          gap('Complete with the correct tense.', 'Yesterday we ___ (play) football in the rain.', 'played'),
+          fix('I am liking this song.', 'I like this song.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete with a question word.', '"How ___ is this T-shirt?" "Ten dollars."', 'much'),
+          gap('Complete with a question word.', '"___ did you arrive?" "Last night."', 'When'),
+          gap('Complete with a question word.', '"___ are you going to wear to the party?" "My blue dress."', 'What'),
+        ]),
+        ...sec('pronunciation', [
+          st('in-to-na-tion', 2),
+        ]),
+        ...sec('listening', [
+          lch([['Man', 'What are you going to do after the course?'], ['Woman', "I'm going to study at Pre-intermediate level."]], 'Listen. What is she going to do?', ['stop studying', 'continue to Pre-intermediate', 'go on holiday'], 1),
+          lgap("I've lived here for ten years, but I was born in Andijan.", 'Listen and complete.', 'He has lived here for ___ years. He was born in ___.', ['ten', '10'], 'Andijan'),
+        ]),
       ],
       theory: [
         ch('Present simple → …', ['habits and facts (I work)', 'now (I am working)'], 0),
@@ -185,6 +238,7 @@ export default {
           [['Karim works in a hotel.', true], ['He started cooking at 20.', false], ['He is writing a cookbook now.', true], ['He has his own restaurant now.', false]]),
         rd('The end of the course', "Congratulations! You have finished the Elementary course. You have learned a lot of grammar: the present, the past, the present perfect and the future. You can now talk about your life, your plans and your experiences. What are you going to do next? Pre-intermediate, of course!",
           [['What have you finished?', ['the Elementary course', 'a book', 'school'], 0], ['What can you talk about now?', ['your life, plans and experiences', 'only the present', 'nothing'], 0], ['What is the next level?', ['Beginner', 'Pre-intermediate', 'Advanced'], 1]]),
+        rd('My English story', "I started learning English two years ago. At first it was very difficult, but now I can talk about my life. Every day I listen to songs in English. Last month I watched my first film without subtitles! I've never been to an English-speaking country, but next summer I'm going to visit London.", [['When did the writer start learning English?', ['last month', 'two years ago', 'ten years ago'], 1], ['What did they do last month?', ['visit London', 'watch a film without subtitles', 'pass an exam'], 1], ['What are they going to do next summer?', ['visit London', 'start a new course', 'stop studying'], 0]]),
       ],
     },
   ],

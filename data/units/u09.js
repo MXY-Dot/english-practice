@@ -1,5 +1,5 @@
 // Unit 9 — countable / uncountable, quantifiers, comparative adjectives.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 9,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('What did you eat and drink yesterday? Use **a, an, some**.', 'Yesterday I had some eggs and bread for breakfast. For lunch I had a sandwich and an apple. I drank some tea.')]),
         ...sec('writing', [wr('Write about your typical meals: breakfast, lunch and dinner. Use **a / an / some / any**.', 40)]),
+        ...sec('grammar', [
+          gap('Complete with **a, an, some** or **any**.', 'Is there ___ juice in the fridge?', 'any'),
+          gap('Complete with **a, an, some** or **any**.', "I'd like ___ orange and ___ grapes.", 'an', 'some'),
+          fix('I need some informations.', 'I need some information.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'A yellow fruit that monkeys love: ___ (b _ _ _ _ a)', 'banana'),
+          gap('Complete.', 'You make an omelette with ___. (e _ _ s)', 'eggs'),
+          gap('Complete.', 'White food from Asia, important in plov: ___ (r _ _ e)', 'rice'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['cheese', 'beans', 'peas', 'bread'], 3),
+        ]),
+        ...sec('listening', [
+          lch([['Waiter', 'Would you like some dessert?'], ['Woman', "Yes, I'd like some ice cream, please."]], 'Listen. What does she want?', ['cake', 'ice cream', 'fruit'], 1),
+          lgap("There aren't any eggs, but there's some cheese.", 'Listen and complete.', "There aren't any ___, but there's some ___.", 'eggs', 'cheese'),
+        ]),
       ],
       theory: [
         ch('Countable nouns…', ['can be counted (one apple, two apples)', 'have no plural'], 0),
@@ -65,6 +82,7 @@ export default {
           [['There is a chicken salad.', true], ['The apple pie is $8.', false], ['You can have fish today.', false]]),
         rd('Healthy eating', "Doctors say we should eat five portions of fruit and vegetables every day. We should drink a lot of water and not much cola. It's good to eat some fish twice a week. And don't eat a lot of sugar — sweets are bad for your teeth!",
           [['How many portions of fruit and vegetables?', ['three', 'five', 'ten'], 1], ['How often should we eat fish?', ['every day', 'twice a week', 'never'], 1], ['Sweets are bad for your…', ['eyes', 'teeth', 'hair'], 1]]),
+        tf('Read. True or false?', "Plov is the national dish of Uzbekistan. You need rice, meat, carrots, onions and oil. Some people also put in chickpeas or raisins. Men often cook plov in a big pot called a kazan. People eat it at weddings and on Thursdays.", [['You need rice and carrots.', true], ['Plov is cooked in a kazan.', true], ['People never eat plov at weddings.', false]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Answer: How much water / coffee / fruit do you have every day? How many hours do you sleep?', "I drink a lot of water — about two litres. I don't drink much coffee. I eat a lot of fruit. I sleep about eight hours.")]),
         ...sec('writing', [wr('Write a shopping list for a party for 10 people. Use containers: a bottle of, a packet of, two kilos of…', 25)]),
+        ...sec('grammar', [
+          gap('Complete with **much** or **many**.', "There isn't ___ milk left.", 'much'),
+          gap('Complete with **much** or **many**.', 'How ___ people came to the party?', 'many'),
+          tr('Make a question with **How much** or **How many**.', 'tea / you / drink', 'How much tea do you drink?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'a ___ of chocolate (b _ r)', 'bar'),
+          gap('Complete.', 'a ___ of soup (b _ _ l)', 'bowl'),
+          gap('Complete.', 'a ___ of orange juice (g _ _ _ s)', 'glass'),
+        ]),
+        ...sec('pronunciation', [
+          st('cho-co-late', 0),
+        ]),
+        ...sec('listening', [
+          lch([['Shop assistant', 'How many apples would you like?'], ['Customer', 'Six, please.']], 'Listen. How many apples?', ['two', 'six', 'sixteen'], 1),
+          lgap("I don't eat much bread, but I eat a lot of fruit.", 'Listen and complete.', "He doesn't eat much ___. He eats a lot of ___.", 'bread', 'fruit'),
+        ]),
       ],
       theory: [
         ch('We use **How much** with…', ['uncountable nouns (How much water?)', 'plural nouns'], 0),
@@ -125,6 +160,7 @@ export default {
           [['Students eat a lot of bread.', true], ['They eat many vegetables.', false], ['They drink a lot of milk.', false], ['Nobody eats fish every day.', true]]),
         rd('A picnic', "On Sunday we had a picnic in the park. We took two bottles of water, a big bag of apples, a loaf of bread and a jar of jam. We forgot the cheese! There were a lot of people in the park, but not many places in the shade.",
           [['How many bottles of water did they take?', ['one', 'two', 'three'], 1], ['What did they forget?', ['bread', 'jam', 'cheese'], 2], ['There weren\'t many…', ['people', 'places in the shade', 'apples'], 1]]),
+        cloze('Shopping list', "We don't have ___ food at home! We need two ___ (bottle) of water, a ___ of bread and some cheese. How ___ eggs do we need? About ten. And we don't have ___ coffee.", ['much', 'any'], 'bottles', 'loaf', 'many', ['any', 'much']),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Compare yourself with a family member: age, height, hobbies.', "My brother is older than me. I'm taller than him. He's better at football, but I'm better at maths.")]),
         ...sec('writing', [wr('Compare life in a city and life in a village. Use at least 6 comparatives.', 40)]),
+        ...sec('grammar', [
+          gap('Write the comparative.', 'thin → ___ · funny → ___', 'thinner', 'funnier'),
+          gap('Write the comparative.', 'dangerous → ___ ___', 'more', 'dangerous'),
+          fix('Moscow is more cold than Tashkent.', 'Moscow is colder than Tashkent.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the number in figures.', 'two thousand and twenty-six = ___', ['2026', '2,026']),
+          gap('Write the number in figures.', 'five hundred thousand = ___', ['500000', '500,000']),
+          gap('Write the number in words.', '1,000 = one ___', 'thousand'),
+        ]),
+        ...sec('pronunciation', [
+          st('dan-ge-rous', 0),
+        ]),
+        ...sec('listening', [
+          lch('A ticket to Samarkand costs one hundred and fifty thousand som.', 'Listen. How much is the ticket?', ['150,000', '115,000', '50,000'], 0),
+          lgap('My phone is newer than yours, but your camera is better.', 'Listen and complete.', 'His phone is ___. Her camera is ___.', 'newer', 'better'),
+        ]),
       ],
       theory: [
         ch('One-syllable adjectives make the comparative with…', ['-er (cheap → cheaper)', 'more (more cheap)'], 0),
@@ -185,6 +238,7 @@ export default {
           [['A blue whale is longer than three buses.', true], ['It is lighter than an elephant.', false], ['It eats krill.', true]]),
         rd('Train or plane?', "From London to Paris you can take the train or the plane. The plane is faster — only one hour. But the train is more comfortable and it goes from the city centre. The train is usually cheaper too. And it's better for the environment.",
           [['Which is faster?', ['the train', 'the plane'], 1], ['Which is more comfortable?', ['the train', 'the plane'], 0], ['Which is better for the environment?', ['the train', 'the plane'], 0]]),
+        tf('Read. True or false?', "The Moon is smaller than the Earth. It is about 384,000 kilometres from us. The Sun is much bigger and hotter than the Earth. It is about 150 million kilometres away. Light from the Sun takes about eight minutes to arrive.", [['The Moon is bigger than the Earth.', false], ['The Sun is hotter than the Earth.', true], ['Light from the Sun takes about eight minutes.', true]]),
       ],
     },
   ],

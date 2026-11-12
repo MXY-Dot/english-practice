@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Say five things in your bag. Use **a / an** and plurals.', "In my bag there's a phone, an umbrella, two pens, some keys and a notebook.")]),
         ...sec('writing', [wr('Write what is in your bag or on your desk. Use **a / an**, plurals and **this / these**.', 25)]),
+        ...sec('grammar', [
+          gap('Write the plural.', 'one bus → two ___', 'buses'),
+          gap('Write the plural.', 'one child → three ___', 'children'),
+          tr('Make it singular.', 'Those are my keys.', 'That is my key.', "That's my key."),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete the word.', 'You put your things in a ___. (b _ g)', 'bag'),
+          gap('Complete the word.', 'You listen to music with ___. (h _ _ _ p _ _ _ _ s)', 'headphones'),
+          gap('Complete with **a** or **an**.', '___ ID card, ___ laptop', 'an', 'a'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which plural ends in /z/?', ['books', 'pens', 'desks'], 1),
+        ]),
+        ...sec('listening', [
+          lch([['Girl', 'What are these?'], ['Boy', "They're my new sunglasses."]], 'Listen. What are they?', ['glasses', 'sunglasses', 'headphones'], 1),
+          lgap('There are three books and an umbrella on the table.', 'Listen and complete.', '___ books and ___ umbrella', ['three', '3'], 'an'),
+        ]),
       ],
       theory: [
         ch('We use **an** before a word that starts with…', ['a vowel sound (a, e, i, o, u)', 'a consonant sound', 'any letter'], 0),
@@ -65,6 +82,7 @@ export default {
           [['There is a guitar.', true], ['There are some photos.', false], ['The TV is new.', false]]),
         rd('Shopping list', "Dad's list: three apples, an onion, two boxes of tea, a loaf of bread and some potatoes. And don't forget batteries for the clock! Please buy everything at the small shop on Green Street, not at the supermarket.",
           [['How many apples?', ['two', 'three', 'one'], 1], ['What is for the clock?', ['batteries', 'an onion', 'tea'], 0], ['Where must you buy the things?', ['at the supermarket', 'at a small shop', 'at the market'], 1]]),
+        cloze('My desk', "On my desk there's ___ laptop and ___ old lamp. There are three ___ (pen) and two ___ (dictionary). ___ (this, plural) are my favourite things.", 'a', 'an', 'pens', 'dictionaries', 'These'),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe three things you can see now. Use colours and adjectives.', "I can see a big white board, a small red bag and an old brown table.")]),
         ...sec('writing', [wr('Describe your favourite place in your town. Use at least five adjectives.', 30)]),
+        ...sec('grammar', [
+          tr('Rewrite. Put the adjective before the noun.', 'The car is fast.', "It's a fast car.", 'It is a fast car.'),
+          fix('They are expensives shoes.', 'They are expensive shoes.', "They're expensive shoes."),
+          gap('Complete with **very** or **quite**.', "It's 10°C. It's ___ cold. (a bit, not very)", 'quite'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the opposite.', 'right → ___ · strong → ___', 'wrong', 'weak'),
+          gap('Write the opposite.', 'beautiful → ___', 'ugly'),
+          gap('Write the colour.', 'red + white = ___', 'pink'),
+        ]),
+        ...sec('pronunciation', [
+          st('beau-ti-ful', 0),
+        ]),
+        ...sec('listening', [
+          lch("My new phone is very small and it's silver.", 'Listen. What colour is the phone?', ['black', 'silver', 'gold'], 1),
+          lgap('The hotel was very cheap, but the rooms were quite dirty.', 'Listen and complete.', 'The hotel was very ___. The rooms were quite ___.', 'cheap', 'dirty'),
+        ]),
       ],
       theory: [
         ch('Where do adjectives usually go?', ['before a noun (a red car)', 'after a noun (a car red)'], 0),
@@ -125,6 +160,7 @@ export default {
           [['The shop is very big.', false], ['The clothes are cheap.', true], ['It is open on Sunday.', false]]),
         rd('Two cities', "Paris is a very beautiful city, but it's quite expensive. The museums are very interesting. Tashkent is very big and modern. The food there is cheap and very good. In summer it is very hot.",
           [['Paris is…', ['cheap', 'quite expensive', 'small'], 1], ['The food in Tashkent is…', ['expensive', 'cheap and good', 'bad'], 1], ['In summer Tashkent is…', ['cold', 'very hot', 'rainy'], 1]]),
+        rd('Two brothers', "Ali and Ravshan are brothers, but they're very different. Ali is tall and thin. Ravshan is quite short. Ali's car is old and slow, but Ravshan's car is new and very fast. Ali is quiet, but Ravshan is very funny.", [['Who is tall?', ['Ali', 'Ravshan'], 0], ["Ravshan's car is…", ['old and slow', 'new and fast', 'red'], 1], ['Who is very funny?', ['Ali', 'Ravshan'], 1]]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Your friend says "I\'m bored." Give three ideas with **let\'s**.', "Let's go to the cinema. Let's play football. Let's listen to some music.")]),
         ...sec('writing', [wr('Write five rules for your classroom. Use imperatives (+ and −).', 20, "Example: _Listen to the teacher. Don't eat in class._")]),
+        ...sec('grammar', [
+          tr("Make a suggestion with **let's**.", 'We are hungry. (have lunch)', "Let's have lunch."),
+          gap('Complete with a negative imperative.', "___ worry! Everything is OK.", ["Don't", 'Do not']),
+          fix("Let's to go to the park.", "Let's go to the park."),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete the feeling.', "I didn't sleep last night. I'm very ___. (t _ _ _ d)", 'tired'),
+          gap('Complete the feeling.', "I'd like a glass of water. I'm ___. (t _ _ _ _ _ y)", 'thirsty'),
+          gap('Write the opposite.', 'stressed → ___ (calm)', 'relaxed'),
+        ]),
+        ...sec('pronunciation', [
+          st('re-laxed', 1),
+        ]),
+        ...sec('listening', [
+          lch([['Boy', "I'm so bored!"], ['Girl', "Let's play a game!"]], 'Listen. What does the girl suggest?', ['watch TV', 'play a game', 'go to bed'], 1),
+          lgap("Don't touch it — it's very hot!", 'Listen and complete.', "Don't ___ it — it's very ___!", 'touch', 'hot'),
+        ]),
       ],
       theory: [
         ch('How do we make the imperative?', ['the infinitive without to (Open!)', 'to + infinitive (To open!)', 'verb + -ing (Opening!)'], 0),
@@ -185,6 +238,7 @@ export default {
           [['Sign 1: you can touch the paintings.', false], ['Sign 2: phones must be off.', true], ['Sign 3: you can give food to the animals.', false], ['Sign 4: wait in this place.', true]]),
         rd('A bad day', "Today was terrible. I was very tired in the morning and I was late for school. Then I was hungry because I didn't have breakfast. My teacher was angry with me. Now I'm at home and I'm happy — it's Friday!",
           [['In the morning she was…', ['happy', 'tired', 'bored'], 1], ['Why was she hungry?', ['no breakfast', 'no lunch', 'no dinner'], 0], ['How does she feel now?', ['angry', 'sad', 'happy'], 2]]),
+        tf('Read the advice. True or false?', "Feeling stressed? Here are some ideas. Go for a walk in the park. Listen to quiet music. Don't drink coffee in the evening. Turn off your phone for an hour. And talk to a friend — don't keep your problems inside!", [['Drink coffee in the evening.', false], ['Turn off your phone for an hour.', true], ['Talk to a friend.', true]]),
       ],
     },
   ],

@@ -1,6 +1,22 @@
 -- Run this once in Supabase: Dashboard → SQL Editor → New query → paste → Run.
--- Creates profiles (with roles) and submissions, plus row-level security so
--- students only see their own work and only teachers can grade.
+-- It is safe to run again after changes.
+--
+-- Roles:
+--  * Everyone registers on the site with their own e-mail and password.
+--  * A teacher registers with the TEACHER CODE (set it below) and becomes 'teacher'.
+--  * A teacher picks ("claims") students; a teacher sees and grades only their own students.
+--  * Students see only their own work and cannot change grades.
+
+-- ---------- settings: the teacher code ----------
+create table if not exists public.app_settings (
+  key text primary key,
+  value text not null
+);
+alter table public.app_settings enable row level security;  -- no policies: not readable through the API
+
+-- ⚠️ CHANGE 'teacher-2026' to your own secret code, then run the script.
+insert into public.app_settings (key, value) values ('teacher_code', 'teacher-2026')
+  on conflict (key) do update set value = excluded.value;
 
 -- ---------- profiles ----------
 create table if not exists public.profiles (
@@ -9,13 +25,26 @@ create table if not exists public.profiles (
   role text not null default 'student' check (role in ('student', 'teacher')),
   created_at timestamptz not null default now()
 );
+alter table public.profiles add column if not exists teacher_id uuid references public.profiles (id) on delete set null;
+
+-- The sign-up form can check the code before creating the account.
+create or replace function public.check_teacher_code(code text)
+returns boolean language sql security definer stable set search_path = public as $$
+  select exists (select 1 from public.app_settings where key = 'teacher_code' and value = code);
+$$;
+grant execute on function public.check_teacher_code(text) to anon, authenticated;
 
 -- Create a profile automatically when someone registers.
+-- The role is 'teacher' only when the correct teacher code was sent with the sign-up.
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, coalesce(new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)));
+  insert into public.profiles (id, full_name, role)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)),
+    case when public.check_teacher_code(coalesce(new.raw_user_meta_data ->> 'teacher_code', '')) then 'teacher' else 'student' end
+  );
   return new;
 end;
 $$;
@@ -30,13 +59,50 @@ returns boolean language sql security definer stable set search_path = public as
   select exists (select 1 from public.profiles where id = auth.uid() and role = 'teacher');
 $$;
 
+-- True when the student belongs to the current teacher.
+create or replace function public.is_my_student(sid uuid)
+returns boolean language sql security definer stable set search_path = public as $$
+  select exists (select 1 from public.profiles where id = sid and teacher_id = auth.uid());
+$$;
+
+-- The current user's teacher (so a student can see their teacher's name).
+create or replace function public.my_teacher_id()
+returns uuid language sql security definer stable set search_path = public as $$
+  select teacher_id from public.profiles where id = auth.uid();
+$$;
+
 alter table public.profiles enable row level security;
 
 drop policy if exists "profiles: read own or teacher" on public.profiles;
-create policy "profiles: read own or teacher" on public.profiles
-  for select using (id = auth.uid() or public.is_teacher());
--- No insert/update policies: profiles are created by the trigger and roles are
--- changed only from the SQL editor, so a student cannot make themselves a teacher.
+drop policy if exists "profiles: read" on public.profiles;
+create policy "profiles: read" on public.profiles
+  for select using (
+    id = auth.uid()
+    or (public.is_teacher() and role = 'student')   -- teachers see the student list to pick students
+    or id = public.my_teacher_id()                   -- students see their teacher
+  );
+-- No insert/update policies: profiles are created by the trigger and changed only
+-- through the functions below, so a student cannot make themselves a teacher.
+
+-- A teacher adds a student who has no teacher yet.
+create or replace function public.claim_student(sid uuid)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_teacher() then raise exception 'Only teachers can add students'; end if;
+  update public.profiles set teacher_id = auth.uid()
+    where id = sid and role = 'student' and (teacher_id is null or teacher_id = auth.uid());
+  if not found then raise exception 'This student already has a teacher'; end if;
+end;
+$$;
+
+-- A teacher removes one of their students.
+create or replace function public.release_student(sid uuid)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  update public.profiles set teacher_id = null where id = sid and teacher_id = auth.uid();
+end;
+$$;
+grant execute on function public.claim_student(uuid), public.release_student(uuid) to authenticated;
 
 -- ---------- submissions ----------
 create table if not exists public.submissions (
@@ -61,8 +127,9 @@ create index if not exists submissions_status_idx on public.submissions (status)
 alter table public.submissions enable row level security;
 
 drop policy if exists "submissions: read own or teacher" on public.submissions;
-create policy "submissions: read own or teacher" on public.submissions
-  for select using (student_id = auth.uid() or public.is_teacher());
+drop policy if exists "submissions: read" on public.submissions;
+create policy "submissions: read" on public.submissions
+  for select using (student_id = auth.uid() or public.is_my_student(student_id));
 
 drop policy if exists "submissions: student inserts own" on public.submissions;
 create policy "submissions: student inserts own" on public.submissions
@@ -77,17 +144,17 @@ create policy "submissions: student updates own draft" on public.submissions
 
 drop policy if exists "submissions: teacher updates" on public.submissions;
 create policy "submissions: teacher updates" on public.submissions
-  for update using (public.is_teacher()) with check (public.is_teacher());
+  for update using (public.is_my_student(student_id)) with check (public.is_my_student(student_id));
 
 drop policy if exists "submissions: teacher deletes" on public.submissions;
 create policy "submissions: teacher deletes" on public.submissions
-  for delete using (public.is_teacher());
+  for delete using (public.is_my_student(student_id));
 
 -- Students must not be able to write grades or teacher comments.
 create or replace function public.protect_teacher_fields()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  if public.is_teacher() then
+  if public.is_teacher() and public.is_my_student(new.student_id) then
     return new;
   end if;
   if tg_op = 'INSERT' then
@@ -111,8 +178,3 @@ drop trigger if exists submissions_protect on public.submissions;
 create trigger submissions_protect
   before insert or update on public.submissions
   for each row execute function public.protect_teacher_fields();
-
--- ---------- make a teacher ----------
--- After the teacher registers on the site, run (with their e-mail):
--- update public.profiles set role = 'teacher'
---   where id = (select id from auth.users where email = 'teacher@example.com');

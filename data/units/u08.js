@@ -1,5 +1,5 @@
 // Unit 8 — past simple irregular verbs, there is / there are, there was / there were.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 8,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Tell a short story about something that happened to you. Use 5 irregular verbs.', 'Last summer I went to Samarkand with my friends. We saw the Registan, ate plov and took a lot of photos. I bought a present for my mum.')]),
         ...sec('writing', [wr('Write a short story that starts: "It was a cold night. I was alone at home when…" Use irregular verbs.', 45)]),
+        ...sec('grammar', [
+          gap('Write the past simple.', 'begin → ___ · drink → ___', 'began', 'drank'),
+          gap('Write the past simple.', 'give → ___ · know → ___', 'gave', 'knew'),
+          fix('She buyed a new dress.', 'She bought a new dress.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the past simple.', 'sleep → ___', 'slept'),
+          gap('Write the past simple.', 'send → ___', 'sent'),
+          gap('Write the past simple.', 'fly → ___', 'flew'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which past form has a **different** vowel sound?', ['drank', 'began', 'sat', 'wrote'], 3),
+        ]),
+        ...sec('listening', [
+          lch('I left my phone on the bus, but a kind man found it and gave it back to me.', 'Listen. Who found the phone?', ['the bus driver', 'a kind man', 'a police officer'], 1),
+          lgap('We flew to Istanbul and then we drove to the sea.', 'Listen and complete.', 'They ___ to Istanbul and ___ to the sea.', 'flew', 'drove'),
+        ]),
       ],
       theory: [
         ch('Irregular verbs in the past…', ['have their own forms (go → went)', 'end in -ed'], 0),
@@ -65,6 +82,7 @@ export default {
           [['Agatha Christie wrote detective novels.', true], ['She was born in 1980.', false], ['She worked in a school.', false], ['She learned about poisons in a hospital.', true]]),
         rd('A lucky day', "On Monday, Ravshan found 100 dollars in the street. He took it to the police. Two days later a woman called him. It was her money. She was very happy and she gave him a present — a ticket for a football match!",
           [['What did Ravshan find?', ['a wallet', '100 dollars', 'a ticket'], 1], ['Where did he take it?', ['home', 'to the police', 'to the bank'], 1], ['What was the present?', ['money', 'a football ticket', 'a book'], 1]]),
+        rd('The first day', "My first day at work was a disaster. I woke up late and I forgot my bag at home. I took a taxi, but it broke down. I ran to the office and arrived thirty minutes late. My boss wasn't angry — she laughed and said, 'Welcome to the team!'", [['What did she forget?', ['her phone', 'her bag', 'her keys'], 1], ['What happened to the taxi?', ['It broke down.', 'It was late.', 'It went the wrong way.'], 0], ['How did the boss react?', ['She was angry.', 'She laughed.', 'She left.'], 1]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe your house or flat. How many rooms are there? What is in your room?', "I live in a flat on the fifth floor. There are three bedrooms, a kitchen and a living room. In my room there's a bed, a desk and some shelves.")]),
         ...sec('writing', [wr('Write an advert for your dream house. Use **there is / there are / some / any**.', 40)]),
+        ...sec('grammar', [
+          gap('Complete with **is** or **are**.', 'There ___ a lot of people here.', 'are'),
+          tr('Make a question.', 'There are some chairs.', 'Are there any chairs?'),
+          fix('There is some apples in the kitchen.', 'There are some apples in the kitchen.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'You wash the dishes in the ___. (s _ _ k)', 'sink'),
+          gap('Complete.', 'You put books on a ___. (s _ _ _ f)', 'shelf'),
+          gap('Complete.', 'You sleep in a bed in the ___.', 'bedroom'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has the sound /ɔː/ as in **door**?', ['floor', 'flat', 'food'], 0),
+        ]),
+        ...sec('listening', [
+          lch('There are two bathrooms: one upstairs and one downstairs.', 'Listen. How many bathrooms are there?', ['one', 'two', 'three'], 1),
+          lgap("There isn't a dishwasher, but there's a big fridge.", 'Listen and complete.', "There isn't a ___, but there's a big ___.", 'dishwasher', 'fridge'),
+        ]),
       ],
       theory: [
         ch('We use **there is** with…', ['singular nouns (there is a bed)', 'plural nouns'], 0),
@@ -125,6 +160,7 @@ export default {
           [['There is a shower.', false], ['There are four bedrooms.', true], ['There are some flowers in the garden.', false]]),
         rd('A tiny house', "Mark lives in a tiny house. It's only 15 square metres! There's a bed above the kitchen and there's a small bathroom with a shower. There isn't a living room, but there's a sofa that is also a table. Mark says: 'I don't need a big house.'",
           [['How big is the house?', ['15 m²', '50 m²', '150 m²'], 0], ['Where is the bed?', ['in the garden', 'above the kitchen', 'in the living room'], 1], ['Is there a living room?', ['Yes.', 'No.'], 1]]),
+        tf('Read. True or false?', "Our new flat is on the eighth floor. There's a lift, so it's easy to go up. There are three rooms and a big kitchen. There isn't a garden, but there's a balcony with a beautiful view of the city. There aren't any shops near here.", [['There is a lift.', true], ['There is a garden.', false], ['There are some shops near the flat.', false]]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe your first school or your grandparents\' house. Use **there was / there were**.', "There was a big garden with apple trees. There were three rooms and there was a very old TV. There weren't any computers.")]),
         ...sec('writing', [wr('Write a ghost story: "Last night I stayed in an old house…" Use **there was / there were** and prepositions.', 45)]),
+        ...sec('grammar', [
+          gap('Complete with **was** or **were**.', 'There ___ two cats on the roof.', 'were'),
+          tr('Make a question.', 'There were some people in the room.', 'Were there any people in the room?'),
+          fix('There was three bedrooms.', 'There were three bedrooms.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete with a preposition.', 'The picture is ___ the sofa. (higher than it, on the wall)', ['above', 'over']),
+          gap('Complete with a preposition.', 'The dog walked ___ the room and sat down.', 'into'),
+          gap('Complete with a preposition.', 'The train goes ___ a long tunnel. (from one end to the other)', 'through'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['through', 'too', 'blue', 'though'], 3),
+        ]),
+        ...sec('listening', [
+          lch('There was a strange man in front of our house. He was looking at the windows.', 'Listen. Where was the man?', ['behind the house', 'in front of the house', 'in the garden'], 1),
+          lgap('The station is opposite the bank, between the café and the cinema.', 'Listen and complete.', 'The station is ___ the bank, between the café and the ___.', 'opposite', 'cinema'),
+        ]),
       ],
       theory: [
         ch('The past of **there is** is…', ['there was', 'there were', 'there been'], 0),
@@ -185,6 +238,7 @@ export default {
           [['You go across the road.', true], ['The café is on the right.', false], ['The café is between the bank and a bookshop.', true]]),
         rd('Pompeii', "Pompeii was a Roman city in Italy. In 79 AD the volcano Vesuvius erupted. There was a lot of ash and the city disappeared. Today tourists can walk along its streets. There were shops, restaurants and even a theatre. It's like a museum under the sky.",
           [['When did Vesuvius erupt?', ['79 AD', '1979', '790 AD'], 0], ['What was there in Pompeii?', ['shops and a theatre', 'a metro', 'a university'], 0], ['Today Pompeii is like…', ['a city', 'a museum', 'a beach'], 1]]),
+        cloze("Grandma's house", "When I was a child, there ___ a big apple tree ___ (at the back of) my grandmother's house. There ___ a lot of chickens in the garden. ___ (close to) the house there was a small river. We swam ___ it every summer.", 'was', 'behind', 'were', ['Near', 'Next to'], 'in'),
       ],
     },
   ],

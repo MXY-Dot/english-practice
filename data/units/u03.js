@@ -1,5 +1,5 @@
 // Unit 3 — present simple (+, −, ?), word order in questions.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 3,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Say three things you do and three things you don\'t do at the weekend.', "I play football, I visit my grandparents and I watch films. I don't get up early, I don't study and I don't cook.")]),
         ...sec('writing', [wr('Write about a person in your family. What do they do every day? What don\'t they do?', 30)]),
+        ...sec('grammar', [
+          gap('Complete with the verb in brackets.', 'My mum ___ (finish) work at five.', 'finishes'),
+          gap('Complete with the verb in brackets.', 'She ___ (have) two cats.', 'has'),
+          tr('Make the sentence negative.', 'They live in London.', "They don't live in London.", 'They do not live in London.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete with a verb.', 'I ___ my homework in the evening. (d o)', 'do'),
+          gap('Complete with a verb.', 'She ___ the guitar very well. (p _ _ _ s)', 'plays'),
+          gap('Complete with a verb.', 'We ___ a lot of water in summer. (d _ _ _ k)', 'drink'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which verb ends in /ɪz/?', ['cooks', 'washes', 'reads'], 1),
+        ]),
+        ...sec('listening', [
+          lch('My brother works in a hospital. He is a nurse.', 'Listen. Where does his brother work?', ['in a school', 'in a hospital', 'in a bank'], 1),
+          lgap("I don't eat meat. I eat fish and vegetables.", 'Listen and complete.', "She doesn't eat ___. She eats fish and ___.", 'meat', 'vegetables'),
+        ]),
       ],
       theory: [
         ch('In the present simple, we add **-s** to the verb with…', ['he, she, it', 'I, you, we, they', 'all subjects'], 0),
@@ -65,6 +82,7 @@ export default {
           [['They live in a big house.', false], ['Lucy studies art.', true], ['They have a car.', false], ['Lucy works on Saturdays.', true]]),
         rd('A cat\'s life', "My cat, Mimi, has an easy life. She sleeps for about sixteen hours a day. She doesn't like rain, so she stays inside in winter. She eats twice a day, at seven in the morning and six in the evening. She loves fish but she doesn't drink milk.",
           [['How many hours does Mimi sleep?', ['six', 'sixteen', 'sixty'], 1], ['When does she eat?', ['once a day', 'twice a day', 'all day'], 1], ["What doesn't she drink?", ['water', 'milk', 'juice'], 1]]),
+        tf('Read. True or false?', "My grandparents live in a village near Fergana. My grandfather gets up very early and works in the garden. My grandmother makes bread every morning. They don't have a computer, but they have a big TV. They watch the news every evening.", [['They live in a city.', false], ['Grandmother makes bread every morning.', true], ["They don't have a computer.", true], ['They never watch TV.', false]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Ask and answer about a job: Where do you work? What do you do? Do you like it?', "Where do you work? I work in a hospital. What do you do? I'm a nurse. Do you like it? Yes, I do.")]),
         ...sec('writing', [wr('Write about the job of a person you know. Where do they work? What do they do? Do they like it?', 30)]),
+        ...sec('grammar', [
+          tr('Make a question.', 'She speaks Chinese.', 'Does she speak Chinese?'),
+          gap('Complete with **do** or **does**.', 'What time ___ the bank open?', 'does'),
+          fix('Do he like his job?', 'Does he like his job?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the job.', "She designs buildings. She's an ___. (a _ _ _ _ _ _ _ t)", 'architect'),
+          gap('Write the job.', "He helps people with legal problems. He's a ___.", 'lawyer'),
+          gap('Write the job.', "She works on a farm. She's a ___.", 'farmer'),
+        ]),
+        ...sec('pronunciation', [
+          st('law-yer', 0),
+        ]),
+        ...sec('listening', [
+          lch([['Woman', 'Does your father work at night?'], ['Boy', "Yes, he does. He's a security guard."]], "Listen. What is the father's job?", ['a doctor', 'a security guard', 'a driver'], 1),
+          lgap('Do you work in an office? No, I work from home.', 'Listen and complete.', 'He works from ___.', 'home'),
+        ]),
       ],
       theory: [
         ch('Questions with I / you / we / they start with…', ['Do', 'Does', 'Are'], 0),
@@ -125,6 +160,7 @@ export default {
           [['The restaurant is Chinese.', false], ['You work in the evening.', true], ['You work on Monday.', false], ['You need to speak English.', true]]),
         rd('Unusual jobs', "Jack is a dog walker. He walks ten dogs every morning in the park. He doesn't work in an office and he doesn't have a boss. Sara is a game tester. She plays new video games all day and finds problems. She works at home.",
           [['How many dogs does Jack walk?', ['two', 'ten', 'twelve'], 1], ['Does Jack have a boss?', ['Yes, he does.', "No, he doesn't."], 1], ['Where does Sara work?', ['in an office', 'at home', 'in a park'], 1]]),
+        cloze('A strange job', 'My aunt has a strange job. She ___ (taste) ice cream for a big company! She ___ (work) from nine to four. ___ she eat a lot of ice cream? Yes, she ___! But she ___ (not / get) fat — she goes running every day.', 'tastes', 'works', 'Does', 'does', ["doesn't get", 'does not get']),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Ask your partner five questions about free time. Record the questions.', 'What do you do at the weekend? Do you like sport? What kind of films do you like? Where do you go with friends? Who is your favourite actor?')]),
         ...sec('writing', [wr('Write 6 questions to interview a famous person you like.', 25, 'Example: _Where do you live? Why do you like music?_')]),
+        ...sec('grammar', [
+          fix('How many brothers you have?', 'How many brothers do you have?'),
+          tr('Write the question for the answer.', 'My favourite colour is blue. → What…?', "What's your favourite colour?", 'What is your favourite colour?'),
+          ord('your Where from is teacher', 'Where is your teacher from?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete with a question word.', '"___ bag is this?" "It\'s Anna\'s."', 'Whose'),
+          gap('Complete with a question word.', '"___ do you live with?" "My parents."', 'Who'),
+          gap('Complete with a question word.', '"___ is the bus? It\'s late!"', 'Where'),
+        ]),
+        ...sec('pronunciation', [
+          ch('Which word starts with the sound /h/?', ['who', 'what', 'where'], 0),
+        ]),
+        ...sec('listening', [
+          lch('When is your English lesson? On Wednesday at four.', 'Listen. When is the lesson?', ['Wednesday at 4', 'Tuesday at 4', 'Wednesday at 2'], 0),
+          lgap('Who is your favourite actor? I love Tom Hanks.', 'Listen and complete.', 'Her favourite actor is Tom ___.', 'Hanks'),
+        ]),
       ],
       theory: [
         ch('In questions with **be**, the order is…', ['be + subject (Are you…?)', 'subject + be (You are…?)'], 0),
@@ -185,6 +238,7 @@ export default {
           [['Emma works at night.', true], ['She has two dogs.', false], ['She loves cooking.', true], ['Her favourite day is Saturday.', false]]),
         rd('A survey', "We asked 100 students: What do you do after school? 45 students do homework first. 30 students play sport. 15 students watch TV or play video games. And 10 students work in a shop or a café.",
           [['How many students play sport?', ['45', '30', '15'], 1], ['What do most students do first?', ['homework', 'sport', 'video games'], 0], ['How many students work?', ['10', '15', '30'], 0]]),
+        rd('An interview', "Our teacher asked us to interview a classmate. I interviewed Sevara. She lives near the school, so she walks there. She has two brothers. Her favourite subject is biology because she wants to be a doctor. At the weekend she plays volleyball.", [['How does Sevara go to school?', ['by bus', 'on foot', 'by car'], 1], ['Why does she like biology?', ['She wants to be a doctor.', 'It is easy.', 'Her teacher is nice.'], 0], ['What does she do at the weekend?', ['plays volleyball', 'studies', 'sleeps'], 0]]),
       ],
     },
   ],

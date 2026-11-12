@@ -1,5 +1,5 @@
 // Unit 6 — object pronouns, like / love / hate + -ing, be or do.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 6,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about three people you often call or text. Use object pronouns.', 'I call my mum every day. I text my best friend Aziz — I send him funny photos. I call my grandparents on Sundays; I love them.')]),
         ...sec('writing', [wr('Write a short phone conversation: you call a friend, but their mum answers. Leave a message.', 35)]),
+        ...sec('grammar', [
+          gap('Complete with an object pronoun.', 'My parents are great. I love ___.', 'them'),
+          tr('Replace the words in **bold** with a pronoun.', 'Call **your sister** tonight.', 'Call her tonight.'),
+          fix('Tell he the answer.', 'Tell him the answer.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'Sorry, wrong ___! (= you called the wrong person)', 'number'),
+          gap('Complete.', "Please ___ the phone — it's ringing! (a _ _ _ _ r)", 'answer'),
+          gap('Complete.', 'Can I ___ a message for him?', 'leave'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['us', 'but', 'much', 'you'], 3),
+        ]),
+        ...sec('listening', [
+          lch([['Woman', 'Is this Tom?'], ['Man', "No, it isn't. Sorry, wrong number."]], 'Listen. What is the problem?', ['wrong number', 'dead battery', 'no signal'], 0),
+          lgap('Can you send me the photos? I want to show them to my mum.', 'Listen and complete.', 'She wants to show ___ to her ___.', 'them', 'mum'),
+        ]),
       ],
       theory: [
         ch('Object pronouns go…', ['after a verb or a preposition', 'before the verb', 'at the start of a sentence'], 0),
@@ -65,6 +82,7 @@ export default {
           [['Ben has two tickets.', true], ['The tickets are for a film.', false], ['They are meeting at the station.', true]]),
         rd('Phone manners', "Here are some rules for good phone manners. Don't use your phone at dinner. Turn it off in the cinema. Don't talk loudly on the bus — people can hear you! And when your friends talk to you, look at them, not at your phone.",
           [['Where should you turn off your phone?', ['at home', 'in the cinema', 'in the street'], 1], ["Why shouldn't you talk loudly on the bus?", ['It is expensive.', 'People can hear you.', 'It is dangerous.'], 1], ['When friends talk to you, look at…', ['your phone', 'them', 'the TV'], 1]]),
+        rd('Grandma and her phone', "My grandma has a new smartphone. She loves it! She calls me every day and sends me funny photos of her cat. Sometimes she calls me at 6 a.m. — I don't answer then! Last week she sent a message to the wrong person: she wrote 'I love you' to her doctor!", [['How often does grandma call?', ['every day', 'once a week', 'never'], 0], ['What photos does she send?', ['of her garden', 'of her cat', 'of food'], 1], ['Who got the wrong message?', ['her doctor', 'her son', 'her friend'], 0]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about three things you love doing and two things you hate doing.', 'I love reading, playing chess and going to the cinema. I hate getting up early and I hate doing the washing-up.')]),
         ...sec('writing', [wr('Write the birthdays of 4 people in your family. Then write what each person loves doing.', 35)]),
+        ...sec('grammar', [
+          gap('Complete with the -ing form.', 'He loves ___ (cook) for his family.', 'cooking'),
+          tr('Make a question.', 'You like dancing.', 'Do you like dancing?'),
+          fix("I don't mind to wait.", "I don't mind waiting.", 'I do not mind waiting.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the ordinal number.', '9th = ___', 'ninth'),
+          gap('Write the ordinal number.', '22nd = twenty-___', 'second'),
+          gap('Write the month.', 'the 12th month = ___', 'December'),
+        ]),
+        ...sec('pronunciation', [
+          st('Sep-tem-ber', 1),
+        ]),
+        ...sec('listening', [
+          lch('Our wedding anniversary is on the eighteenth of May.', 'Listen. What date is it?', ['8th May', '18th May', '18th March'], 1),
+          lgap('I love playing tennis, but I hate watching it on TV.', 'Listen and complete.', 'He loves ___ tennis. He hates ___ it.', 'playing', 'watching'),
+        ]),
       ],
       theory: [
         ch('After **like, love, hate, don\'t mind** we usually use…', ['verb + -ing', 'the infinitive without to', 'verb + -s'], 0),
@@ -125,6 +160,7 @@ export default {
           [['Most teenagers love meeting friends.', true], ['40% hate doing housework.', false], ['Only 10% like getting up early.', true]]),
         rd('Important dates', "In the UK, people celebrate New Year on the first of January. Valentine's Day is on the fourteenth of February. In Uzbekistan, Navruz is on the twenty-first of March and Independence Day is on the first of September.",
           [["When is Valentine's Day?", ['14th February', '4th February', '14th March'], 0], ['When is Navruz?', ['1st March', '21st March', '21st May'], 1], ['Independence Day in Uzbekistan is on…', ['1st September', '1st August', '11th September'], 0]]),
+        tf('Read. True or false?', "My family's birthdays: my dad's birthday is on the 3rd of January — he hates having parties. My mum's is on the 14th of July; she loves dancing, so we always go dancing. My birthday is on the 30th of October. I love eating cake!", [["Dad's birthday is in January.", true], ['Dad loves parties.', false], ["Mum's birthday is on the 14th of July.", true], ['The writer was born in November.', false]]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about your favourite singer or band. Where are they from? What kind of music do they play?', "My favourite singer is Sevara Nazarkhan. She's from Uzbekistan. She sings folk and pop music. I love her voice.")]),
         ...sec('writing', [wr('Write a music questionnaire: 6 questions with **be** and **do**. Then answer them.', 35)]),
+        ...sec('grammar', [
+          gap('Complete with **am / is / are / do / does**.', '___ your parents like pop music?', 'Do'),
+          gap('Complete with **am / is / are / do / does**.', 'What ___ your favourite song?', 'is'),
+          fix("She don't play the piano.", "She doesn't play the piano.", 'She does not play the piano.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'A person who plays the guitar is a ___.', 'guitarist'),
+          gap('Complete.', 'A person who writes music is a ___. (c _ _ _ _ _ _ r)', 'composer'),
+          gap('Complete.', 'You can listen to music on the ___ in the car. (r _ _ _ o)', 'radio'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['song', 'rock', 'pop', 'show'], 3),
+        ]),
+        ...sec('listening', [
+          lch([['Man', 'Is the concert on Saturday?'], ['Woman', "No, it isn't. It's on Sunday."]], 'Listen. When is the concert?', ['Saturday', 'Sunday', 'Friday'], 1),
+          lgap("I don't sing, but I play the drums in a rock band.", 'Listen and complete.', 'He plays the ___ in a ___ band.', 'drums', 'rock'),
+        ]),
       ],
       theory: [
         ch('We use **be** (am/is/are) with…', ['adjectives, nouns, places (I\'m tired / She\'s a singer)', 'other verbs (I am like)'], 0),
@@ -185,6 +238,7 @@ export default {
           [['The concert is on Saturday.', false], ['Student tickets are cheaper.', true], ['The band plays rock music.', false]]),
         rd('Music and studying', "Do you listen to music when you study? Some scientists say classical music helps you concentrate. But music with words can be bad — your brain listens to the lyrics, not your book! So, if you study with music, choose something quiet without lyrics.",
           [['Classical music can help you…', ['sleep', 'concentrate', 'sing'], 1], ['Why is music with words bad?', ['It is loud.', 'Your brain listens to the lyrics.', 'It is boring.'], 1], ['The text says choose music…', ['with lyrics', 'without lyrics', 'very loud'], 1]]),
+        cloze('My favourite singer', 'My favourite singer ___ Dua Lipa. She ___ from London, but her parents ___ from Kosovo. She ___ (sing) pop music. ___ you like her songs? I listen to them every day!', 'is', 'is', 'are', 'sings', 'Do'),
       ],
     },
   ],

@@ -1,5 +1,5 @@
 // Unit 11 — adverbs, verbs + to + infinitive, articles.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 11,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe how people in your family do things. Use adverbs.', 'My dad drives carefully. My mum cooks really well. My little sister speaks very loudly and eats very slowly.')]),
         ...sec('writing', [wr('Describe a person you know who does something very well. Use at least 5 adverbs.', 35)]),
+        ...sec('grammar', [
+          gap('Write the adverb.', 'bad → ___ · quiet → ___', 'badly', 'quietly'),
+          gap('Complete with an adverb from the adjective.', 'She is a careful driver. She drives ___.', 'carefully'),
+          fix('He speaks very slow.', 'He speaks very slowly.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the opposite adverb.', 'loudly → ___', 'quietly'),
+          gap('Complete.', 'He got up ___ (not on time) and missed the bus.', 'late'),
+          gap('Complete.', 'She smiled ___ (in a happy way).', 'happily'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['slowly', 'go', 'road', 'loud'], 3),
+        ]),
+        ...sec('listening', [
+          lch('Please drive slowly. There are children near the school.', 'Listen. Why should you drive slowly?', ['It is raining.', 'There are children.', 'The road is bad.'], 1),
+          lgap('She sings beautifully and plays the piano well.', 'Listen and complete.', 'She sings ___ and plays the piano ___.', 'beautifully', 'well'),
+        ]),
       ],
       theory: [
         ch('Adverbs of manner describe…', ['how we do something (verb)', 'a person or a thing (noun)'], 0),
@@ -65,6 +82,7 @@ export default {
           [['The hare ran slowly.', false], ['The tortoise walked slowly.', true], ['The hare won the race.', false]]),
         rd('A polite tourist', "When you visit a new country, behave politely. Speak quietly in museums and on public transport. Dress appropriately when you visit a mosque or a church. Learn a few words in the local language — people will smile happily when you say 'thank you' in their language!",
           [['How should you speak on public transport?', ['loudly', 'quietly', 'quickly'], 1], ['Where should you dress appropriately?', ['at the beach', 'in a mosque or church', 'at a party'], 1], ['Why learn some local words?', ['People smile happily.', 'It is required.', 'For the exam.'], 0]]),
+        tf('Read. True or false?', "My cousin Jamshid is a good student. He studies hard and always does his homework carefully. He speaks English fluently because he watches films in English. But he plays football badly — he always falls over!", [['Jamshid studies hard.', true], ['He speaks English badly.', false], ['He plays football very well.', false]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about your dreams: what do you want to do, hope to do and need to do?', 'I want to become a programmer. I hope to study abroad. I need to improve my English and I need to study maths.')]),
         ...sec('writing', [wr('Write about your dreams for the future. Use **want to, would like to, hope to, plan to, need to**.', 45)]),
+        ...sec('grammar', [
+          gap('Complete with **to** + verb.', 'They promised ___ (help) us.', 'to help'),
+          tr('Make a question.', 'You want to come.', 'Do you want to come?'),
+          fix('I decided learn Japanese.', 'I decided to learn Japanese.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'I ___ to finish this project by Friday. (= it is necessary) (n _ _ d)', 'need'),
+          gap('Complete.', 'She ___ to be a vet one day. (h _ _ e s)', 'hopes'),
+          gap('Complete.', "Don't ___ to lock the door! (f _ _ _ _ t)", 'forget'),
+        ]),
+        ...sec('pronunciation', [
+          st('pro-mise', 0),
+        ]),
+        ...sec('listening', [
+          lch([['Boy', 'What do you want to do this weekend?'], ['Girl', "I'd like to go to the mountains."]], 'Listen. Where would she like to go?', ['to the sea', 'to the mountains', 'to the city'], 1),
+          lgap("I'm trying to learn twenty new words every day.", 'Listen and complete.', 'He is trying to learn ___ new words every ___.', ['twenty', '20'], 'day'),
+        ]),
       ],
       theory: [
         ch('After **want, need, hope, decide, would like** we use…', ['to + infinitive', 'verb + -ing', 'infinitive without to'], 0),
@@ -125,6 +160,7 @@ export default {
           [['The writer learned to swim as a child.', false], ['She practised twice a week.', true], ['She is planning to learn to dive.', true]]),
         rd('Bucket list', "A bucket list is a list of things you want to do before you die. Here's my list: I want to see the Northern Lights. I'd like to learn to speak Chinese. I hope to run a marathon. And I'd love to visit every continent!",
           [['What is a bucket list?', ['a shopping list', 'things you want to do in life', 'a list of friends'], 1], ['What language does the writer want to learn?', ['Spanish', 'Chinese', 'Japanese'], 1], ['What does the writer hope to run?', ['a marathon', 'a company', 'a shop'], 0]]),
+        cloze('Plans for the summer', "This summer I want ___ (get) a job in a café. I need ___ (save) money because I'd like ___ (buy) a laptop. I also hope ___ (visit) my cousins in Kazakhstan. And I promised my mum ___ (help) at home!", 'to get', 'to save', 'to buy', 'to visit', 'to help'),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('How do you use the internet? What do you do online and how often?', 'I use the internet every day. I usually watch videos and chat with my friends. I sometimes do my homework online.')]),
         ...sec('writing', [wr('Write about the good and bad things about the internet for teenagers.', 45)]),
+        ...sec('grammar', [
+          gap('Complete with **a, an** or **the**.', 'I watched ___ interesting video. ___ video was about cats.', 'an', 'The'),
+          gap('Complete with **a, an, the** or **—** (write — for no article).', 'She goes to ___ school by bus.', ['—', '-', 'no article']),
+          fix('The children love the ice cream.', 'Children love ice cream.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'You ___ in to your account with a password. (l _ g)', 'log'),
+          gap('Complete.', 'A person who writes online about their life writes a ___. (b _ _ g)', 'blog'),
+          gap('Complete.', 'You ___ on a link to open a page. (c _ _ _ k)', 'click'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['click', 'link', 'like', 'ink'], 2),
+        ]),
+        ...sec('listening', [
+          lch('I usually watch videos online, but I hardly ever post anything.', 'Listen. What does she hardly ever do?', ['watch videos', 'post things', 'chat'], 1),
+          lgap('Can you send me the link to the website?', 'Listen and complete.', 'Send me the ___ to the ___.', 'link', 'website'),
+        ]),
       ],
       theory: [
         ch('We use **a / an** when we mention something…', ['for the first time', 'for the second time'], 0),
@@ -185,6 +238,7 @@ export default {
           [['You can share your password with friends.', false], ['Photos online can stay forever.', true], ['Talk to an adult if you are worried.', true]]),
         rd('Online learning', "Today millions of people learn languages online. There are apps, videos and websites. The best thing is that you can study at home, at any time. The problem? You need to be very organised. Many people start an online course, but only a few finish it.",
           [['Where can you study online?', ['only at school', 'at home', 'only in a library'], 1], ['What do you need to be?', ['rich', 'very organised', 'young'], 1], ['How many people finish online courses?', ['everybody', 'most', 'only a few'], 2]]),
+        rd('The first website', "The first website appeared in 1991. A British scientist, Tim Berners-Lee, created it. The website explained what the World Wide Web was. Today there are more than a billion websites, and the internet is a part of our everyday life.", [['When did the first website appear?', ['1981', '1991', '2001'], 1], ['Who created it?', ['an American student', 'a British scientist', 'a company'], 1], ['How many websites are there today?', ['about a million', 'more than a billion', 'ten thousand'], 1]]),
       ],
     },
   ],

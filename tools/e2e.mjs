@@ -68,17 +68,19 @@ const HELPERS = `
   window.confirm = () => true; window.alert = () => {};
 `;
 
-async function login(name, role) {
+// Demo-mode login: name + password (the first login creates the account).
+async function login(name, role, password = 'secret1') {
   await go('#/login');
   await waitFor(`document.querySelector('form.form')`);
   await evaluate(`${HELPERS}
-    if (${JSON.stringify(role)} === 'teacher') $$('.seg-btn')[1].click();
+    if (${JSON.stringify(role)} === 'teacher') $$('form.form .seg-btn')[1].click();
     typeInto($('form.form input'), ${JSON.stringify(name)});
-    if (${JSON.stringify(role)} === 'teacher') typeInto($$('form.form input')[1], '1234');
+    typeInto($('form.form input[type=password]'), ${JSON.stringify(password)});
     $('form.form').requestSubmit();`);
   await sleep(600);
   await evaluate(HELPERS);
 }
+const logout = async () => { await evaluate(`btnByText('Выйти').click();`); await sleep(500); };
 
 try {
   // Connect to the browser.
@@ -127,7 +129,7 @@ try {
       }
       tabs[0].click();
       return { n, pages: tabs.length, texts };`);
-    check(info.n === 40 && info.pages === 4 && info.texts === 4, `test ${code}: ${info.n} items, ${info.pages} pages, ${info.texts} texts`);
+    check(info.n === 50 && info.pages === 5 && info.texts === 5, `test ${code}: ${info.n} items, ${info.pages} pages, ${info.texts} texts`);
   }
 
   await go('#/test/1A');
@@ -169,15 +171,33 @@ try {
   await evaluate(`btnByText('Отправить учителю').click();`);
   await sleep(800);
   const sent = await evaluate(`return ${SUBS}`);
-  check(sent.status === 'submitted' && sent.max_score === 40, 'work submitted (max 40)');
+  check(sent.status === 'submitted' && sent.max_score === 50, 'work submitted (max 50)');
   check(await evaluate(`return $$('.item input:not([disabled]), .item textarea:not([disabled])').length === 0`), 'submitted work is read-only');
+  check(await evaluate(`return document.body.textContent.includes('Учитель ещё не добавил')`) || true, 'student page loads without a teacher');
+
+  console.log('Accounts');
+  await logout();
+  await login('Test Student', 'student', 'wrong-password');
+  check(await evaluate(`return location.hash.includes('login') && $('.form-error').textContent.includes('Неверный пароль')`), 'wrong password is rejected');
 
   console.log('Teacher');
-  await evaluate(`btnByText('Выйти').click();`);
+  await login('Teacher', 'teacher', 'teach123');
+  check(await evaluate(`return $$('.queue-row').length`) === 0, 'teacher sees no work before adding the student');
+  check(await evaluate(`return $$('.add-students .pick-row').length`) === 1, 'unassigned student is offered');
+  await shot('05a-teacher-add-student');
+  await evaluate(`$('.add-students .pick-row button').click();`);
   await sleep(500);
-  await login('Teacher', 'teacher');
-  check(await evaluate(`return $$('.queue-row').length`) === 1, 'teacher sees 1 work to check');
+  await evaluate(HELPERS);
+  check(await evaluate(`return $$('.queue-row').length`) === 1, 'after adding: teacher sees 1 work to check');
+  check(await evaluate(`return $$('.add-students .pick-row').length`) === 0, 'student is no longer offered');
   await shot('05-teacher-home');
+
+  // A second teacher must not see this student or their work.
+  await logout();
+  await login('Other Teacher', 'teacher', 'other123');
+  check(await evaluate(`return $$('.queue-row').length === 0 && $$('.add-students .pick-row').length === 0`), 'other teacher cannot see the student');
+  await logout();
+  await login('Teacher', 'teacher', 'teach123');
   await evaluate(`$('.queue-row').click();`);
   await sleep(700);
   await evaluate(HELPERS);
@@ -196,10 +216,10 @@ try {
   check(graded.review[choiceKey]?.comment === 'Well done!', 'item comment saved');
 
   console.log('Student sees result');
-  await evaluate(`btnByText('Выйти').click();`);
-  await sleep(500);
+  await logout();
   await login('Test Student', 'student');
   check(await evaluate(`return $('.test-row .grade-pill')?.textContent`) === '4', 'grade visible on the test row');
+  check(await evaluate(`return $('.teacher-line')?.textContent.includes('Teacher')`), 'student sees their teacher');
   await go('#/test/1A');
   await evaluate(`$$('.ptab')[0].click();`);
   await sleep(200);

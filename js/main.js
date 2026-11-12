@@ -1,7 +1,7 @@
 import { CONFIG } from './config.js';
 import { createStore } from './store.js';
 import { UNITS } from '../data/units/index.js';
-import { buildTest, allTests, PAGE_SIZE } from './content.js';
+import { buildTest, allTests, PAGE_SIZE, TEST_SIZE } from './content.js';
 import { h, clear, toast, fmtDate, debounce } from './ui.js';
 import { renderItem } from './tasks.js';
 import { scoreUnit, suggestGrade, isAnswered } from './grading.js';
@@ -12,6 +12,7 @@ startThemeClock();
 
 const app = document.getElementById('app');
 const TESTS = allTests(UNITS);
+const TEST_LEN = TEST_SIZE.practice + TEST_SIZE.theory + TEST_SIZE.texts;
 const testByCode = (code) => TESTS.find((t) => t.code === code);
 let store;
 let user = null;
@@ -104,35 +105,51 @@ function loginView() {
   const done = (u) => { user = u; go('/'); };
   let body;
 
+  // Role switch shared by both modes.
+  let role = 'student';
+  const roleTabs = h('div', { class: 'seg wide' });
+  const roleBtn = (r, label) => h('button', { type: 'button', class: 'seg-btn' + (r === role ? ' active' : ''), 'data-r': r, onclick: () => setRole(r) }, label);
+  roleTabs.append(roleBtn('student', '🎒 Я ученик'), roleBtn('teacher', '🧑‍🏫 Я учитель'));
+  let onRole = () => {};
+  function setRole(r) {
+    role = r;
+    roleTabs.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.r === r));
+    onRole();
+  }
+
   if (store.mode === 'local') {
-    let role = 'student';
-    const name = h('input', { class: 'inp', placeholder: 'Имя и фамилия', autocomplete: 'name' });
-    const pin = h('input', { class: 'inp', placeholder: 'PIN учителя', type: 'password', style: { display: 'none' } });
-    const tabs = h('div', { class: 'seg wide' });
-    const setRole = (r) => {
-      role = r;
-      tabs.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.r === r));
-      pin.style.display = r === 'teacher' ? '' : 'none';
-    };
-    tabs.append(
-      h('button', { type: 'button', class: 'seg-btn active', 'data-r': 'student', onclick: () => setRole('student') }, '🎒 Я ученик'),
-      h('button', { type: 'button', class: 'seg-btn', 'data-r': 'teacher', onclick: () => setRole('teacher') }, '🧑‍🏫 Я учитель'));
-    body = h('form', { class: 'form', onsubmit: (e) => { e.preventDefault(); store.localLogin(name.value, role, pin.value).then(done, fail); } },
-      tabs, name, pin, err, h('button', { class: 'btn primary', type: 'submit' }, 'Войти'),
-      h('p', { class: 'muted small' }, `Демо-режим. PIN учителя по умолчанию: ${CONFIG.LOCAL_TEACHER_PIN} (меняется в js/config.js).`));
+    const name = h('input', { class: 'inp', placeholder: 'Имя и фамилия', autocomplete: 'username' });
+    const pass = h('input', { class: 'inp', placeholder: 'Пароль (придумайте при первом входе)', type: 'password', autocomplete: 'current-password' });
+    body = h('form', { class: 'form', onsubmit: (e) => { e.preventDefault(); store.localLogin(name.value, role, pass.value).then(done, fail); } },
+      roleTabs, name, pass, err, h('button', { class: 'btn primary', type: 'submit' }, 'Войти'),
+      h('p', { class: 'muted small' }, 'Демо-режим. При первом входе аккаунт создаётся с этим паролем; потом входите с тем же паролем.'));
   } else {
     let mode = 'in';
     const name = h('input', { class: 'inp', placeholder: 'Имя и фамилия', autocomplete: 'name', style: { display: 'none' } });
     const email = h('input', { class: 'inp', placeholder: 'E-mail', type: 'email', autocomplete: 'email', required: true });
     const pass = h('input', { class: 'inp', placeholder: 'Пароль (минимум 6 символов)', type: 'password', autocomplete: 'current-password', required: true, minLength: 6 });
+    const code = h('input', { class: 'inp', placeholder: 'Код учителя', type: 'password', autocomplete: 'off', style: { display: 'none' } });
+    const roleWrap = h('div', { style: { display: 'none' } }, roleTabs);
     const submit = h('button', { class: 'btn primary', type: 'submit' }, 'Войти');
+    const hint = h('p', { class: 'muted small' });
     const tabs = h('div', { class: 'seg wide' });
+    const sync = () => {
+      const up = mode === 'up';
+      name.style.display = up ? '' : 'none';
+      roleWrap.style.display = up ? '' : 'none';
+      code.style.display = up && role === 'teacher' ? '' : 'none';
+      pass.autocomplete = up ? 'new-password' : 'current-password';
+      submit.textContent = up ? 'Зарегистрироваться' : 'Войти';
+      hint.textContent = up
+        ? (role === 'teacher' ? 'Придумайте пароль. Код учителя даёт владелец сайта.' : 'Придумайте пароль. После регистрации учитель добавит вас в свой класс.')
+        : '';
+    };
+    onRole = sync;
     const setMode = (m) => {
       mode = m;
       tabs.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.m === m));
-      name.style.display = m === 'up' ? '' : 'none';
-      submit.textContent = m === 'up' ? 'Зарегистрироваться' : 'Войти';
       err.textContent = '';
+      sync();
     };
     tabs.append(
       h('button', { type: 'button', class: 'seg-btn active', 'data-m': 'in', onclick: () => setMode('in') }, 'Вход'),
@@ -144,17 +161,18 @@ function loginView() {
       try {
         if (mode === 'up') {
           if (!name.value.trim()) throw new Error('Введите имя и фамилию.');
-          const u = await store.signUp(name.value.trim(), email.value.trim(), pass.value);
+          if (role === 'teacher' && !code.value.trim()) throw new Error('Введите код учителя.');
+          const u = await store.signUp({ name: name.value.trim(), email: email.value.trim(), password: pass.value, role, teacherCode: code.value.trim() });
           if (!u) { err.className = 'form-ok'; err.textContent = 'Мы отправили письмо для подтверждения. Подтвердите e-mail и войдите.'; setMode('in'); return; }
           done(u);
         } else {
           const u = await store.signIn(email.value.trim(), pass.value);
-          if (!u) throw new Error('Профиль не найден. Обратитесь к учителю.');
+          if (!u) throw new Error('Профиль не найден.');
           done(u);
         }
       } catch (ex) { err.className = 'form-error'; fail(ex); } finally { submit.disabled = false; }
-    } }, tabs, name, email, pass, err, submit,
-    h('p', { class: 'muted small' }, 'Новые аккаунты создаются как «ученик». Роль учителя назначается в базе данных (см. README).'));
+    } }, tabs, roleWrap, name, email, pass, code, err, submit, hint);
+    sync();
   }
 
   app.replaceChildren(h('div', { class: 'login-page' },
@@ -164,7 +182,7 @@ function loginView() {
       h('div', { class: 'login-cover' },
         h('div', { class: 'cover-dots' }, UNITS.map((u) => h('span', { style: { background: u.color } }))),
         h('h1', null, CONFIG.SITE_TITLE),
-        h('p', null, `${TESTS.length} тестов по 40 заданий: грамматика, лексика, произношение, аудирование, тексты и теория.`)),
+        h('p', null, `${TESTS.length} тестов по ${TEST_LEN} заданий: грамматика, лексика, произношение, аудирование, тексты и теория.`)),
       body)));
 }
 
@@ -190,11 +208,17 @@ async function studentHome() {
   const subs = await store.listSubmissions(user.id);
   const byTest = Object.fromEntries(subs.map((s) => [s.test, s]));
   const graded = subs.filter((s) => s.status === 'graded').length;
+  // Refresh: the teacher may have added this student after they logged in.
+  user = (await store.currentUser()) || user;
+  const teacher = user.teacher_id ? await store.teacherName(user.teacher_id) : '';
   shell(
     h('div', { class: 'hero' },
       h('div', null,
         h('h1', null, 'Привет, ', user.name.split(' ')[0], '! 👋'),
-        h('p', { class: 'muted' }, 'Выберите урок. В каждом тесте 40 заданий вперемешку: практика, тексты и теория грамматики.')),
+        h('p', { class: 'muted' }, `Выберите урок. В каждом тесте ${TEST_LEN} заданий вперемешку: практика, тексты и теория грамматики.`),
+        h('p', { class: 'teacher-line' }, teacher
+          ? ['🧑‍🏫 Ваш учитель: ', h('b', null, teacher)]
+          : '⏳ Учитель ещё не добавил вас в свой класс. Задания можно делать уже сейчас — учитель увидит их, когда добавит вас.')),
       h('div', { class: 'hero-stats' },
         h('div', null, h('b', null, subs.length), h('small', null, 'начато')),
         h('div', null, h('b', null, graded), h('small', null, 'проверено')),
@@ -285,7 +309,7 @@ function testHeader(test, extra = []) {
     h('div', { class: 'uh-extra' }, extra));
 }
 
-// Splits the 40 items into pages of 10 (each page ends with a text).
+// Splits the items into pages of 10 (each page ends with a text).
 function paged(test, entries, renderEntry, isDone) {
   const wrap = h('section', { class: 'lessons', style: { '--uc': test.unit.color } });
   const tabs = h('nav', { class: 'page-tabs' });
@@ -338,7 +362,9 @@ function scoreSummary(sc, grade) {
 // ---------- teacher ----------
 
 async function teacherHome() {
-  const [subs, students] = await Promise.all([store.listSubmissions(), store.listStudents()]);
+  const [subs, allStudents] = await Promise.all([store.listSubmissions(), store.listStudents()]);
+  const students = allStudents.filter((s) => s.teacher_id === user.id);
+  const free = allStudents.filter((s) => !s.teacher_id);
   const toCheck = subs.filter((s) => s.status === 'submitted').sort((a, b) => String(a.submitted_at).localeCompare(String(b.submitted_at)));
   const byKey = Object.fromEntries(subs.map((s) => [s.student_id + ':' + s.test, s]));
 
@@ -365,10 +391,42 @@ async function teacherHome() {
       h('tbody', null, students.map((st) => h('tr', null,
         h('td', null, h('a', { href: '#/student/' + st.id }, st.name)),
         UNITS.map((u) => h('td', null, h('div', { class: 'minis' }, u.lessons.map((l) => cell(st, l))))))))))
-    : h('p', { class: 'muted' }, 'Учеников пока нет. Они появятся после регистрации.');
+    : h('p', { class: 'muted' }, 'Добавьте учеников в блоке «Мои ученики», и здесь появятся их оценки.');
+
+  // "My students": the teacher picks students who registered and have no teacher yet.
+  const run = async (fn, okMsg) => {
+    try { await fn(); toast(okMsg, 'ok'); teacherHome(); } catch (e) { toast(e.message, 'error'); }
+  };
+  const search = h('input', { class: 'inp', placeholder: '🔎 Найти ученика по имени…', oninput: () => drawFree() });
+  const freeList = h('div', { class: 'pick-list' });
+  function drawFree() {
+    const q = search.value.trim().toLowerCase();
+    const found = free.filter((s) => s.name.toLowerCase().includes(q));
+    freeList.replaceChildren(...(found.length
+      ? found.map((s) => h('div', { class: 'pick-row' },
+        h('span', { class: 'avatar' }, s.name.slice(0, 1).toUpperCase()), h('span', { class: 'pick-name' }, s.name),
+        h('button', { class: 'btn small soft', onclick: () => run(() => store.claimStudent(s.id), `${s.name} добавлен(а) в ваш класс.`) }, '+ Добавить')))
+      : [h('p', { class: 'muted small' }, free.length ? 'Никого не нашлось.' : 'Свободных учеников нет. Попросите учеников зарегистрироваться на сайте.')]));
+  }
+  drawFree();
+  const myStudents = h('section', { class: 'card' },
+    h('h2', null, 'Мои ученики ', h('span', { class: 'count' }, students.length)),
+    students.length
+      ? h('div', { class: 'pick-list' }, students.map((s) => h('div', { class: 'pick-row' },
+        h('span', { class: 'avatar mine' }, s.name.slice(0, 1).toUpperCase()),
+        h('a', { class: 'pick-name', href: '#/student/' + s.id }, s.name),
+        h('button', { class: 'btn small ghost', title: 'Убрать из класса', onclick: () => {
+          if (confirm(`Убрать ${s.name} из вашего класса? Работы ученика сохранятся.`)) run(() => store.releaseStudent(s.id), `${s.name} убран(а) из класса.`);
+        } }, '✕'))))
+      : h('p', { class: 'muted' }, 'У вас пока нет учеников.'),
+    h('details', { class: 'add-students', open: !students.length },
+      h('summary', null, '➕ Добавить ученика'),
+      h('p', { class: 'muted small' }, 'Здесь ученики, которые зарегистрировались на сайте и ещё не выбраны учителем.'),
+      search, freeList));
 
   shell(
-    h('div', { class: 'hero' }, h('div', null, h('h1', null, 'Кабинет учителя'), h('p', { class: 'muted' }, 'Проверяйте работы, исправляйте ошибки и оставляйте комментарии.'))),
+    h('div', { class: 'hero' }, h('div', null, h('h1', null, 'Кабинет учителя'), h('p', { class: 'muted' }, 'Добавляйте учеников, проверяйте их работы, исправляйте ошибки и оставляйте комментарии.'))),
+    myStudents,
     h('section', { class: 'card' }, h('h2', null, 'На проверку ', h('span', { class: 'count' }, toCheck.length)), queue),
     h('section', { class: 'card' }, h('h2', null, 'Журнал'),
       h('p', { class: 'muted small' }, 'В каждой клетке три урока (A, B, C). Цифра — оценка, «!» — ждёт проверки, «…» — ученик делает, «↺» — на доработке.'), matrix),
@@ -378,7 +436,8 @@ async function teacherHome() {
 
 async function studentProgressView(studentId) {
   const [subs, students] = await Promise.all([store.listSubmissions(studentId), store.listStudents()]);
-  const st = students.find((s) => s.id === studentId);
+  const st = students.find((s) => s.id === studentId && s.teacher_id === user.id);
+  if (!st) throw new Error('Этого ученика нет в вашем классе.');
   const byTest = Object.fromEntries(subs.map((s) => [s.test, s]));
   shell(
     h('a', { class: 'back dark', href: '#/' }, '← Кабинет'),

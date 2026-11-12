@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe your family. Who are they? How old are they? Use the possessive \'s.', "There are five people in my family. My father's name is Akmal. My mother's name is Dilnoza. My brother's name is Sardor. He's 10.")]),
         ...sec('writing', [wr('Write about your family tree: grandparents, parents, aunts, uncles and cousins.', 35)]),
+        ...sec('grammar', [
+          strict(gap("Complete with the possessive 's.", "Mia has a bike. It's ___ bike.", "Mia's")),
+          gap('Complete with **who** or **whose**.', '"___ is that woman?" "My aunt."', 'Who'),
+          tr("Rewrite with the possessive 's.", 'the car of my uncle', "my uncle's car"),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', "My father's sister is my ___.", 'aunt'),
+          gap('Complete.', "My brother's daughter is my ___. (n _ _ _ e)", 'niece'),
+          gap('Complete.', "My mother's father is my ___.", 'grandfather'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has the sound /ʌ/ as in **up**?', ['cousin', 'niece', 'aunt'], 0),
+        ]),
+        ...sec('listening', [
+          lch("This is my husband's mother. She lives with us.", 'Listen. Who lives with them?', ["the woman's mother", "her husband's mother", 'her sister'], 1),
+          lgap("Whose glasses are these? They're Grandma's.", 'Listen and complete.', "They're ___ glasses.", "Grandma's"),
+        ]),
       ],
       theory: [
         ch('We use **\'s** after a name or a person to show…', ['who something belongs to', 'that it is plural', 'the past'], 0),
@@ -65,6 +82,7 @@ export default {
           [['Harry is the son of Charles.', true], ["Kate is Harry's wife.", false], ["Charlotte is William's daughter.", true]]),
         rd('Twins', "Ana and Eva are twins. They're 15. Ana's hair is long and Eva's hair is short. Ana's favourite subject is maths, but Eva's favourite subject is art. Their parents' names are Pedro and Lucia. Their grandparents' house is in the mountains.",
           [["Whose hair is short?", ["Ana's", "Eva's", 'both'], 1], ["What is Ana's favourite subject?", ['art', 'maths', 'music'], 1], ["Where is the grandparents' house?", ['by the sea', 'in the city', 'in the mountains'], 2]]),
+        tf('Read. True or false?', "Hi, I'm Laylo. My mum's name is Shahnoza and my dad's name is Bobur. My dad's parents live with us. My mum's sister, Aunt Dilya, lives in Moscow. Her children, my cousins, are twins. Their names are Adam and Amir.", [['Laylo lives with her grandparents.', true], ["Aunt Dilya is her father's sister.", false], ['Her cousins are twins.', true]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe your typical weekday with times.', 'I wake up at half past six. I have breakfast at seven. I go to school at quarter to eight. I get home at three.')]),
         ...sec('writing', [wr('Write about your typical Saturday. Use **at / in / on** and times.', 35)]),
+        ...sec('grammar', [
+          gap('Complete with **at**, **in** or **on**.', '___ Christmas Day · ___ Christmas', 'on', 'at'),
+          gap('Complete with **at**, **in** or **on**.', "I usually have lunch ___ one o'clock.", 'at'),
+          fix('We go skiing on winter.', 'We go skiing in winter.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the time in words.', '10:50 = ten ___ eleven', 'to'),
+          gap('Complete the routine.', 'I ___ dressed after my shower. (g _ t)', 'get'),
+          gap('Complete the routine.', 'I ___ my homework after school. (d o)', 'do'),
+        ]),
+        ...sec('pronunciation', [
+          st('af-ter-noon', 2),
+        ]),
+        ...sec('listening', [
+          lch('The bus leaves at twenty past eight.', 'Listen. What time does the bus leave?', ['8:20', '8:40', '2:08'], 0),
+          lgap('I have breakfast at seven and I leave home at half past seven.', 'Listen and complete.', 'She leaves home at half past ___.', ['seven', '7']),
+        ]),
       ],
       theory: [
         ch('We use **at** with…', ['times (at 6 o\'clock)', 'days (at Monday)', 'months (at May)'], 0),
@@ -125,6 +160,7 @@ export default {
           [['The pool opens at 7 on Saturday.', false], ['It is closed on Sunday.', true], ['Kids\' lessons are on Wednesday.', true]]),
         rd('Night owl or early bird?', "Sam is a night owl. He goes to bed at two in the morning and gets up at eleven. Sam's sister, Lily, is an early bird. She gets up at five and goes running. She goes to bed at nine in the evening.",
           [['What time does Sam go to bed?', ['at 11 p.m.', 'at 2 a.m.', 'at 9 p.m.'], 1], ['Who goes running in the morning?', ['Sam', 'Lily', 'both'], 1], ['When does Lily go to bed?', ['at 9 p.m.', 'at 5 a.m.', 'at 11 p.m.'], 0]]),
+        cloze('A school day', "I get up ___ 6:30. ___ Mondays I have six lessons. ___ the afternoon I go to the gym. My best friend's birthday is ___ June, so ___ the summer we always have a party.", 'at', 'On', 'In', 'in', 'in'),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about a healthy and an unhealthy habit. Use adverbs of frequency.', 'I always walk to school, so I am quite healthy. But I often eat sweets and I hardly ever go to bed early.')]),
         ...sec('writing', [wr('Write about how often you do 6 activities. Use different adverbs and expressions of frequency.', 35)]),
+        ...sec('grammar', [
+          tr('Add the adverb in the correct place.', 'I am late for school. (never)', 'I am never late for school.', "I'm never late for school."),
+          tr('Add the adverb in the correct place.', 'We go to the beach. (often)', 'We often go to the beach.'),
+          fix('She goes never to the gym.', 'She never goes to the gym.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'every day = ___ (d _ _ _ y)', 'daily'),
+          gap('Complete.', 'once a week = every ___', 'week'),
+          gap('Complete.', 'not often = ___ (r _ _ _ _ y)', 'rarely'),
+        ]),
+        ...sec('pronunciation', [
+          st('of-ten', 0),
+        ]),
+        ...sec('listening', [
+          lch('I hardly ever watch TV. I prefer reading.', 'Listen. How often does she watch TV?', ['always', 'almost never', 'often'], 1),
+          lgap('We have English three times a week.', 'Listen and complete.', 'They have English ___ times a ___.', ['three', '3'], 'week'),
+        ]),
       ],
       theory: [
         ch('Adverbs of frequency go **before** the main verb:', ['I often go…', 'I go often…'], 0),
@@ -185,6 +238,7 @@ export default {
           [['60% use their phones every hour.', true], ['10% hardly ever use their phones.', true], ['Most teenagers switch off their phones at night.', false]]),
         rd('My week', "I'm a student and I have a busy week. I have classes every day from Monday to Friday. On Tuesdays and Thursdays I go to the gym. I see my friends once a week, usually on Saturday. On Sundays I always sleep until eleven!",
           [['How often does she go to the gym?', ['once a week', 'twice a week', 'every day'], 1], ['When does she usually see her friends?', ['on Saturday', 'on Sunday', 'on Friday'], 0], ['On Sundays she…', ['gets up early', 'sleeps late', 'goes to the gym'], 1]]),
+        rd('Sleep habits', "Most teenagers need about nine hours of sleep. But many teenagers usually sleep only six or seven hours. They often use their phones in bed. Doctors say: always go to bed at the same time and never use your phone an hour before sleep.", [['How many hours do teenagers need?', ['six', 'seven', 'nine'], 2], ['What do teenagers often do in bed?', ['read', 'use their phones', 'eat'], 1], ['What do doctors say?', ['use your phone before sleep', 'go to bed at the same time', 'sleep less'], 1]]),
       ],
     },
   ],

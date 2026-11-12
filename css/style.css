@@ -564,6 +564,18 @@ button.chip:disabled { cursor: default; color: var(--ink); }
 .matrix td:first-child a { text-decoration: none; }
 .minis { display: flex; gap: 3px; justify-content: center; }
 .mini { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; font-weight: 900; font-size: .78rem; text-decoration: none; }
+.teacher-line { margin: 8px 0 0; padding: 8px 14px; background: var(--paper); border-radius: var(--radius-sm); box-shadow: var(--shadow); font-size: .92rem; display: inline-block; }
+.pick-list { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
+.pick-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--soft); }
+.pick-name { flex: 1; font-weight: 800; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.avatar {
+  flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  background: color-mix(in srgb, var(--muted) 18%, var(--paper)); color: var(--muted); font-weight: 900;
+}
+.avatar.mine { background: var(--accent-soft); color: var(--accent); }
+.add-students { margin-top: 12px; }
+.add-students summary { cursor: pointer; font-weight: 800; color: var(--accent); padding: 6px 0; }
+.add-students .inp { margin: 6px 0; }
 .unit-links { display: flex; flex-wrap: wrap; gap: 6px; }
 .unit-link { padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--uc) 12%, var(--paper)); color: var(--uc); text-decoration: none; font-weight: 900; font-size: .9rem; }
 .unit-link:hover { background: var(--uc); color: #fff; }

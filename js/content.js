@@ -1,7 +1,7 @@
 // Turns unit files (data/units/*.js) into tests.
-// Each lesson (1A, 1B, 1C, …) is one test of 40 items:
-//   26 practice items + 10 grammar-theory items, mixed in a fixed pseudo-random order,
-//   and 4 short texts placed at positions 10, 20, 30 and 40.
+// Each lesson (1A, 1B, 1C, …) is one test of 50 items:
+//   35 practice items + 10 grammar-theory items, mixed in a fixed pseudo-random order,
+//   and 5 short texts placed at positions 10, 20, 30, 40 and 50.
 import { seededShuffle } from './ui.js';
 
 export const SECTIONS = {
@@ -16,10 +16,10 @@ export const SECTIONS = {
   text: { label: 'Text', color: '#c27c0e' },
 };
 
-export const TEST_SIZE = { practice: 26, theory: 10, texts: 4 };
+export const TEST_SIZE = { practice: 35, theory: 10, texts: 5 };
 export const PAGE_SIZE = 10;
 
-// Item ids are stable per group: p1…p26 (practice), t1…t10 (theory), x1…x4 (texts).
+// Item ids are stable per group: p1…p35 (practice), t1…t10 (theory), x1…x5 (texts).
 // Editing an item keeps its id; inserting or removing items inside a group shifts the
 // ids after it and breaks saved answers for tests already started.
 export function buildTest(lesson) {

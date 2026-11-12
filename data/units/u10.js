@@ -1,5 +1,5 @@
 // Unit 10 — superlatives, be going to (plans and predictions).
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 10,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe your town. What is the best place? What is the oldest building? Where is the most popular café?', 'The best place in my town is the park. The oldest building is the mosque in the centre. The most popular café is near the university.')]),
         ...sec('writing', [wr('Write a short guide to your town for tourists. Use at least 5 superlatives.', 40)]),
+        ...sec('grammar', [
+          gap('Write the superlative.', 'young → the ___ · thin → the ___', 'youngest', 'thinnest'),
+          gap('Complete with the superlative.', 'Who is ___ (funny) person in your family?', 'the funniest'),
+          fix('It is the most cheap hotel.', 'It is the cheapest hotel.', "It's the cheapest hotel."),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'You see doctors in a ___. (h _ _ _ _ _ _ l)', 'hospital'),
+          gap('Complete.', 'You buy fruit and vegetables at a ___. (m _ _ _ _ t)', 'market'),
+          gap('Complete.', 'You change money at a ___. (b _ _ k)', 'bank'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['town', 'house', 'down', 'road'], 3),
+        ]),
+        ...sec('listening', [
+          lch('The most famous building in Paris is the Eiffel Tower.', 'Listen. What is the most famous building?', ['the Louvre', 'the Eiffel Tower', 'Notre-Dame'], 1),
+          lgap('This is the biggest shopping centre in the city and the cheapest too.', 'Listen and complete.', 'the ___ shopping centre and the ___', 'biggest', 'cheapest'),
+        ]),
       ],
       theory: [
         ch('One-syllable adjectives make the superlative with…', ['the + -est (the cheapest)', 'the most (the most cheap)'], 0),
@@ -65,6 +82,7 @@ export default {
           [['The town is very big.', false], ['The library is the oldest building.', true], ["The best pizza is at Mario's.", true]]),
         rd('The best and the worst', "We asked tourists about London. The best thing? The museums — most of them are free! The worst thing? The weather. The most expensive thing? Hotels and taxis. The most surprising thing? People always say 'sorry'!",
           [['What is the best thing about London?', ['the weather', 'the museums', 'the hotels'], 1], ['What is the worst thing?', ['the weather', 'the people', 'the food'], 0], ['What is the most expensive?', ['museums', 'hotels and taxis', 'food'], 1]]),
+        cloze('My city', 'Tashkent is the ___ (big) city in Uzbekistan. The ___ (old) part of the city is Chorsu, with the ___ ___ (famous) bazaar. The ___ (good) time to visit is in spring. Summer is the ___ (hot) season.', 'biggest', 'oldest', 'most', 'famous', 'best', 'hottest'),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Ask and answer about holiday plans: Where are you going to go? How are you going to travel? Where are you going to stay?', "Where are you going to go? I'm going to go to Bukhara. How are you going to travel? By train.")]),
         ...sec('writing', [wr('Write an e-mail to a friend about your plans for the next holidays. Use **be going to**.', 45)]),
+        ...sec('grammar', [
+          gap('Complete with **be going to** + verb.', 'We ___ (stay) at home this weekend.', ['are going to stay', "'re going to stay"]),
+          tr('Make a question.', 'He is going to buy a car.', 'Is he going to buy a car?'),
+          fix("I'm going to visiting my aunt.", "I'm going to visit my aunt.", 'I am going to visit my aunt.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', 'You sleep in a ___ when you go camping. (t _ _ t)', 'tent'),
+          gap('Complete.', 'You need a ___ to get on the plane. (t _ _ _ _ t)', 'ticket'),
+          gap('Complete.', "We're going to ___ a car and drive around. (h _ _ e)", 'hire'),
+        ]),
+        ...sec('pronunciation', [
+          st('suit-case', 0),
+        ]),
+        ...sec('listening', [
+          lch([['Man', 'Are you going to fly to London?'], ['Woman', "No, I'm going to take the train."]], 'Listen. How is she going to travel?', ['by plane', 'by train', 'by car'], 1),
+          lgap("We're going to visit Bukhara for three days in May.", 'Listen and complete.', 'They are going to visit ___ in ___.', 'Bukhara', 'May'),
+        ]),
       ],
       theory: [
         ch('We use **be going to** for…', ['future plans and intentions', 'habits', 'the past'], 0),
@@ -125,6 +160,7 @@ export default {
           [['Tom is going to finish school next year.', true], ['He is going to university immediately.', false], ['He is going to study engineering.', true]]),
         rd('New Year resolutions', "Every January people make plans for the new year. Ali is going to stop eating fast food. Madina is going to learn to play the guitar. Their dad is going to walk 10,000 steps every day. And their grandmother? She's going to learn to use a smartphone!",
           [['What is Ali going to stop?', ['playing games', 'eating fast food', 'watching TV'], 1], ['Who is going to learn the guitar?', ['Ali', 'Madina', 'Dad'], 1], ['What is grandma going to learn?', ['to drive', 'to use a smartphone', 'to swim'], 1]]),
+        tf('Read. True or false?', "Next month Aziza and her friends are going to travel around Uzbekistan by train. First they're going to visit Samarkand. Then they're going to go to Bukhara and Khiva. They aren't going to stay in hotels — they're going to stay with families.", [['They are going to travel by bus.', false], ['First they are going to visit Samarkand.', true], ['They are going to stay in hotels.', false]]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Look at the sky now (or imagine). Make three predictions about today.', "It's very cloudy. I think it's going to rain. It's going to be cold this evening. I'm going to need an umbrella.")]),
         ...sec('writing', [wr('Write 5 predictions for a friend\'s future (job, home, family, travel, money). Use **be going to**.', 35)]),
+        ...sec('grammar', [
+          gap('Complete with **be going to** + verb.', 'Look at the time! We ___ (be) late.', ['are going to be', "'re going to be"]),
+          tr('Write a prediction with **be going to**.', 'The glass is at the edge of the table. (fall)', "It's going to fall.", 'It is going to fall.'),
+          fix('Look! It going to snow.', "Look! It's going to snow.", 'Look! It is going to snow.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete.', "They're going to ___ married next year. (g _ t)", 'get'),
+          gap('Complete.', "I think she's going to ___ the race. She's very fast. (w _ n)", 'win'),
+          gap('Complete.', "He studied a lot. He's going to ___ the exam. (p _ _ s)", 'pass'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['rain', 'snow', 'late', 'great'], 1),
+        ]),
+        ...sec('listening', [
+          lch("Look at that man on the ladder! He's going to fall!", 'Listen. What is going to happen?', ['The man is going to fall.', 'It is going to rain.', 'The ladder is going to break.'], 0),
+          lgap("I think it's going to be a great year for our team.", 'Listen and complete.', "It's going to be a ___ year for their ___.", 'great', 'team'),
+        ]),
       ],
       theory: [
         ch('We use **be going to** for predictions when…', ['we can see evidence now (Look at the clouds!)', 'it is a habit'], 0),
@@ -185,6 +238,7 @@ export default {
           [['It is going to be cloudy in the morning.', true], ['It is going to rain in the south.', false], ['It is going to be windy in the evening.', true]]),
         rd('A football prediction', "Our team is playing the final tomorrow. Our best player is injured, so I don't think we're going to win. My brother is more optimistic. He says: 'We're going to score two goals. It's going to be a great match!' What do you think?",
           [['What is happening tomorrow?', ['a final', 'a training', 'a party'], 0], ['Why does the writer think they are going to lose?', ['The best player is injured.', 'It is going to rain.', 'The team is tired.'], 0], ['How many goals does the brother predict?', ['one', 'two', 'three'], 1]]),
+        rd('Predictions for the future', "Some experts think that in 20 years people are going to live on Mars. Others think that we are going to have flying taxis in big cities. And many say that most people are going to speak two or three languages — thanks to the internet!", [['Where are people going to live?', ['on the Moon', 'on Mars', 'under the sea'], 1], ['What are big cities going to have?', ['flying taxis', 'no cars', 'more trains'], 0], ['How many languages are people going to speak?', ['one', 'two or three', 'ten'], 1]]),
       ],
     },
   ],

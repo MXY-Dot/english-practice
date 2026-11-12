@@ -1,5 +1,5 @@
 // Unit 5 — can / can't, present continuous, present simple or continuous.
-import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, sec } from '../helpers.js';
+import { ch, lch, odd, gap, lgap, fix, tr, ord, mt, tf, st, sp, wr, rd, cloze, strict, sec } from '../helpers.js';
 
 export default {
   unit: 5,
@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Ask and answer: Can you cook / swim / drive / dance?', "Can you cook? Yes, I can. Can you drive? No, I can't.")]),
         ...sec('writing', [wr('Write about the abilities of three people you know. Use **can** and **can\'t**.', 30)]),
+        ...sec('grammar', [
+          tr('Make a question.', 'She can speak French.', 'Can she speak French?'),
+          gap("Complete with **can** or **can't**.", "It's very dark. I ___ see anything!", ["can't", 'cannot']),
+          fix('Can you to help me?', 'Can you help me?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete with a verb.', 'Can you ___ a horse? (r _ _ e)', 'ride'),
+          gap('Complete with a verb.', 'I can ___ — I go to the pool every week. (s _ _ m)', 'swim'),
+          gap('Complete with a verb.', "Can you ___ the window? It's hot. (o _ _ n)", 'open'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has the sound /æ/ as in **cat**?', ["can't", 'can', 'car'], 1),
+        ]),
+        ...sec('listening', [
+          lch([['Girl', 'Can you play chess?'], ['Boy', 'Yes, I can, but not very well.']], 'Listen. Can the boy play chess?', ['Yes, very well.', 'Yes, but not very well.', "No, he can't."], 1),
+          lgap("I can't come to the party because I have to study.", 'Listen and complete.', "She can't come to the ___. She has to ___.", 'party', 'study'),
+        ]),
       ],
       theory: [
         ch('After **can** we use…', ['the infinitive without to (can swim)', 'to + infinitive (can to swim)', 'verb + -s (can swims)'], 0),
@@ -65,6 +82,7 @@ export default {
           [['The camp is by the sea.', false], ['You can learn tennis.', true], ['You can bring your phone.', false]]),
         rd('Robots today', "Robots can do a lot of things today. They can clean the house, cook simple meals and play chess. Some robots can talk to people. But they can't think like humans and they can't feel happy or sad. Can robots be our friends? Maybe one day.",
           [['Robots can…', ['feel sad', 'play chess', 'think like humans'], 1], ["What can't robots do?", ['clean', 'talk', 'feel happy'], 2], ['Can robots be our friends now?', ['Yes, they can.', 'Maybe one day.'], 1]]),
+        tf('Read. True or false?', "Cats are amazing animals. They can see very well at night. They can jump five times their height. They can sleep for sixteen hours a day. But most cats can't swim and they don't like water.", [['Cats can see well at night.', true], ['Cats can jump five times their height.', true], ['Most cats can swim well.', false]]),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Imagine you are calling a friend. Say where you are and what people around you are doing.', "I'm at the station. A man is reading a newspaper. Two children are eating ice cream and a woman is talking on the phone.")]),
         ...sec('writing', [wr('Look out of the window (or imagine a street). Write 6 sentences about what people are doing now.', 30)]),
+        ...sec('grammar', [
+          gap('Complete with the present continuous.', 'Listen! Someone ___ (knock) at the door.', ['is knocking', "'s knocking"]),
+          tr('Make a question.', 'They are watching a film.', 'Are they watching a film?'),
+          fix('What you are doing?', 'What are you doing?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the -ing form.', 'make → ___ · stop → ___', 'making', 'stopping'),
+          gap('Write the -ing form.', 'cry → ___ · shop → ___', 'crying', 'shopping'),
+          gap('Complete.', "Shh! I'm ___ on the phone. (t _ _ _ _ _ g)", 'talking'),
+        ]),
+        ...sec('pronunciation', [
+          st('hap-pen-ing', 0),
+        ]),
+        ...sec('listening', [
+          lch([['Mum', 'Where is Dad?'], ['Girl', "He's in the garage. He's repairing the car."]], 'Listen. What is Dad doing?', ['washing the car', 'repairing the car', 'driving'], 1),
+          lgap("We're having dinner now. Can I call you later?", 'Listen and complete.', "They're having ___. He will call ___.", 'dinner', 'later'),
+        ]),
       ],
       theory: [
         ch('How do we make the present continuous?', ['be + verb + -ing', 'do + verb', 'verb + -s'], 0),
@@ -125,6 +160,7 @@ export default {
           [['Dad is cooking.', false], ['Mum is in the garden.', true], ['The twins are playing football.', false], ['The cat is sleeping.', true]]),
         rd('Live from the stadium', "Good evening from the national stadium! It's raining, but 50,000 people are watching the match. The players are coming onto the field now. The fans are singing and waving flags. The match is starting!",
           [['What is the weather like?', ['sunny', 'rainy', 'snowy'], 1], ['How many people are watching?', ['5,000', '15,000', '50,000'], 2], ['What are the fans doing?', ['singing', 'sleeping', 'leaving'], 0]]),
+        cloze('A busy park', "It's Sunday afternoon in the park. Some children ___ (play) football. An old man ___ (feed) the birds. Two girls ___ (ride) their bikes. And I ___ (sit) on a bench and ___ (read) a book.", ['are playing', "'re playing"], ['is feeding', "'s feeding"], ['are riding', "'re riding"], ['am sitting', "'m sitting"], 'reading'),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Describe the weather today and what you are wearing. Then say what you usually wear in winter.', "Today it's cloudy and cool. I'm wearing jeans and a blue jumper. In winter I usually wear a warm coat and boots.")]),
         ...sec('writing', [wr('Write about your favourite season. What is the weather like? What do you usually wear and do?', 35)]),
+        ...sec('grammar', [
+          gap('Present simple or continuous? Complete.', 'She ___ (not / usually / wear) a hat.', ["doesn't usually wear", 'does not usually wear']),
+          gap('Present simple or continuous? Complete.', "Why ___ you ___ (wear) a coat? It's hot!", 'are', 'wearing'),
+          fix('He is wanting a new phone.', 'He wants a new phone.'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete the clothes word.', 'You wear them on your legs: ___ (t _ _ _ _ _ _ s)', 'trousers'),
+          gap('Complete the weather word.', "There's a lot of wind. It's ___.", 'windy'),
+          gap('Complete the weather word.', "You can't see far. It's ___. (f _ _ _ y)", 'foggy'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['shirt', 'skirt', 'shorts', 'T-shirt'], 2),
+        ]),
+        ...sec('listening', [
+          lch("Take an umbrella. It's going to rain this afternoon.", 'Listen. What should you take?', ['a coat', 'an umbrella', 'sunglasses'], 1),
+          lgap("I usually wear a uniform at school, but today I'm wearing jeans because it's a holiday.", 'Listen and complete.', "He usually wears a ___. Today he's wearing ___.", 'uniform', 'jeans'),
+        ]),
       ],
       theory: [
         ch('Present simple is for…', ['habits and facts (I usually walk)', 'now (I am walking now)'], 0),
@@ -185,6 +238,7 @@ export default {
           [['Amir usually wears a tie to work.', true], ['Today he is at work.', false], ['He is playing tennis now.', true]]),
         rd('The four seasons in Uzbekistan', "Spring is warm and green, and it sometimes rains. Summer is very hot and dry — it hardly ever rains in July. Autumn is sunny and there is a lot of fruit. Winter is cold and it sometimes snows.",
           [['When does it hardly ever rain?', ['in spring', 'in July', 'in winter'], 1], ['What is there a lot of in autumn?', ['snow', 'rain', 'fruit'], 2], ['Winter is…', ['hot', 'cold', 'dry and green'], 1]]),
+        rd('What to wear', "In Moscow in January it's usually very cold, sometimes minus 20. People wear warm coats, hats, scarves and boots. In Dubai it's hot all year, so people usually wear light clothes. But inside shopping centres it's cold because of the air conditioning, so take a jumper!", [['What is the weather like in Moscow in January?', ['warm', 'very cold', 'rainy'], 1], ['What do people wear in Dubai?', ['warm coats', 'light clothes', 'boots'], 1], ['Why take a jumper in Dubai?', ['It snows.', 'Shopping centres are cold.', 'It is windy.'], 1]]),
       ],
     },
   ],

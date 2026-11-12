@@ -44,6 +44,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Introduce yourself: your name, age and where you are from.', "Hi! I'm Alex. I'm sixteen. I'm from Uzbekistan.")]),
         ...sec('writing', [wr('Write 4–5 sentences about you and your best friend. Use **I am, he is, she is, we are**.', 25)]),
+        ...sec('grammar', [
+          gap('Complete with **am**, **is** or **are**.', 'It ___ Monday today.', 'is'),
+          tr('Rewrite with a subject pronoun.', 'Maria is a nurse.', 'She is a nurse.', "She's a nurse."),
+          fix('I is from Uzbekistan.', 'I am from Uzbekistan.', "I'm from Uzbekistan."),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the answer in words.', '9 + 9 = ___', 'eighteen'),
+          gap('Complete the greeting.', 'Good ___! (in the afternoon)', 'afternoon'),
+          gap('Write the day after Friday.', 'Friday → ___', 'Saturday'),
+        ]),
+        ...sec('pronunciation', [
+          st('Wed-nes-day', 0),
+        ]),
+        ...sec('listening', [
+          lch('My name is Ali and this is my sister Lola. She is ten.', 'Listen. How old is Lola?', ['ten', 'two', 'twelve'], 0),
+          lgap('Good evening. I am Mr Smith and this is Mrs Smith.', 'Listen and complete.', 'Good ___. I am Mr ___.', 'evening', 'Smith'),
+        ]),
       ],
       theory: [
         ch('Which form of **be** do we use with **I**?', ['am', 'is', 'are'], 0),
@@ -65,6 +82,7 @@ export default {
           [['Ali is a teacher.', false], ['Nodira is forty.', true], ['Jamshid is twelve.', true], ['They are from Samarkand.', false]]),
         rd('At the hotel', "Receptionist: Good evening! What's your name, please?\nGuest: It's Maria Lopez.\nReceptionist: Thank you, Ms Lopez. Your room is number 14. It's on the first floor.\nGuest: Thank you. Is breakfast at seven?\nReceptionist: No, it's at eight.",
           [["What is the guest's surname?", ['Maria', 'Lopez', 'Lopes'], 1], ['What is her room number?', ['40', '14', '4'], 1], ['What time is breakfast?', ['7', '8', '9'], 1]]),
+        cloze('Hello from Tashkent', 'Hello! My name ___ Kamila. I ___ fourteen. My brother ___ Timur. He ___ eleven. We ___ from Tashkent. Our school ___ big and nice.', 'is', 'am', 'is', 'is', 'are', 'is'),
       ],
     },
     {
@@ -104,6 +122,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Say where these people are from: you, a friend and a famous person.', "I'm from Uzbekistan. My friend Aziz is from Kazakhstan. Messi is from Argentina. He's Argentinian.")]),
         ...sec('writing', [wr('Write 5 questions with **be** to ask a new classmate.', 15, 'Example: _Where are you from? Are you a student?_')]),
+        ...sec('grammar', [
+          tr('Make a question.', 'They are from Korea.', 'Are they from Korea?'),
+          gap('Complete the short answer.', '"Are your friends Russian?" "No, they ___."', ["aren't", 'are not']),
+          fix('Is you from Turkey?', 'Are you from Turkey?'),
+        ]),
+        ...sec('vocabulary', [
+          gap('Write the nationality.', 'Uzbekistan → ___', 'Uzbek'),
+          gap('Write the nationality.', 'Germany → ___', 'German'),
+          gap('Write the number in words.', '100 = one ___', 'hundred'),
+        ]),
+        ...sec('pronunciation', [
+          st('A-me-ri-can', 1),
+        ]),
+        ...sec('listening', [
+          lch([['Man', 'Are you from Italy?'], ['Woman', "No, I'm not. I'm from Spain. I'm Spanish."]], 'Listen. Where is the woman from?', ['Italy', 'Spain', 'Mexico'], 1),
+          lgap('My grandfather is eighty-seven.', 'Listen and write the number in figures.', 'He is ___.', ['87', 'eighty-seven']),
+        ]),
       ],
       theory: [
         ch('How do we make the negative of **be**?', ['be + not', 'do + not', 'not + be'], 0),
@@ -125,6 +160,7 @@ export default {
           [['Ahmed is from Egypt.', true], ['He is thirty-two.', false], ['His city is Cairo.', true]]),
         rd('Famous people', "Cristiano Ronaldo isn't Spanish. He's Portuguese. Shakira isn't Mexican, she's Colombian. Jackie Chan is from Hong Kong — he's Chinese. And Adele? She's English, from London.",
           [['Ronaldo is…', ['Spanish', 'Portuguese', 'Brazilian'], 1], ['Where is Shakira from?', ['Mexico', 'Colombia', 'Spain'], 1], ['Adele is from…', ['London', 'New York', 'Dublin'], 0]]),
+        rd('A language school', "At our language school there are students from many countries. Hiro isn't Chinese, he's Japanese. Ana and Pedro aren't Spanish — they're from Mexico. Olga is Russian. Is the teacher English? No, he isn't. He's Australian, from Sydney.", [['Hiro is…', ['Chinese', 'Japanese', 'Korean'], 1], ['Where are Ana and Pedro from?', ['Spain', 'Mexico', 'Brazil'], 1], ['The teacher is…', ['English', 'American', 'Australian'], 2]]),
       ],
     },
     {
@@ -164,6 +200,23 @@ export default {
         ]),
         ...sec('speaking', [sp('Talk about your family. Use **my, his, her, their**.', "My father's name is Ravshan. His car is white. My sister is Lola. Her bag is red.")]),
         ...sec('writing', [wr('Describe your classroom and classmates: their names and where they are from. Use **my, his, her, our, their**.', 30)]),
+        ...sec('grammar', [
+          gap('Complete with a possessive adjective.', 'You have a new phone. Is ___ phone expensive?', 'your'),
+          gap('Complete with a possessive adjective.', 'The cat is hungry. ___ food is in the kitchen.', 'Its'),
+          fix('What is you name?', 'What is your name?', "What's your name?"),
+        ]),
+        ...sec('vocabulary', [
+          gap('Complete the classroom phrase.', 'Can you ___ that, please? (= say it again)', 'repeat'),
+          gap('Write the missing letters.', 'P, Q, ___, S, T, ___', 'R', 'U'),
+          gap('Complete the word.', 'The teacher writes on the ___. (b _ _ _ d)', 'board'),
+        ]),
+        ...sec('pronunciation', [
+          odd('Listen. Which word has a **different** vowel sound?', ['blue', 'you', 'do', 'go'], 3),
+        ]),
+        ...sec('listening', [
+          lgap('S. M. I. T. H.', 'Listen to the spelling. Write the surname.', 'Surname: ___', 'Smith'),
+          lch('Please close your books and look at the board.', 'Listen. What must the students do?', ['open their books', 'look at the board', 'work in pairs'], 1),
+        ]),
       ],
       theory: [
         ch('Possessive adjectives go…', ['before a noun', 'after a noun', 'at the end of a sentence'], 0),
@@ -185,6 +238,7 @@ export default {
           [['The classroom is room 7.', true], ['The lessons are on Tuesday.', false], ['Students bring their books every day.', true]]),
         rd('Lost and found', "Is this your bag? It's black and it's from room 3. Inside there's a phone, a pen and a notebook. The name in the notebook is Jamila Nurova. Her class is 9B. Please come to the school office.",
           [['What colour is the bag?', ['brown', 'black', 'blue'], 1], ['Whose notebook is it?', ["Jamila's", "the teacher's", "a boy's"], 0], ['Jamila is in class…', ['3', '9B', '9A'], 1]]),
+        tf('Read. True or false?', "Hi! I'm Rustam and this is my new class. Our teacher is Ms Brown. Her first name is Emily. My best friend is Ali. His desk is next to my desk. The girls in our class are very clever. Their English is excellent.", [["Ms Brown's first name is Emily.", true], ["Ali's desk is next to Rustam's desk.", true], ["The girls' English is bad.", false]]),
       ],
     },
   ],
