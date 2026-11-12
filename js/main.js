@@ -3,7 +3,7 @@ import { createStore } from './store.js';
 import { UNITS } from '../data/units/index.js';
 import { buildTest, allTests, PAGE_SIZE, TEST_SIZE } from './content.js';
 import { h, clear, toast, fmtDate, debounce } from './ui.js';
-import { renderItem } from './tasks.js';
+import { renderItem, voiceNote } from './tasks.js';
 import { scoreUnit, suggestGrade, isAnswered } from './grading.js';
 import { stopSpeaking } from './audio.js';
 import { startThemeClock, themeButton } from './theme.js';
@@ -334,7 +334,12 @@ async function testView(code) {
     sub.grade ? h('span', { class: 'grade-big' }, 'Оценка: ', h('b', null, sub.grade)) : null,
   ])];
   if (sub.status === 'returned') parts.push(h('div', { class: 'notice warn' }, h('b', null, 'Работа возвращена на доработку. '), 'Исправьте задания с комментариями учителя и отправьте снова.'));
-  if (sub.teacher_comment && ['graded', 'returned'].includes(sub.status)) parts.push(h('div', { class: 'notice teacher' }, h('b', null, '💬 Учитель: '), sub.teacher_comment));
+  const overall = sub.review?._overall || {};
+  if ((sub.teacher_comment || overall.voice) && ['graded', 'returned'].includes(sub.status)) {
+    parts.push(h('div', { class: 'notice teacher' },
+      sub.teacher_comment ? [h('b', null, '💬 Учитель: '), sub.teacher_comment] : h('b', null, '💬 Учитель оставил голосовой комментарий:'),
+      overall.voice ? h('div', { class: 'tn-voice' }, h('span', null, '🎙 '), h('audio', { controls: true, src: overall.voice, preload: 'none' })) : null));
+  }
   if (sub.status === 'graded') parts.push(scoreSummary(scoreUnit(entries, sub.answers, sub.review || {}), sub.grade));
   else if (sub.status === 'submitted') parts.push(h('div', { class: 'notice' }, '📨 Работа отправлена ', fmtDate(sub.submitted_at), '. Учитель скоро её проверит.'));
 
@@ -566,7 +571,10 @@ async function reviewView(subId) {
   sub.answers ||= {};
   const review = sub.review;
   let grade = sub.grade ?? null;
-  const commentBox = h('textarea', { class: 'inp', rows: 3, placeholder: 'Общий комментарий к работе…', value: sub.teacher_comment || '' });
+  const commentBox = h('textarea', { class: 'inp', rows: 3, placeholder: 'Общий комментарий к работе (необязательно)…', value: sub.teacher_comment || '' });
+  // Optional voice comment for the whole work, kept in review._overall (not an item id).
+  const overallVoice = h('div', { class: 'overall-voice' }, h('div', { class: 'tp-label' }, 'Голосовой комментарий (необязательно)'),
+    voiceNote(review._overall?.voice, (v) => { review._overall = { ...(review._overall || {}), voice: v || undefined }; pendingSave = autosave; autosave(); }));
 
   const totals = h('div');
   const gradeBtns = h('div', { class: 'seg grade-seg' });
@@ -623,6 +631,7 @@ async function reviewView(subId) {
       h('h2', null, 'Итог'), totals,
       h('div', { class: 'grade-row' }, h('span', null, 'Оценка:'), gradeBtns),
       commentBox,
+      overallVoice,
       h('div', { class: 'actions' },
         h('button', { class: 'btn primary', onclick: async () => {
           if (!grade) return toast('Выберите оценку.', 'error');

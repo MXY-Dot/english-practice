@@ -44,8 +44,11 @@ export function renderItem(entry, ctx) {
   const body = RENDER[item.type]?.(item, ans, set, editable, id);
   card.append(h('div', { class: 'item-body' }, body ?? h('p', { class: 'muted' }, 'Неизвестный тип задания: ' + item.type)));
 
-  if (ctx.mode !== 'do') card.append(feedback(entry, ans, rev, ctx));
-  else if (rev && (rev.comment || rev.correction)) card.append(teacherNote(rev));
+  // The student sees results only after the teacher has graded the work;
+  // while it waits for checking, nothing is marked (no auto "wrong").
+  const showResult = ctx.mode === 'review' || (ctx.mode === 'result' && ctx.status === 'graded');
+  if (showResult) card.append(feedback(entry, ans, rev, ctx));
+  else if (hasNote(rev)) card.append(teacherNote(rev));
   return card;
 }
 
@@ -138,12 +141,44 @@ function sayBtn(text) {
   } }, '🔊');
 }
 
-function teacherNote(rev) {
+const hasNote = (rev) => !!(rev && (rev.comment || rev.correction || rev.voice));
+
+export function teacherNote(rev, title = 'Комментарий учителя') {
   return h('div', { class: 'teacher-note' },
-    h('div', { class: 'tn-title' }, 'Комментарий учителя'),
+    h('div', { class: 'tn-title' }, title),
     rev.correction ? h('div', null, h('b', null, 'Исправление: '), rev.correction) : null,
     rev.comment ? h('div', null, rev.comment) : null,
+    rev.voice ? h('div', { class: 'tn-voice' }, h('span', null, '🎙 '), h('audio', { controls: true, src: rev.voice, preload: 'none' })) : null,
   );
+}
+
+// Record / re-record / delete a short voice note. `value` is a data URL or empty.
+export function voiceNote(value, onChange, { label = '🎙 Записать голосовое', maxSeconds = 60 } = {}) {
+  const wrap = h('div', { class: 'voice-note' });
+  const draw = (v) => {
+    wrap.replaceChildren();
+    if (v) {
+      wrap.append(
+        h('audio', { controls: true, src: v, preload: 'none' }),
+        h('button', { type: 'button', class: 'btn small ghost', title: 'Удалить запись', onclick: () => { onChange(null); draw(null); } }, '🗑'));
+    }
+    if (!recordingSupported) {
+      if (!v) wrap.append(h('span', { class: 'muted small' }, 'Запись голоса недоступна в этом браузере.'));
+      return;
+    }
+    let rec = null;
+    const btn = h('button', { type: 'button', class: 'btn small rec' }, v ? '🎙 Перезаписать' : label);
+    btn.onclick = async () => {
+      if (rec) { rec.stop(); return; }
+      try { rec = await startRecording(maxSeconds * 1000); } catch { alert('Нет доступа к микрофону. Разрешите доступ в настройках браузера.'); return; }
+      btn.textContent = '■ Остановить';
+      btn.classList.add('recording');
+      rec.done.then((res) => { rec = null; onChange(res.audio); draw(res.audio); });
+    };
+    wrap.append(btn);
+  };
+  draw(value);
+  return wrap;
 }
 
 function feedback(entry, ans, rev, ctx) {
@@ -172,7 +207,7 @@ function feedback(entry, ans, rev, ctx) {
   }
 
   if (ctx.mode === 'review') box.append(reviewControls(id, rev, auto, ctx));
-  else if (rev && (rev.comment || rev.correction)) box.append(teacherNote(rev));
+  else if (hasNote(rev)) box.append(teacherNote(rev));
   return box;
 }
 
@@ -191,16 +226,38 @@ function reviewControls(id, rev = {}, auto, ctx) {
     btns.append(h('button', { type: 'button', class: 'link', onclick: () => ctx.onReview(id, { points: undefined }) }, 'вернуть авто-оценку'));
   }
   wrap.append(btns);
-  wrap.append(
-    h('input', {
-      class: 'inp', placeholder: 'Исправление (правильный вариант)…', value: rev.correction || '',
-      oninput: (e) => ctx.onReview(id, { correction: e.target.value }, true),
-    }),
-    h('textarea', {
-      class: 'inp', rows: 2, placeholder: 'Комментарий для ученика…', value: rev.comment || '',
-      oninput: (e) => ctx.onReview(id, { comment: e.target.value }, true),
-    }),
-  );
+
+  // Notes are optional: closed by default, opened by a tap (or open when they already have content).
+  const correction = h('input', {
+    class: 'inp', placeholder: 'Исправление (правильный вариант)…', value: rev.correction || '',
+    oninput: (e) => ctx.onReview(id, { correction: e.target.value }, true),
+  });
+  const comment = h('textarea', {
+    class: 'inp', rows: 2, placeholder: 'Комментарий для ученика…', value: rev.comment || '',
+    oninput: (e) => ctx.onReview(id, { comment: e.target.value }, true),
+  });
+  const voice = voiceNote(rev.voice, (v) => ctx.onReview(id, { voice: v || undefined }, true));
+  const slots = [
+    ['correction', '✏️ Исправление', correction],
+    ['comment', '💬 Комментарий', comment],
+    ['voice', '🎙 Голосовое', voice],
+  ];
+  const toggles = h('div', { class: 'note-toggles' });
+  const panels = h('div', { class: 'note-panels' });
+  for (const [key, label, el] of slots) {
+    const open = !!rev[key];
+    el.hidden = !open;
+    toggles.append(h('button', {
+      type: 'button', class: 'note-toggle' + (open ? ' on' : ''),
+      onclick: (e) => {
+        el.hidden = !el.hidden;
+        e.currentTarget.classList.toggle('on', !el.hidden);
+        if (!el.hidden && el.focus && key !== 'voice') el.focus();
+      },
+    }, label));
+    panels.append(el);
+  }
+  wrap.append(toggles, panels);
   return wrap;
 }
 

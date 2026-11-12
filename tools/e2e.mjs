@@ -234,6 +234,7 @@ try {
   const sent = await evaluate(`return ${SUBS}`);
   check(sent.status === 'submitted' && sent.max_score === 50, 'work submitted (max 50)');
   check(await evaluate(`return $$('.item input:not([disabled]), .item textarea:not([disabled])').length === 0`), 'submitted work is read-only');
+  check(await evaluate(`return !$$('.lessons .feedback').length && !$('.lessons').textContent.includes('Неверно')`), 'no marks are shown before the teacher checks');
   check(await evaluate(`return document.body.textContent.includes('Учитель ещё не добавил')`) || true, 'student page loads without a teacher');
 
   console.log('Accounts');
@@ -266,6 +267,8 @@ try {
   await sleep(100);
   check(await evaluate(`return $$('.review-ctl').length === 10`), 'review controls on every item of the page');
   check(await evaluate(`return !$('.lessons').textContent.includes('Правильный ответ')`), 'teacher review shows no answer key');
+  check(await evaluate(`return $$('.review-ctl .note-panels > *').every(el => el.hidden) && $$('.note-toggle').length === 30`), 'teacher notes are optional and collapsed');
+  check(await evaluate(`return !!$('.review-ctl .voice-note') && !!$('.overall-voice .voice-note')`), 'voice comment available for items and the whole work');
   await shot('06-review');
   await evaluate(`$$('#${gapId} .review-ctl .seg-btn')[1].click();`);
   await sleep(100);
