@@ -20,9 +20,12 @@ const args = process.argv.slice(2);
 const LIMIT = args.includes('--limit') ? Number(args[args.indexOf('--limit') + 1]) : Infinity;
 const FORCE = args.includes('--force');
 
-// British voices (Kokoro). Two of each so dialogues with two women/men still differ.
-const VOICES = { female: ['bf_emma', 'bf_isabella'], male: ['bm_george', 'bm_lewis'] };
-const WORD_VOICE = 'bf_emma';
+// American voices (Kokoro's best-rated ones). Two of each so dialogues with two women/men still differ.
+const VOICES = { female: ['af_heart', 'af_bella'], male: ['am_michael', 'am_fenrir'] };
+const WORD_VOICE = 'af_heart';
+// fp32 sounds noticeably cleaner than the quantized q8 model.
+const DTYPE = args.includes('--q8') ? 'q8' : 'fp32';
+const SAMPLES = args.includes('--samples');
 
 const FEMALE = /^(woman|girl|mum|mother|grandma|grandmother|aunt|sister|wife|ms|mrs|miss|ann|anna|amy|ella|emma|jane|jo|kate|laura|leila|lisa|lola|lucy|maria|mia|sara|sarah|zara|lily|jamila|nadia|dilnoza|malika|madina|sofia)\b/i;
 const MALE = /^(man|boy|dad|father|grandpa|grandfather|uncle|brother|husband|mr|ali|ben|dan|daniel|jack|kenji|leo|mark|max|nick|sam|tom|timur|aziz|bek|omar|guest|customer)\b/i;
@@ -87,6 +90,31 @@ for (const unit of UNITS) {
 }
 for (const words of Object.values(SOUNDS)) words.forEach(addWord);
 
+// ---------- samples: one file per voice, to choose voices by ear ----------
+if (SAMPLES) {
+  const dir = join(ROOT, 'audio-samples');
+  mkdirSync(dir, { recursive: true });
+  const tts = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', { dtype: DTYPE, device: 'cpu' });
+  const text = "Hi! My name's Alex and I'm from Chicago. I work in a hotel, and on weekends I play basketball with my friends.";
+  const voices = ['af_heart', 'af_bella', 'af_nicole', 'af_sarah', 'am_michael', 'am_fenrir', 'am_puck', 'am_echo'];
+  for (const v of voices) {
+    const a = await tts.generate(text, { voice: v, speed: 0.95 });
+    writeFileSync(join(dir, `${v}.mp3`), toMp3(a.audio, a.sampling_rate));
+    console.log('sample', v);
+  }
+  const dialogue = [['af_heart', "Hi Tom! Are you busy?"], ['am_michael', "Yes, sorry. I'm cooking dinner for my family."], ['af_heart', "OK, no problem. Call me later!"]];
+  const parts = [];
+  let rate = 24000;
+  for (const [v, t] of dialogue) {
+    const a = await tts.generate(t, { voice: v, speed: 0.95 });
+    rate = a.sampling_rate;
+    parts.push(a.audio, new Float32Array(Math.round(rate * 0.45)));
+  }
+  writeFileSync(join(dir, 'dialogue.mp3'), toMp3(concat(parts), rate));
+  console.log('Samples in', dir);
+  process.exit(0);
+}
+
 // ---------- generate ----------
 mkdirSync(OUT, { recursive: true });
 const todo = [...clips.entries()].filter(([key]) => FORCE || !existsSync(join(OUT, key + '.mp3'))).slice(0, LIMIT);
@@ -94,7 +122,7 @@ console.log(`Clips: ${clips.size} total, ${todo.length} to generate.`);
 
 if (todo.length) {
   const t0 = Date.now();
-  const tts = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', { dtype: 'q8', device: 'cpu' });
+  const tts = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', { dtype: DTYPE, device: 'cpu' });
   console.log(`Model loaded in ${Math.round((Date.now() - t0) / 1000)} s.`);
   let rate = 24000;
   let done = 0;

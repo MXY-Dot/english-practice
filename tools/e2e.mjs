@@ -104,6 +104,21 @@ try {
 
   console.log('Login page');
   check(await waitFor(`document.querySelector('.login-card')`), 'login page renders');
+  const pw = await evaluate(`${HELPERS}
+    const input = $('.pw-wrap input');
+    const [dice, eye] = $$('.pw-wrap .pw-btn');
+    eye.click(); const shown = input.type === 'text';
+    eye.click(); const hidden = input.type === 'password';
+    dice.click(); await new Promise(r => setTimeout(r, 100));
+    const generated = input.value.length >= 10 && input.type === 'text';
+    input.value = ''; input.type = 'password';
+    return { shown, hidden, generated };`);
+  check(pw.shown && pw.hidden, 'eye button shows and hides the password');
+  check(pw.generated, 'dice button generates a password');
+  await evaluate(`$('.theme-btn').click();`);
+  await sleep(150);
+  check(await evaluate(`return !$('.theme-panel').textContent.includes('null')`), 'theme settings show no "null"');
+  await evaluate(`document.body.click();`);
   await shot('01-login');
 
   console.log('Student');

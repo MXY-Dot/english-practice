@@ -130,7 +130,8 @@ export function themeButton() {
   function draw() {
     const s = loadSettings();
     const r = resolved(s);
-    panel.replaceChildren(
+    // replaceChildren() would print a null as the text "null", so drop empty entries.
+    panel.replaceChildren(...[
       h('div', { class: 'tp-title' }, 'Оформление'),
       h('div', { class: 'tp-label' }, 'Сезон'),
       seg([['auto', 'Авто'], ...Object.entries(SEASONS).map(([k, v]) => [k, v.icon + ' ' + v.label])], s.season, (v) => set({ season: v })),
@@ -140,7 +141,7 @@ export function themeButton() {
       s.time === 'auto' ? h('div', { class: 'tp-hint' }, 'Ночная тема с 19:00 до 7:00. Сейчас: ', r.night ? 'ночь' : 'день') : null,
       h('div', { class: 'tp-label' }, 'Анимация'),
       seg([[true, 'Включена'], [false, 'Выключена']], s.fx, (v) => set({ fx: v })),
-    );
+    ].filter(Boolean));
   }
   wrap.close = () => toggle(false);
   wrap.append(btn, panel);

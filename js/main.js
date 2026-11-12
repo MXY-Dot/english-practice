@@ -99,6 +99,37 @@ async function logout() {
 
 // ---------- login ----------
 
+// Readable random password (no 0/O, 1/l/I look-alikes).
+function makePassword(len = 10) {
+  const chars = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const rnd = new Uint32Array(len);
+  crypto.getRandomValues(rnd);
+  return Array.from(rnd, (n) => chars[n % chars.length]).join('');
+}
+
+// Password input with a 👁 show/hide button and an optional 🎲 generate button.
+function passwordField(input, { generate = false } = {}) {
+  const eye = h('button', { type: 'button', class: 'pw-btn', title: 'Показать пароль', 'aria-label': 'Показать пароль' }, '👁');
+  const setVisible = (on) => {
+    input.type = on ? 'text' : 'password';
+    eye.textContent = on ? '🙈' : '👁';
+    eye.title = on ? 'Скрыть пароль' : 'Показать пароль';
+    eye.setAttribute('aria-label', eye.title);
+  };
+  eye.onclick = () => setVisible(input.type === 'password');
+  const dice = h('button', { type: 'button', class: 'pw-btn', title: 'Придумать надёжный пароль', 'aria-label': 'Придумать пароль',
+    onclick: async () => {
+      input.value = makePassword();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      setVisible(true);
+      try { await navigator.clipboard.writeText(input.value); toast('Пароль придуман и скопирован. Запишите его!', 'ok'); } catch { toast('Пароль придуман. Запишите его!', 'ok'); }
+    } }, '🎲');
+  const wrap = h('div', { class: 'pw-wrap' }, input, h('div', { class: 'pw-tools' }, dice, eye));
+  wrap.showGenerate = (on) => { dice.style.display = on ? '' : 'none'; };
+  wrap.showGenerate(generate);
+  return wrap;
+}
+
 function loginView() {
   const err = h('p', { class: 'form-error' });
   const fail = (e) => (err.textContent = e.message || String(e));
@@ -121,14 +152,16 @@ function loginView() {
     const name = h('input', { class: 'inp', placeholder: 'Имя и фамилия', autocomplete: 'username' });
     const pass = h('input', { class: 'inp', placeholder: 'Пароль (придумайте при первом входе)', type: 'password', autocomplete: 'current-password' });
     body = h('form', { class: 'form', onsubmit: (e) => { e.preventDefault(); store.localLogin(name.value, role, pass.value).then(done, fail); } },
-      roleTabs, name, pass, err, h('button', { class: 'btn primary', type: 'submit' }, 'Войти'),
+      roleTabs, name, passwordField(pass, { generate: true }), err, h('button', { class: 'btn primary', type: 'submit' }, 'Войти'),
       h('p', { class: 'muted small' }, 'Демо-режим. При первом входе аккаунт создаётся с этим паролем; потом входите с тем же паролем.'));
   } else {
     let mode = 'in';
     const name = h('input', { class: 'inp', placeholder: 'Имя и фамилия', autocomplete: 'name', style: { display: 'none' } });
     const email = h('input', { class: 'inp', placeholder: 'E-mail', type: 'email', autocomplete: 'email', required: true });
     const pass = h('input', { class: 'inp', placeholder: 'Пароль (минимум 6 символов)', type: 'password', autocomplete: 'current-password', required: true, minLength: 6 });
-    const code = h('input', { class: 'inp', placeholder: 'Код учителя', type: 'password', autocomplete: 'off', style: { display: 'none' } });
+    const code = h('input', { class: 'inp', placeholder: 'Код учителя', type: 'password', autocomplete: 'off' });
+    const passWrap = passwordField(pass);
+    const codeWrap = passwordField(code);
     const roleWrap = h('div', { style: { display: 'none' } }, roleTabs);
     const submit = h('button', { class: 'btn primary', type: 'submit' }, 'Войти');
     const hint = h('p', { class: 'muted small' });
@@ -137,7 +170,8 @@ function loginView() {
       const up = mode === 'up';
       name.style.display = up ? '' : 'none';
       roleWrap.style.display = up ? '' : 'none';
-      code.style.display = up && role === 'teacher' ? '' : 'none';
+      codeWrap.style.display = up && role === 'teacher' ? '' : 'none';
+      passWrap.showGenerate(up);
       pass.autocomplete = up ? 'new-password' : 'current-password';
       submit.textContent = up ? 'Зарегистрироваться' : 'Войти';
       hint.textContent = up
@@ -171,7 +205,7 @@ function loginView() {
           done(u);
         }
       } catch (ex) { err.className = 'form-error'; fail(ex); } finally { submit.disabled = false; }
-    } }, tabs, roleWrap, name, email, pass, code, err, submit, hint);
+    } }, tabs, roleWrap, name, email, passWrap, codeWrap, err, submit, hint);
     sync();
   }
 
