@@ -237,6 +237,26 @@ try {
   const draft = await evaluate(`return ${SUBS}`);
   check(draft?.status === 'draft' && draft.test === '1A' && draft.answers[choiceKey] === 0, 'draft autosaved');
   check(JSON.stringify(draft?.answers[gapKey]).includes('am'), 'gap answer saved');
+  // Regression: after an autosave, new clicks must still show as selected (all click types).
+  const afterSave = await evaluate(`
+    const res = [];
+    for (const t of $$('.ptab')) {
+      t.click(); await new Promise(r => setTimeout(r, 40));
+      for (const card of $$('.lesson-body .item')) {
+        const type = card.dataset.type;
+        const btn = type === 'choice' ? card.querySelector('.opt:not(.selected)')
+          : type === 'stress' ? card.querySelector('.syl:not(.selected)')
+          : type === 'tf' ? card.querySelector('.seg-btn') : null;
+        if (!btn || res.some(r => r.type === type)) continue;
+        const id = card.id; btn.click(); await new Promise(r => setTimeout(r, 60));
+        const ok = !!document.querySelector('#' + id + ' .selected, #' + id + ' .seg-btn.active');
+        res.push({ type, ok });
+      }
+    }
+    $$('.ptab')[0].click();
+    return res;`);
+  check(afterSave.length >= 3 && afterSave.every((r) => r.ok), 'clicks after autosave still select (' + afterSave.map((r) => r.type + ':' + r.ok).join(', ') + ')');
+  await sleep(1500);
   await evaluate(`btnByText('Отправить учителю').click();`);
   await sleep(800);
   const sent = await evaluate(`return ${SUBS}`);

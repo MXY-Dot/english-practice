@@ -310,7 +310,9 @@ async function testView(code) {
     saveState.textContent = 'Сохранение…';
     try {
       const saved = await store.saveSubmission(payload);
-      sub = { ...sub, ...saved };
+      // Keep our own answers object: the page renders from it (ctx.answers). The server
+      // returns a copy, and switching to it would make later clicks invisible.
+      sub = { ...sub, ...saved, answers: sub.answers };
       saveState.textContent = '✓ Сохранено ' + fmtDate(saved.updated_at);
       return true;
     } catch (e) {

@@ -189,7 +189,8 @@ function localStore() {
       row.id = existing?.id ?? uid();
       all[row.id] = row;
       write(K.subs, all);
-      return { ...row, student_name: nameOf(row.student_id) };
+      // Return a copy, like the real server does (keeps demo mode honest for tests).
+      return structuredClone({ ...row, student_name: nameOf(row.student_id) });
     },
     async listSubmissions(studentId) {
       return Object.values(subs())
