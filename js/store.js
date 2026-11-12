@@ -53,7 +53,11 @@ async function supabaseStore(cfg) {
       }
       const meta = { full_name: name, ...(role === 'teacher' ? { teacher_code: teacherCode } : {}) };
       const data = check(await sb.auth.signUp({ email, password, options: { data: meta } }));
-      return data.session ? currentUser() : null;
+      if (data.session) return currentUser();
+      // "Confirm email" may still be on, but the database confirms new accounts itself
+      // (auto_confirm_email trigger), so a normal sign-in works right away.
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      return error ? null : currentUser();
     },
     async signOut() {
       await sb.auth.signOut();
