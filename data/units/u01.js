@@ -129,7 +129,7 @@ export default {
         ]),
         ...sec('vocabulary', [
           gap('Write the nationality.', 'Uzbekistan → ___', 'Uzbek'),
-          gap('Write the nationality.', 'Germany → ___', 'German'),
+          gap('Write the continent adjective.', 'Asia → ___ · Europe → ___', 'Asian', 'European'),
           gap('Write the number in words.', '100 = one ___', 'hundred'),
         ]),
         ...sec('pronunciation', [
@@ -160,7 +160,7 @@ export default {
           [['Ahmed is from Egypt.', true], ['He is thirty-two.', false], ['His city is Cairo.', true]]),
         rd('Famous people', "Cristiano Ronaldo isn't Spanish. He's Portuguese. Shakira isn't Mexican, she's Colombian. Jackie Chan is from Hong Kong — he's Chinese. And Adele? She's English, from London.",
           [['Ronaldo is…', ['Spanish', 'Portuguese', 'Brazilian'], 1], ['Where is Shakira from?', ['Mexico', 'Colombia', 'Spain'], 1], ['Adele is from…', ['London', 'New York', 'Dublin'], 0]]),
-        rd('A language school', "At our language school there are students from many countries. Hiro isn't Chinese, he's Japanese. Ana and Pedro aren't Spanish — they're from Mexico. Olga is Russian. Is the teacher English? No, he isn't. He's Australian, from Sydney.", [['Hiro is…', ['Chinese', 'Japanese', 'Korean'], 1], ['Where are Ana and Pedro from?', ['Spain', 'Mexico', 'Brazil'], 1], ['The teacher is…', ['English', 'American', 'Australian'], 2]]),
+        rd('One world', "The world has seven continents. Africa, Asia, Europe, North America and South America are full of countries and people. Australia is a country and a continent. And Antarctica? Nobody lives there all year — it's very, very cold! Russia isn't only in Europe — it's in Asia too.", [['How many continents are there?', ['five', 'six', 'seven'], 2], ['Where does nobody live all year?', ['Australia', 'Antarctica', 'Africa'], 1], ['Russia is in…', ['Europe and Asia', 'only Europe', 'only Asia'], 0]]),
       ],
     },
     {

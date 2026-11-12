@@ -160,7 +160,7 @@ export default {
           [['Students eat a lot of bread.', true], ['They eat many vegetables.', false], ['They drink a lot of milk.', false], ['Nobody eats fish every day.', true]]),
         rd('A picnic', "On Sunday we had a picnic in the park. We took two bottles of water, a big bag of apples, a loaf of bread and a jar of jam. We forgot the cheese! There were a lot of people in the park, but not many places in the shade.",
           [['How many bottles of water did they take?', ['one', 'two', 'three'], 1], ['What did they forget?', ['bread', 'jam', 'cheese'], 2], ['There weren\'t many…', ['people', 'places in the shade', 'apples'], 1]]),
-        cloze('Shopping list', "We don't have ___ food at home! We need two ___ (bottle) of water, a ___ of bread and some cheese. How ___ eggs do we need? About ten. And we don't have ___ coffee.", ['much', 'any'], 'bottles', 'loaf', 'many', ['any', 'much']),
+        rd('White gold', "Salt is sometimes called 'white gold'. In the past it was very expensive, and Roman soldiers sometimes got salt as part of their pay. Today we eat too much of it. Doctors say adults shouldn't eat more than about five grams of salt a day — that's one teaspoon. Bread, cheese and crisps have a lot of salt.", [["What is 'white gold'?", ['sugar', 'salt', 'rice'], 1], ['Who got salt as part of their pay?', ['Roman soldiers', 'farmers', 'children'], 0], ['How much salt can adults eat a day?', ['about one teaspoon', 'about five teaspoons', 'no salt'], 0]]),
       ],
     },
     {

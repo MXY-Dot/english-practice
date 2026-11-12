@@ -82,7 +82,7 @@ export default {
           [['The hare ran slowly.', false], ['The tortoise walked slowly.', true], ['The hare won the race.', false]]),
         rd('A polite tourist', "When you visit a new country, behave politely. Speak quietly in museums and on public transport. Dress appropriately when you visit a mosque or a church. Learn a few words in the local language — people will smile happily when you say 'thank you' in their language!",
           [['How should you speak on public transport?', ['loudly', 'quietly', 'quickly'], 1], ['Where should you dress appropriately?', ['at the beach', 'in a mosque or church', 'at a party'], 1], ['Why learn some local words?', ['People smile happily.', 'It is required.', 'For the exam.'], 0]]),
-        tf('Read. True or false?', "My cousin Jamshid is a good student. He studies hard and always does his homework carefully. He speaks English fluently because he watches films in English. But he plays football badly — he always falls over!", [['Jamshid studies hard.', true], ['He speaks English badly.', false], ['He plays football very well.', false]]),
+        rd('Culture shock', "When Aziz moved to London, he had a culture shock. People queued patiently for everything — buses, coffee, even the toilet! They spoke quietly on trains and said 'thank you' to the bus driver. 'At home we speak loudly and we don't queue very carefully,' he laughs. 'Now I do it too!'", [['Where did Aziz move?', ['to New York', 'to London', 'to Paris'], 1], ['How did people speak on trains?', ['loudly', 'quietly', 'quickly'], 1], ['What do people say to the bus driver?', ['sorry', 'thank you', 'goodbye'], 1]]),
       ],
     },
     {
@@ -160,7 +160,7 @@ export default {
           [['The writer learned to swim as a child.', false], ['She practised twice a week.', true], ['She is planning to learn to dive.', true]]),
         rd('Bucket list', "A bucket list is a list of things you want to do before you die. Here's my list: I want to see the Northern Lights. I'd like to learn to speak Chinese. I hope to run a marathon. And I'd love to visit every continent!",
           [['What is a bucket list?', ['a shopping list', 'things you want to do in life', 'a list of friends'], 1], ['What language does the writer want to learn?', ['Spanish', 'Chinese', 'Japanese'], 1], ['What does the writer hope to run?', ['a marathon', 'a company', 'a shop'], 0]]),
-        cloze('Plans for the summer', "This summer I want ___ (get) a job in a café. I need ___ (save) money because I'd like ___ (buy) a laptop. I also hope ___ (visit) my cousins in Kazakhstan. And I promised my mum ___ (help) at home!", 'to get', 'to save', 'to buy', 'to visit', 'to help'),
+        tf('Read. True or false?', "Experiences or things? Scientists say experiences make us happier than things. A new phone makes us happy for a short time, but we remember a trip with friends for years. So next time, don't buy a new jacket — try to learn something new or travel to a new place!", [['Things make us happier than experiences.', false], ['We remember trips with friends for a long time.', true], ['The text says: try to learn something new.', true]]),
       ],
     },
     {

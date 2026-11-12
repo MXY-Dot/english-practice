@@ -82,7 +82,7 @@ export default {
           [['Agatha Christie wrote detective novels.', true], ['She was born in 1980.', false], ['She worked in a school.', false], ['She learned about poisons in a hospital.', true]]),
         rd('A lucky day', "On Monday, Ravshan found 100 dollars in the street. He took it to the police. Two days later a woman called him. It was her money. She was very happy and she gave him a present — a ticket for a football match!",
           [['What did Ravshan find?', ['a wallet', '100 dollars', 'a ticket'], 1], ['Where did he take it?', ['home', 'to the police', 'to the bank'], 1], ['What was the present?', ['money', 'a football ticket', 'a book'], 1]]),
-        rd('The first day', "My first day at work was a disaster. I woke up late and I forgot my bag at home. I took a taxi, but it broke down. I ran to the office and arrived thirty minutes late. My boss wasn't angry — she laughed and said, 'Welcome to the team!'", [['What did she forget?', ['her phone', 'her bag', 'her keys'], 1], ['What happened to the taxi?', ['It broke down.', 'It was late.', 'It went the wrong way.'], 0], ['How did the boss react?', ['She was angry.', 'She laughed.', 'She left.'], 1]]),
+        rd('A murder mystery', "Lord Barton was in his library at 9 p.m. At 10 p.m. the cook found him dead. The police inspector asked everybody questions. His wife said, 'I was in the garden.' His son said, 'I was in my room. I went to bed early.' But the gardener saw the son in the garden at 9.30…", [['Where was Lord Barton at 9 p.m.?', ['in the garden', 'in his library', 'in his bedroom'], 1], ['Who found him?', ['his wife', 'the cook', 'the police'], 1], ["Who said something that wasn't true?", ['the wife', 'the son', 'the gardener'], 1]]),
       ],
     },
     {
@@ -238,7 +238,7 @@ export default {
           [['You go across the road.', true], ['The café is on the right.', false], ['The café is between the bank and a bookshop.', true]]),
         rd('Pompeii', "Pompeii was a Roman city in Italy. In 79 AD the volcano Vesuvius erupted. There was a lot of ash and the city disappeared. Today tourists can walk along its streets. There were shops, restaurants and even a theatre. It's like a museum under the sky.",
           [['When did Vesuvius erupt?', ['79 AD', '1979', '790 AD'], 0], ['What was there in Pompeii?', ['shops and a theatre', 'a metro', 'a university'], 0], ['Today Pompeii is like…', ['a city', 'a museum', 'a beach'], 1]]),
-        cloze("Grandma's house", "When I was a child, there ___ a big apple tree ___ (at the back of) my grandmother's house. There ___ a lot of chickens in the garden. ___ (close to) the house there was a small river. We swam ___ it every summer.", 'was', 'behind', 'were', ['Near', 'Next to'], 'in'),
+        tf('Read. True or false?', "Room 333 is the most famous room in the old Grand Hotel. Guests say there was a strange noise at night and the door opened and closed. The hotel manager says, 'There aren't any ghosts here.' But the room is always full — people want to stay there!", [['Room 333 is in a new hotel.', false], ['Guests heard a strange noise at night.', true], ['People never want to stay in the room.', false]]),
       ],
     },
   ],

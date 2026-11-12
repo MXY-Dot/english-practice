@@ -82,7 +82,7 @@ export default {
           [['The town is very big.', false], ['The library is the oldest building.', true], ["The best pizza is at Mario's.", true]]),
         rd('The best and the worst', "We asked tourists about London. The best thing? The museums — most of them are free! The worst thing? The weather. The most expensive thing? Hotels and taxis. The most surprising thing? People always say 'sorry'!",
           [['What is the best thing about London?', ['the weather', 'the museums', 'the hotels'], 1], ['What is the worst thing?', ['the weather', 'the people', 'the food'], 0], ['What is the most expensive?', ['museums', 'hotels and taxis', 'food'], 1]]),
-        cloze('My city', 'Tashkent is the ___ (big) city in Uzbekistan. The ___ (old) part of the city is Chorsu, with the ___ ___ (famous) bazaar. The ___ (good) time to visit is in spring. Summer is the ___ (hot) season.', 'biggest', 'oldest', 'most', 'famous', 'best', 'hottest'),
+        tf('Read. True or false?', "The North Yungas Road in Bolivia is called 'the most dangerous road in the world'. It is very narrow and very high in the mountains, and there are no walls at the side. Today most cars use a new, safer road, but many tourists go down the old road by bike!", [['The road is in Bolivia.', true], ['It is very wide.', false], ['Tourists ride bikes on the old road.', true]]),
       ],
     },
     {
@@ -160,7 +160,7 @@ export default {
           [['Tom is going to finish school next year.', true], ['He is going to university immediately.', false], ['He is going to study engineering.', true]]),
         rd('New Year resolutions', "Every January people make plans for the new year. Ali is going to stop eating fast food. Madina is going to learn to play the guitar. Their dad is going to walk 10,000 steps every day. And their grandmother? She's going to learn to use a smartphone!",
           [['What is Ali going to stop?', ['playing games', 'eating fast food', 'watching TV'], 1], ['Who is going to learn the guitar?', ['Ali', 'Madina', 'Dad'], 1], ['What is grandma going to learn?', ['to drive', 'to use a smartphone', 'to swim'], 1]]),
-        tf('Read. True or false?', "Next month Aziza and her friends are going to travel around Uzbekistan by train. First they're going to visit Samarkand. Then they're going to go to Bukhara and Khiva. They aren't going to stay in hotels — they're going to stay with families.", [['They are going to travel by bus.', false], ['First they are going to visit Samarkand.', true], ['They are going to stay in hotels.', false]]),
+        rd('Five continents in a day', "In a big city like London you can visit the world in one day. In the morning you're going to have breakfast in a Turkish café. Then you're going to see Chinese art at the British Museum and have lunch at an Indian restaurant. In the evening you're going to listen to African music and have Brazilian food!", [['Where are you going to have breakfast?', ['in a Turkish café', 'at the museum', 'at a hotel'], 0], ['What are you going to see at the museum?', ['Chinese art', 'African music', 'old cars'], 0], ['What food are you going to have in the evening?', ['Indian', 'Brazilian', 'Turkish'], 1]]),
       ],
     },
     {

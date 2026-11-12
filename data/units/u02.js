@@ -22,7 +22,7 @@ export default {
           ord('is What this', 'What is this?'),
         ]),
         ...sec('vocabulary', [
-          mt('Match the words to make things.', [['sun', 'glasses'], ['credit', 'card'], ['note', 'book'], ['head', 'phones'], ['tooth', 'brush']]),
+          mt('Match the words to make things.', [['sun', 'glasses'], ['credit', 'card'], ['note', 'book'], ['head', 'phones'], ['news', 'paper']]),
           gap('Complete the word.', 'You open a door with a ___. (k _ y)', 'key'),
           gap('Complete the word.', 'You see the time on your ___. (w _ _ _ h)', 'watch'),
           gap('Complete the word.', 'You put money in your ___. (w _ _ _ _ t)', 'wallet'),
@@ -160,7 +160,7 @@ export default {
           [['The shop is very big.', false], ['The clothes are cheap.', true], ['It is open on Sunday.', false]]),
         rd('Two cities', "Paris is a very beautiful city, but it's quite expensive. The museums are very interesting. Tashkent is very big and modern. The food there is cheap and very good. In summer it is very hot.",
           [['Paris is…', ['cheap', 'quite expensive', 'small'], 1], ['The food in Tashkent is…', ['expensive', 'cheap and good', 'bad'], 1], ['In summer Tashkent is…', ['cold', 'very hot', 'rainy'], 1]]),
-        rd('Two brothers', "Ali and Ravshan are brothers, but they're very different. Ali is tall and thin. Ravshan is quite short. Ali's car is old and slow, but Ravshan's car is new and very fast. Ali is quiet, but Ravshan is very funny.", [['Who is tall?', ['Ali', 'Ravshan'], 0], ["Ravshan's car is…", ['old and slow', 'new and fast', 'red'], 1], ['Who is very funny?', ['Ali', 'Ravshan'], 1]]),
+        tf('Read. True or false?', "Made in America? Not always! Many famous American things are made in other countries. The jeans in your bag are maybe from Bangladesh, and the phone in your hand is maybe from China. But some things are really American: blue jeans were first made in San Francisco in the 1870s.", [['All American things are made in the USA.', false], ['The first blue jeans were made in San Francisco.', true], ['Many phones are made in China.', true]]),
       ],
     },
     {

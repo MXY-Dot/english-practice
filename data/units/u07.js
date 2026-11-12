@@ -82,7 +82,7 @@ export default {
           [['The weather was good.', false], ['Her friends were at home.', false], ['The TV was broken.', true], ['She was bored.', true]]),
         rd('Ulugh Beg', "Ulugh Beg was a famous astronomer and a leader. He was born in 1394. He was the grandson of Amir Temur. He built an observatory in Samarkand. His star tables were very accurate and they were famous in Europe too.",
           [['Ulugh Beg was…', ['a painter', 'an astronomer', 'a writer'], 1], ['Who was his grandfather?', ['Amir Temur', 'Babur', 'Navoi'], 0], ['Where was his observatory?', ['in Bukhara', 'in Samarkand', 'in Khiva'], 1]]),
-        rd('Alisher Navoi', "Alisher Navoi was a famous poet and thinker. He was born in Herat in 1441. He was a friend of the ruler Husayn Bayqara. His poems were in the Chagatai language. Today many streets, parks and a theatre in Tashkent have his name.", [['What was Navoi?', ['a painter', 'a poet', 'a scientist'], 1], ['When was he born?', ['1441', '1414', '1541'], 0], ['What has his name today?', ['streets, parks and a theatre', 'only a university', 'nothing'], 0]]),
+        rd('Selfies', "The first selfie was in 1839! Robert Cornelius, an American, took a photo of himself in Philadelphia. He was very still for about three minutes. Today people take millions of selfies every day. In 2013 'selfie' was the word of the year in the Oxford dictionaries.", [['When was the first selfie?', ['1839', '1939', '2013'], 0], ['Who took it?', ['a British woman', 'Robert Cornelius', 'a photographer from Paris'], 1], ['In 2013 selfie was…', ['a new phone', 'the word of the year', 'a film'], 1]]),
       ],
     },
     {
@@ -238,7 +238,7 @@ export default {
           [['Dan got up at seven.', false], ['He got the train at six.', false], ['He had three classes.', true], ['He went to the library.', true]]),
         rd('Holiday in Khiva', "Last spring we went to Khiva for three days. We got there by train from Tashkent. We stayed in a small hotel in the old city. We had lunch in a traditional restaurant and we got some beautiful souvenirs. We had a great time!",
           [['How long did they stay?', ['two days', 'three days', 'a week'], 1], ['How did they get to Khiva?', ['by plane', 'by train', 'by car'], 1], ['What did they get?', ['souvenirs', 'a car', 'tickets'], 0]]),
-        cloze('A day out', 'Last Sunday we ___ (go) to the zoo. We ___ (get) there by bus. We ___ (have) a picnic near the lake. We ___ (see) lions and elephants. We ___ (get) home very late.', 'went', 'got', 'had', 'saw', 'got'),
+        tf('Read. True or false?', "Happy New Year? Last year I was at a party in the city centre. At midnight there were fireworks and everybody sang. But then it started to rain, there weren't any taxis and I walked home for two hours. I got home at three in the morning, very wet and very tired!", [['There were fireworks at midnight.', true], ['The writer went home by taxi.', false], ['The writer got home at 3 a.m.', true]]),
       ],
     },
   ],

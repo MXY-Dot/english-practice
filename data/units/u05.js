@@ -22,7 +22,7 @@ export default {
           ord('you me Can help', 'Can you help me?'),
         ]),
         ...sec('vocabulary', [
-          mt('Match the verbs and the phrases.', [['play', 'the piano'], ['ride', 'a bike'], ['take', 'photos'], ['run', 'a marathon'], ['speak', 'two languages']]),
+          mt('Match the verbs and the phrases.', [['call', 'a taxi'], ['wait for', 'a bus'], ['look for', 'your keys'], ['tell somebody', 'a secret'], ['find', 'a parking space']]),
           gap('Complete with a verb.', "Don't ___ your keys! Put them in your bag.", ['forget', 'lose']),
           gap('Complete with a verb.', 'Can you ___ the piano? (p _ _ y)', 'play'),
           gap('Complete with a verb.', "I can't ___ — I don't have a licence. (d _ _ _ e)", 'drive'),
@@ -82,7 +82,7 @@ export default {
           [['The camp is by the sea.', false], ['You can learn tennis.', true], ['You can bring your phone.', false]]),
         rd('Robots today', "Robots can do a lot of things today. They can clean the house, cook simple meals and play chess. Some robots can talk to people. But they can't think like humans and they can't feel happy or sad. Can robots be our friends? Maybe one day.",
           [['Robots can…', ['feel sad', 'play chess', 'think like humans'], 1], ["What can't robots do?", ['clean', 'talk', 'feel happy'], 2], ['Can robots be our friends now?', ['Yes, they can.', 'Maybe one day.'], 1]]),
-        tf('Read. True or false?', "Cats are amazing animals. They can see very well at night. They can jump five times their height. They can sleep for sixteen hours a day. But most cats can't swim and they don't like water.", [['Cats can see well at night.', true], ['Cats can jump five times their height.', true], ['Most cats can swim well.', false]]),
+        tf('Read. True or false?', "Vote for me! My name is Sam and I want to be the class president. I can speak English and Spanish, I can play the guitar and I can organise great parties. I can't sing, but I can listen! If you vote for me, we can have a school concert every month.", [['Sam can speak two languages.', true], ['Sam can sing very well.', false], ['Sam wants a concert every month.', true]]),
       ],
     },
     {

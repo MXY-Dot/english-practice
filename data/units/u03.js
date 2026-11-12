@@ -22,7 +22,7 @@ export default {
           ord("don't We in live a flat", "We don't live in a flat."),
         ]),
         ...sec('vocabulary', [
-          mt('Match the verbs and the phrases.', [['play', 'tennis'], ['watch', 'TV'], ['drink', 'coffee'], ['speak', 'English'], ['listen to', 'music']]),
+          mt('Match the verbs and the phrases.', [['wear', 'glasses'], ['do', 'housework'], ['say', 'sorry'], ['take', 'an umbrella'], ['listen to', 'music']]),
           gap('Complete with a verb.', 'I ___ in a flat in the city centre. (l _ _ e)', 'live'),
           gap('Complete with a verb.', 'Do you ___ a car? (h _ _ e)', 'have'),
           gap('Complete with a verb.', 'We ___ to the gym on Mondays. (g o)', 'go'),
@@ -82,7 +82,7 @@ export default {
           [['They live in a big house.', false], ['Lucy studies art.', true], ['They have a car.', false], ['Lucy works on Saturdays.', true]]),
         rd('A cat\'s life', "My cat, Mimi, has an easy life. She sleeps for about sixteen hours a day. She doesn't like rain, so she stays inside in winter. She eats twice a day, at seven in the morning and six in the evening. She loves fish but she doesn't drink milk.",
           [['How many hours does Mimi sleep?', ['six', 'sixteen', 'sixty'], 1], ['When does she eat?', ['once a day', 'twice a day', 'all day'], 1], ["What doesn't she drink?", ['water', 'milk', 'juice'], 1]]),
-        tf('Read. True or false?', "My grandparents live in a village near Fergana. My grandfather gets up very early and works in the garden. My grandmother makes bread every morning. They don't have a computer, but they have a big TV. They watch the news every evening.", [['They live in a city.', false], ['Grandmother makes bread every morning.', true], ["They don't have a computer.", true], ['They never watch TV.', false]]),
+        rd('Britain: the good and the bad', "Visitors to Britain often say the people are very polite — they say 'sorry' all the time! They love the parks and the old buildings, and the museums in London are free. But they don't like the weather: it rains a lot. And the food? Some people love fish and chips, but some people don't.", [['What do the British say all the time?', ['thank you', 'sorry', 'hello'], 1], ['Which museums are free?', ['in London', 'in all of Britain', 'none'], 0], ["What don't visitors like?", ['the parks', 'the weather', 'the people'], 1]]),
       ],
     },
     {
@@ -105,7 +105,7 @@ export default {
           gap('Write the job.', 'She works in a hospital and helps doctors. She\'s a ___.', 'nurse'),
           gap('Write the job.', 'He cooks in a restaurant. He\'s a ___.', ['chef', 'cook']),
           gap('Write the job.', 'She works with money in a bank. She\'s a bank ___. (c _ _ _ _ _ r)', 'cashier'),
-          ch('This person works with computers.', ['a lawyer', 'an IT worker', 'a farmer'], 1),
+          ch('This person cuts and washes hair.', ['a lawyer', 'a hairdresser', 'a soldier'], 1),
           ch('A person who doesn\'t have a job is…', ['unemployed', 'retired', 'a student'], 0),
         ]),
         ...sec('pronunciation', [
@@ -130,7 +130,7 @@ export default {
         ...sec('vocabulary', [
           gap('Write the job.', "She designs buildings. She's an ___. (a _ _ _ _ _ _ _ t)", 'architect'),
           gap('Write the job.', "He helps people with legal problems. He's a ___.", 'lawyer'),
-          gap('Write the job.', "She works on a farm. She's a ___.", 'farmer'),
+          gap('Write the job.', "He writes for a newspaper. He's a ___. (j _ _ _ _ _ _ _ _ t)", 'journalist'),
         ]),
         ...sec('pronunciation', [
           st('law-yer', 0),
