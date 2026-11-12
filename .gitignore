@@ -3,3 +3,4 @@ tools/screenshots/
 .DS_Store
 Thumbs.db
 audio-samples/
+supabase/*.local.sql
