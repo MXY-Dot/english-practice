@@ -8,6 +8,11 @@
     "validate": "node tools/validate.mjs",
     "test": "node --test tools/grading.test.mjs",
     "e2e": "node tools/e2e.mjs",
+    "voices": "node tools/voices.mjs",
     "check": "node --test tools/grading.test.mjs && node tools/validate.mjs"
+  },
+  "devDependencies": {
+    "@breezystack/lamejs": "^1.2.7",
+    "kokoro-js": "^1.2.1"
   }
 }

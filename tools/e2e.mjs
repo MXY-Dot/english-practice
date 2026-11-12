@@ -227,6 +227,18 @@ try {
   check(await evaluate(`return document.body.textContent.includes('I am a student.')`), 'student sees correction');
   await shot('07-student-result');
 
+  console.log('Voices');
+  const voiceInfo = await evaluate(`
+    const m = await (await fetch('audio/manifest.json')).json();
+    const { clipUrl } = await import('./js/audio.js');
+    const { UNITS } = await import('./data/units/index.js');
+    const says = UNITS.flatMap(u => u.lessons.flatMap(l => [...l.practice, ...l.texts])).filter(i => i.say).map(i => i.say);
+    const covered = says.filter(s => clipUrl(s)).length;
+    const first = clipUrl(says[0]);
+    const ok = first ? (await fetch(first)).ok : false;
+    return { files: m.files.length, says: says.length, covered, ok };`);
+  check(voiceInfo.covered === voiceInfo.says && voiceInfo.ok, `natural voice files for all listening items (${voiceInfo.covered}/${voiceInfo.says}, ${voiceInfo.files} files)`);
+
   console.log('Themes');
   check(await evaluate(`return ['winter','spring','summer','autumn'].includes(document.documentElement.dataset.season)`), 'auto season is applied');
   await evaluate(`$('.theme-btn').click();`);

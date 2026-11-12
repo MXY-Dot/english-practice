@@ -1,6 +1,30 @@
-// Text-to-speech for listening tasks and microphone recording for speaking tasks.
+// Audio for listening tasks and microphone recording for speaking tasks.
+// Order of preference:
+//  1. pre-generated natural voices in audio/*.mp3 (tools/voices.mjs, listed in audio/manifest.json)
+//  2. browser speech synthesis (fallback)
+// Single words first try real human recordings from a dictionary API.
+import { audioKey } from './audiokey.js';
 
 const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+
+let clipSet = new Set();
+const manifestReady = typeof fetch !== 'undefined' && typeof window !== 'undefined'
+  ? fetch('audio/manifest.json').then((r) => (r.ok ? r.json() : { files: [] }))
+    .then((m) => { clipSet = new Set(m.files || []); }).catch(() => {})
+  : Promise.resolve();
+
+export function clipUrl(say) {
+  const key = audioKey(say);
+  return clipSet.has(key) ? `audio/${key}.mp3` : null;
+}
+
+async function playFile(url, { slow, onEnd }) {
+  currentClip = new Audio(url);
+  currentClip.playbackRate = slow ? 0.75 : 1;
+  currentClip.preservesPitch = true;
+  if (onEnd) currentClip.onended = onEnd;
+  await currentClip.play();
+}
 let voicesCache = [];
 
 function englishVoices() {
@@ -12,10 +36,21 @@ function englishVoices() {
 }
 if (synth) synth.addEventListener?.('voiceschanged', () => (voicesCache = synth.getVoices()));
 
-export const ttsSupported = !!synth;
+// Audio buttons are shown when either generated files or TTS can play.
+export const ttsSupported = !!synth || typeof Audio !== 'undefined';
 
 // `say` is a string, or a dialogue: [["Anna", "Hi!"], ["Tom", "Hello."]].
-export function speak(say, { slow = false, onEnd } = {}) {
+export async function speak(say, { slow = false, onEnd } = {}) {
+  stopSpeaking();
+  await manifestReady;
+  const url = clipUrl(say);
+  if (url) {
+    try { await playFile(url, { slow, onEnd }); return; } catch { /* fall back to TTS */ }
+  }
+  ttsSpeak(say, { slow, onEnd });
+}
+
+function ttsSpeak(say, { slow = false, onEnd } = {}) {
   if (!synth) return;
   synth.cancel();
   const lines = typeof say === 'string' ? [[null, say]] : say;
@@ -66,18 +101,13 @@ export function lookupWord(word) {
 
 export const isSingleWord = (t) => /^[a-z][a-z'-]*$/i.test(String(t).trim());
 
-// Plays a real recording of the word when available, otherwise TTS.
+// Plays a real human recording of the word when the dictionary has one,
+// otherwise the generated voice file, otherwise TTS.
 export async function playWord(word, { slow = false, onEnd } = {}) {
   stopSpeaking();
   const info = isSingleWord(word) ? await lookupWord(word) : null;
   if (info?.audio) {
-    try {
-      currentClip = new Audio(info.audio);
-      currentClip.playbackRate = slow ? 0.75 : 1;
-      if (onEnd) currentClip.onended = onEnd;
-      await currentClip.play();
-      return;
-    } catch { /* fall through to TTS */ }
+    try { await playFile(info.audio, { slow, onEnd }); return; } catch { /* fall through */ }
   }
   speak(word, { slow, onEnd });
 }

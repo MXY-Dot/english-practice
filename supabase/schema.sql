@@ -88,10 +88,10 @@ create policy "profiles: read" on public.profiles
 create or replace function public.claim_student(sid uuid)
 returns void language plpgsql security definer set search_path = public as $$
 begin
-  if not public.is_teacher() then raise exception 'Only teachers can add students'; end if;
+  if not public.is_teacher() then raise exception 'Добавлять учеников может только учитель.'; end if;
   update public.profiles set teacher_id = auth.uid()
     where id = sid and role = 'student' and (teacher_id is null or teacher_id = auth.uid());
-  if not found then raise exception 'This student already has a teacher'; end if;
+  if not found then raise exception 'У этого ученика уже есть учитель.'; end if;
 end;
 $$;
 

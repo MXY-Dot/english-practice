@@ -395,7 +395,9 @@ async function teacherHome() {
 
   // "My students": the teacher picks students who registered and have no teacher yet.
   const run = async (fn, okMsg) => {
-    try { await fn(); toast(okMsg, 'ok'); teacherHome(); } catch (e) { toast(e.message, 'error'); }
+    // Refresh in both cases: another teacher may have picked this student a moment ago.
+    try { await fn(); toast(okMsg, 'ok'); } catch (e) { toast(e.message, 'error'); }
+    teacherHome();
   };
   const search = h('input', { class: 'inp', placeholder: '🔎 Найти ученика по имени…', oninput: () => drawFree() });
   const freeList = h('div', { class: 'pick-list' });
