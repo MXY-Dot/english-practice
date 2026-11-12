@@ -8,7 +8,7 @@ export default {
   topics: 'adverbs, verbs + to + infinitive, articles · common adverbs, verbs + to, the internet',
   lessons: [
     {
-      code: '11A', title: 'Slowly and carefully', topics: 'adverbs of manner and modifiers · common adverbs',
+      code: '11A', title: "Culture shock", topics: "adverbs (manner and modifiers) · common adverbs · connected speech",
       practice: [
         ...sec('grammar', [
           gap('Write the adverb.', 'quick → ___ · careful → ___', 'quickly', 'carefully'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '11B', title: 'Hopes and dreams', topics: 'verbs + to + infinitive · verbs followed by to',
+      code: '11B', title: "Experiences or things?", topics: "verb + to + infinitive · verbs that take the infinitive · weak to, sentence stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with **to** + verb.', 'I want ___ (be) a doctor.', 'to be'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '11C', title: 'Life online', topics: 'articles: a / an, the, no article · the internet',
+      code: '11C', title: "How smart is your phone?", topics: "definite article: the or no the · phones and the internet · the · Practical English: getting to the airport",
       practice: [
         ...sec('grammar', [
           gap('Complete with **a, an** or **the**.', 'I have ___ cat and ___ dog. ___ cat is black.', 'a', 'a', 'The'),

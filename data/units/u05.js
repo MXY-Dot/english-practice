@@ -8,7 +8,7 @@ export default {
   topics: "can / can't, present continuous, present simple or continuous · verb phrases, weather, clothes",
   lessons: [
     {
-      code: '5A', title: 'What can you do?', topics: "can / can't · verb phrases",
+      code: '5A', title: "Vote for me!", topics: "can / can't · verb phrases: buy a newspaper, etc. · sentence stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with **can** or **can\'t**.', "She ___ swim. She's a very good swimmer.", 'can'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '5B', title: "What's happening?", topics: 'present continuous · verb phrases, -ing spelling',
+      code: '5B', title: "A quiet life?", topics: "present continuous: be + verb + -ing · noise: verbs and verb phrases · /ŋ/",
       practice: [
         ...sec('grammar', [
           gap('Complete with the present continuous.', 'I ___ (read) a book.', ['am reading', "'m reading"]),
@@ -100,13 +100,13 @@ export default {
           ord('you doing What are', 'What are you doing?'),
         ]),
         ...sec('vocabulary', [
-          gap('Write the -ing form.', 'get → ___ · dance → ___', 'getting', 'dancing'),
-          gap('Write the -ing form.', 'swim → ___ · write → ___', 'swimming', 'writing'),
-          gap('Write the -ing form.', 'study → ___ · play → ___', 'studying', 'playing'),
-          gap('Write the -ing form.', 'lie → ___ · die → ___', 'lying', 'dying'),
-          mt('Match to make phrases.', [['wait for', 'a bus'], ['talk on', 'the phone'], ['take', 'a photo'], ['look at', 'the sea']]),
-          ch('Which -ing form is spelled correctly?', ['siting', 'sitting', 'sittting'], 1),
-          ch('Someone calls you while you drive: "Sorry, I\'m ___. I can\'t talk now."', ['driving', 'drive', 'drives'], 0),
+          mt('Noise. Match the person or animal and the noise.', [['a dog', 'barks'], ['a baby', 'cries'], ['a phone', 'rings'], ['builders', 'make a lot of noise'], ['the couple next door', 'argue']]),
+          gap('Complete the noise phrase.', 'The neighbours have noisy ___ until 3 a.m. (p _ _ _ _ _ s)', 'parties'),
+          gap('Complete the noise phrase.', 'My son plays ___ music in his room. (l _ _ d)', 'loud'),
+          gap('Complete the noise phrase.', 'My sister ___ the piano for hours every day. (p _ _ _ _ _ _ _ s)', 'practises'),
+          gap('Complete the noise phrase.', 'They have the TV ___ very loud. (o n)', 'on'),
+          ch('People who live in the flat next to yours are your…', ['neighbours', 'cousins', 'builders'], 0),
+          ch('The people in the flat above you live…', ['upstairs', 'downstairs', 'next door'], 0),
         ]),
         ...sec('pronunciation', [
           odd('Listen. Which word does **not** have the sound /ŋ/ as in **sing**?', ['thing', 'think', 'thin'], 2),
@@ -130,7 +130,7 @@ export default {
         ...sec('vocabulary', [
           gap('Write the -ing form.', 'make → ___ · stop → ___', 'making', 'stopping'),
           gap('Write the -ing form.', 'cry → ___ · shop → ___', 'crying', 'shopping'),
-          gap('Complete.', "Shh! I'm ___ on the phone. (t _ _ _ _ _ g)", 'talking'),
+          gap('Complete the noise phrase.', "The neighbours' dog ___ all night! (b _ _ _ s)", 'barks'),
         ]),
         ...sec('pronunciation', [
           st('hap-pen-ing', 0),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '5C', title: 'Weather and clothes', topics: 'present simple or present continuous? · the weather, seasons, clothes',
+      code: '5C', title: "A city for all seasons", topics: "present simple or present continuous? · the weather and seasons · places in London · Practical English: buying clothes",
       practice: [
         ...sec('grammar', [
           gap('Complete with the correct form of **wear**.', 'She usually ___ jeans, but today she ___ a dress.', 'wears', ['is wearing', "'s wearing"]),

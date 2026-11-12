@@ -8,7 +8,7 @@ export default {
   topics: "a/an, plurals, this/that, adjectives, imperatives, let's · things, colours, feelings",
   lessons: [
     {
-      code: '2A', title: "What's in your bag?", topics: 'a / an, plurals, this / that / these / those · things',
+      code: '2A', title: "Are you tidy or untidy?", topics: "singular and plural nouns · things, in, on, under · final -s and -es",
       practice: [
         ...sec('grammar', [
           gap('Complete with **a** or **an**.', "It's ___ umbrella.", 'an'),
@@ -26,8 +26,8 @@ export default {
           gap('Complete the word.', 'You open a door with a ___. (k _ y)', 'key'),
           gap('Complete the word.', 'You see the time on your ___. (w _ _ _ h)', 'watch'),
           gap('Complete the word.', 'You put money in your ___. (w _ _ _ _ t)', 'wallet'),
-          ch("It's raining. You need…", ['an umbrella', 'sunglasses', 'a stamp'], 0),
-          ch('Which is **not** usually in a bag?', ['a phone', 'a fridge', 'a pen'], 1),
+          gap('Complete with **in**, **on** or **under**.', 'My keys are ___ my bag. The book is ___ the table. The cat is ___ the bed.', 'in', 'on', 'under'),
+          ch('The shoes are below the bed. They are ___ the bed.', ['under', 'on', 'in'], 0),
           gap('Write the singular.', 'boxes → ___ · watches → ___', 'box', 'watch'),
         ]),
         ...sec('pronunciation', [
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '2B', title: 'Colours and adjectives', topics: 'adjectives, very / quite · colours, opposite adjectives',
+      code: '2B', title: "Made in America", topics: "adjectives · colours, adjectives, modifiers: very / really, quite · long and short vowel sounds",
       practice: [
         ...sec('grammar', [
           ord("car It's red a", "It's a red car."),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '2C', title: 'How do you feel?', topics: "imperatives, let's · feelings",
+      code: '2C', title: "Slow down!", topics: "imperatives, let's · feelings · linking",
       practice: [
         ...sec('grammar', [
           tr('Make the imperative negative.', 'Open the window.', "Don't open the window.", 'Do not open the window.'),

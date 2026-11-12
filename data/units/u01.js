@@ -8,7 +8,7 @@ export default {
   topics: 'verb be, pronouns, possessive adjectives · days, numbers, countries, the alphabet',
   lessons: [
     {
-      code: '1A', title: "My name's…", topics: 'verb be (+), subject pronouns · days of the week, numbers 0–20, greetings',
+      code: '1A', title: "Welcome to the class", topics: "verb be (+), subject pronouns · days of the week, numbers 0–20 · vowel sounds, word stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with **am**, **is** or **are**.', 'I ___ a student.', 'am'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '1B', title: "I'm not English", topics: 'verb be (− and ?) · countries and nationalities, numbers 21–100',
+      code: '1B', title: "One world", topics: "verb be (− and ?) · countries, numbers 21–100 · /ə/, /tʃ/, /ʃ/, /dʒ/, word stress",
       practice: [
         ...sec('grammar', [
           tr('Make the sentence negative.', "I'm English.", "I'm not English.", 'I am not English.'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '1C', title: 'What\'s your name?', topics: 'possessive adjectives · the alphabet, classroom language',
+      code: '1C', title: "What's your email?", topics: "possessive adjectives · classroom language · /əʊ/, /uː/, /ɑː/, the alphabet · Practical English: checking in",
       practice: [
         ...sec('grammar', [
           gap('Complete with a possessive adjective.', 'I am Ana. ___ name is Ana.', 'My'),

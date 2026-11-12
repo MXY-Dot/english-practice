@@ -8,7 +8,7 @@ export default {
   topics: "possessive 's, whose, at / in / on, adverbs of frequency · family, daily routine, time",
   lessons: [
     {
-      code: '4A', title: 'My family', topics: "possessive 's, whose · family",
+      code: '4A', title: "Family photos", topics: "possessive 's, Whose…? · family · /ʌ/, the letter o",
       practice: [
         ...sec('grammar', [
           strict(gap("Complete with the possessive 's.", "Ali has a dog. It's ___ dog.", "Ali's")),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '4B', title: 'A typical day', topics: 'prepositions of time: at, in, on · daily routine, the time',
+      code: '4B', title: "From morning to night", topics: "prepositions of time (at, in, on) and place (at, in, to) · daily routine · linking",
       practice: [
         ...sec('grammar', [
           gap('Complete with **at**, **in** or **on**.', '___ Monday · ___ the morning · ___ 7 o\'clock', 'on', 'in', 'at'),
@@ -105,8 +105,8 @@ export default {
           gap('Write the time in words.', '7:30 = half past ___', 'seven'),
           gap('Write the time in words.', '8:15 = quarter ___ eight', 'past'),
           gap('Write the time in words.', '9:45 = quarter ___ ten', 'to'),
-          gap('Complete the phrase.', 'I ___ home at 6 p.m. (= arrive home)', 'get'),
-          ch('I ___ my teeth twice a day.', ['brush', 'wash', 'make'], 0),
+          gap('Complete with **at**, **in** or **to** (place).', 'I go ___ work by bus. I have lunch ___ work. I read ___ bed.', 'to', 'at', 'in'),
+          gap('Complete with **at** or **to**.', 'I get home ___ 6 p.m. Then I stay ___ home.', 'at', 'at'),
         ]),
         ...sec('pronunciation', [
           odd('Listen. Which word has the sound /əʊ/ as in **phone**?', ['home', 'come', 'shop'], 0),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '4C', title: 'How often…?', topics: 'adverbs of frequency, expressions of frequency',
+      code: '4C', title: "Blue Zones", topics: "position of adverbs, expressions of frequency · months, adverbs of frequency · the letter h",
       practice: [
         ...sec('grammar', [
           ord('late I am never', 'I am never late.'),
@@ -182,9 +182,9 @@ export default {
           gap('Complete.', '0% = ___', 'never'),
           gap('Complete.', '100% = ___', 'always'),
           gap('Complete.', 'once a day, twice a day, three ___ a day', 'times'),
-          gap('Complete.', 'I visit my grandparents every ___ (= on all weekends).', 'weekend'),
+          gap('Write the next month.', 'October, November, ___', 'December'),
           ch('"I hardly ever eat fast food" means…', ['very often', 'almost never', 'always'], 1),
-          ch('Which expression means **every day**?', ['daily', 'weekly', 'monthly'], 0),
+          gap('Write the month.', 'the fourth month of the year = ___', 'April'),
         ]),
         ...sec('pronunciation', [
           odd('Listen. In which word is the **h** not pronounced?', ['hour', 'home', 'happy'], 0),

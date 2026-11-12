@@ -8,7 +8,7 @@ export default {
   topics: 'countable / uncountable, a / some / any, how much / how many, comparatives · food, containers, high numbers',
   lessons: [
     {
-      code: '9A', title: 'What did you eat yesterday?', topics: 'countable / uncountable nouns; a / an, some / any · food',
+      code: '9A', title: "#mydinnerlastnight", topics: "countable / uncountable nouns, a / an, some / any · food and drink · the letters ea",
       practice: [
         ...sec('grammar', [
           gap('Complete with **a, an, some** or **any**.', "I'd like ___ apple, please.", 'an'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '9B', title: 'How much sugar?', topics: 'quantifiers: how much / how many, a lot of, not much / many · food containers',
+      code: '9B', title: "White gold", topics: "quantifiers: how much / how many, a lot of, etc. · food containers · linking, /ʃ/ and /s/",
       practice: [
         ...sec('grammar', [
           gap('Complete with **much** or **many**.', 'How ___ sugar do you have in your coffee?', 'much'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '9C', title: 'Which is bigger?', topics: 'comparative adjectives · high numbers',
+      code: '9C', title: "Facts and figures", topics: "comparative adjectives · high numbers · /ə/, sentence stress · Practical English: ordering a meal",
       practice: [
         ...sec('grammar', [
           gap('Write the comparative.', 'cheap → ___ · big → ___', 'cheaper', 'bigger'),

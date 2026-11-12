@@ -8,7 +8,7 @@ export default {
   topics: 'irregular past verbs, there is / are, some / any, there was / were · the house, prepositions',
   lessons: [
     {
-      code: '8A', title: 'A story', topics: 'past simple: regular and irregular verbs · irregular verbs',
+      code: '8A', title: "A murder mystery", topics: "past simple: regular and irregular · irregular verbs · past simple verbs",
       practice: [
         ...sec('grammar', [
           gap('Write the past simple.', 'buy → ___ · see → ___', 'bought', 'saw'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '8B', title: 'A house to rent', topics: 'there is / there are, some / any + plural nouns · the house',
+      code: '8B', title: "A house with a history", topics: "there is / there are, some / any + plural nouns · the house · /eə/ and /ɪə/",
       practice: [
         ...sec('grammar', [
           gap('Complete with **there\'s** or **there are**.', '___ a big garden behind the house.', ["There's", 'There is']),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '8C', title: 'A night in a haunted house', topics: 'there was / there were · prepositions of place and movement',
+      code: '8C', title: "Room 333", topics: "there was / there were · prepositions: place and movement · silent letters",
       practice: [
         ...sec('grammar', [
           gap('Complete with **there was** or **there were**.', '___ a lot of people at the party.', 'There were'),

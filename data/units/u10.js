@@ -8,7 +8,7 @@ export default {
   topics: 'superlatives, be going to (plans and predictions) · places and buildings, holidays, verb phrases',
   lessons: [
     {
-      code: '10A', title: 'The best city', topics: 'superlative adjectives · places and buildings',
+      code: '10A', title: "The most dangerous place…", topics: "superlative adjectives · places and buildings · consonant groups",
       practice: [
         ...sec('grammar', [
           gap('Write the superlative.', 'cold → the ___ · hot → the ___', 'coldest', 'hottest'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '10B', title: 'Holiday plans', topics: 'be going to (plans) · holidays',
+      code: '10B', title: "Five continents in a day", topics: "be going to (plans), future time expressions · city holidays · sentence stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with **be going to** + verb.', 'They ___ (buy) a new car next year.', ['are going to buy', "'re going to buy"]),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '10C', title: 'What\'s going to happen?', topics: 'be going to (predictions) · verb phrases',
+      code: '10C', title: "The fortune teller", topics: "be going to (predictions) · verb phrases · word stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with **be going to** + verb.', 'Look at those black clouds! It ___ (rain).', ['is going to rain', "'s going to rain"]),

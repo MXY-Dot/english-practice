@@ -8,7 +8,7 @@ export default {
   topics: 'was / were, past simple regular, go / have / get · word formation, past time expressions',
   lessons: [
     {
-      code: '7A', title: 'Famous people', topics: 'past simple of be: was / were · word formation (paint → painter)',
+      code: '7A', title: "Selfies", topics: "past simple of be: was / were · word formation: write → writer · sentence stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with **was** or **were**.', 'Shakespeare ___ a writer.', 'was'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '7B', title: 'Last weekend', topics: 'past simple: regular verbs · past time expressions',
+      code: '7B', title: "Wrong name, wrong place", topics: "past simple: regular verbs · past time expressions · -ed endings",
       practice: [
         ...sec('grammar', [
           gap('Write the past simple.', 'watch → ___ · play → ___', 'watched', 'played'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '7C', title: 'A night out', topics: 'past simple: go, have, get · go, have, get phrases',
+      code: '7C', title: "Happy New Year?", topics: "past simple: irregular verbs · go, have, get · sentence stress · Practical English: asking the way",
       practice: [
         ...sec('grammar', [
           gap('Write the past simple.', 'have → ___ · get → ___ · go → ___', 'had', 'got', 'went'),

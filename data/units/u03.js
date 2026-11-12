@@ -8,7 +8,7 @@ export default {
   topics: 'present simple, word order in questions · verb phrases, jobs, question words',
   lessons: [
     {
-      code: '3A', title: 'Things I do', topics: 'present simple + and − · verb phrases',
+      code: '3A', title: "Britain: the good and the bad", topics: "present simple + and − · verb phrases: cook dinner, etc. · third person -s",
       practice: [
         ...sec('grammar', [
           gap('Complete with the verb in brackets.', 'She ___ (work) in a bank.', 'works'),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '3B', title: 'Jobs', topics: 'present simple ? · jobs',
+      code: '3B', title: "9 to 5", topics: "present simple ? · jobs · /ɜː/ and /ə/",
       practice: [
         ...sec('grammar', [
           gap('Complete with **do** or **does**.', '___ she work at the weekend?', 'Does'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '3C', title: 'Questions, questions', topics: 'word order in questions · question words',
+      code: '3C', title: "Love me, love my dog", topics: "word order in questions · question words · sentence stress · Practical English: buying a coffee, telling the time",
       practice: [
         ...sec('grammar', [
           ord('old How you are', 'How old are you?'),

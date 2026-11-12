@@ -8,7 +8,7 @@ export default {
   topics: 'present perfect, present perfect or past simple, revision · past participles, travel, questions',
   lessons: [
     {
-      code: '12A', title: 'Have you ever…?', topics: 'present perfect · irregular past participles',
+      code: '12A', title: "I've seen it ten times!", topics: "present perfect · irregular past participles · sentence stress",
       practice: [
         ...sec('grammar', [
           gap('Complete with the present perfect.', 'I ___ (be) to Paris three times.', ['have been', "'ve been"]),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '12B', title: 'When did you…?', topics: 'present perfect or past simple? · travel',
+      code: '12B', title: "He's been everywhere!", topics: "present perfect or past simple? · learning irregular verbs · irregular past participles",
       practice: [
         ...sec('grammar', [
           gap('Present perfect or past simple? Complete.', 'I ___ (be) to Italy. I ___ (go) there last summer.', ['have been', "'ve been"], 'went'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '12C', title: 'Review: tenses and questions', topics: 'revision of tenses · question review',
+      code: '12C', title: "The English File interview", topics: "revision: question formation",
       practice: [
         ...sec('grammar', [
           gap('Complete with the correct form of **go**.', 'I usually ___ to bed at 11. Last night I ___ to bed at 1.', 'go', 'went'),

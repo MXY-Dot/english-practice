@@ -8,7 +8,7 @@ export default {
   topics: 'object pronouns, like + -ing, be or do · phone language, dates, ordinal numbers, music',
   lessons: [
     {
-      code: '6A', title: 'Can you call me?', topics: 'object pronouns · phone language',
+      code: '6A', title: "A North African story", topics: "object pronouns: me, you, him, etc. · words in a story · /aɪ/, /ɪ/ and /iː/",
       practice: [
         ...sec('grammar', [
           gap('Complete with an object pronoun.', 'I love my grandmother. I visit ___ every Sunday.', 'her'),
@@ -22,13 +22,13 @@ export default {
           ch('"Do you like your new teacher?" "Yes, I like ___ a lot."', ['she', 'her', 'hers'], 1),
         ]),
         ...sec('vocabulary', [
-          mt('Match to make phone phrases.', [['leave', 'a message'], ['send', 'a text'], ['call', 'back'], ['answer', 'the phone'], ['charge', 'your phone']]),
-          gap('Complete.', "I'm sorry, he isn't here. Can I take a ___?", 'message'),
-          gap('Complete.', 'Your phone has no power. The battery is ___. (d _ _ d)', 'dead'),
-          gap('Complete.', 'On the phone: "Hello, ___ is Ana. Can I speak to Mr Lee?"', 'this'),
-          gap('Complete.', "Sorry, I can't hear you. Can you speak more ___, please? (l _ _ _ l y)", 'loudly'),
-          ch('You write it on your phone and send it:', ['a text message', 'a letter', 'a postcard'], 0),
-          ch("Hold ___ a moment, please. I'll get him.", ['on', 'in', 'up'], 0),
+          mt('Words in a story. Match the word and the description.', [['a desert', 'a hot, dry place with sand'], ['mountains', 'very high hills'], ['a field', 'a place where farmers grow food'], ['the sky', 'it is blue on a sunny day'], ['a palace', 'a very big house where a king lives']]),
+          gap('Write the opposite.', 'rich → ___ · full → ___', 'poor', 'empty'),
+          gap('Complete the story word.', 'The son of a king is a ___. (p _ _ _ _ e)', 'prince'),
+          gap('Complete the story word.', 'You wear a ___ on your finger. It can be gold or silver. (r _ _ g)', 'ring'),
+          gap('Complete the story word.', 'Hassan ___ to leave home and find work. (d _ _ _ _ _ s)', 'decides'),
+          ch('In a story: "___, the door opened and a man came in." (= very quickly, when nobody expected it)', ['Suddenly', 'Every day', 'Never'], 0),
+          ch('Hassan walks ___ the mountains. (= in the direction of)', ['towards', 'under', 'between'], 0),
         ]),
         ...sec('pronunciation', [
           odd('Listen. Which word has a **different** vowel sound?', ['me', 'meet', 'him', 'we'], 2),
@@ -50,9 +50,9 @@ export default {
           fix('Tell he the answer.', 'Tell him the answer.'),
         ]),
         ...sec('vocabulary', [
-          gap('Complete.', 'Sorry, wrong ___! (= you called the wrong person)', 'number'),
-          gap('Complete.', "Please ___ the phone — it's ringing! (a _ _ _ _ r)", 'answer'),
-          gap('Complete.', 'Can I ___ a message for him?', 'leave'),
+          gap('Complete the story word.', 'A long story about a king, a prince and magic is a traditional ___. (s _ _ _ y)', 'story'),
+          gap('Complete the story word.', 'His mother gives him water in a glass ___. (b _ _ _ _ e)', 'bottle'),
+          gap('Complete the story word.', 'They have no money. They are very ___. (p _ _ r)', 'poor'),
         ]),
         ...sec('pronunciation', [
           odd('Listen. Which word has a **different** vowel sound?', ['us', 'but', 'much', 'you'], 3),
@@ -86,7 +86,7 @@ export default {
       ],
     },
     {
-      code: '6B', title: 'Love it or hate it', topics: 'like / love / hate + verb + -ing · the date, ordinal numbers',
+      code: '6B', title: "The third Friday in June", topics: "like + (verb + -ing) · the date, ordinal numbers · /ð/ and /θ/, saying the date",
       practice: [
         ...sec('grammar', [
           gap('Complete with the -ing form.', 'I love ___ (listen) to music.', 'listening'),
@@ -164,7 +164,7 @@ export default {
       ],
     },
     {
-      code: '6C', title: 'Music', topics: 'revision: be or do? · music',
+      code: '6C', title: "Making music", topics: "revision: be or do? · music · /j/, giving opinions",
       practice: [
         ...sec('grammar', [
           gap('Complete with **am / is / are / do / does**.', '___ you like jazz?', 'Do'),
