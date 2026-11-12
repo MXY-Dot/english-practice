@@ -18,7 +18,7 @@ const BROWSERS = [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ].filter(Boolean);
 const shotsDir = join(ROOT, 'tools', 'screenshots');
-mkdirSync(shotsDir, { recursive: true });
+mkdirSync(join(shotsDir, 'mobile'), { recursive: true });
 
 const browserPath = BROWSERS.find((p) => existsSync(p));
 if (!browserPath) { console.error('Chrome/Edge not found. Set CHROME_PATH.'); process.exit(1); }
@@ -46,11 +46,15 @@ async function evaluate(expr) {
   if (r.exceptionDetails) throw new Error('Eval failed: ' + (r.exceptionDetails.exception?.description || r.exceptionDetails.text));
   return r.result.value;
 }
-async function shot(name, width = 1280, height = 900, mobile = false) {
-  await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile });
+// MOBILE=1 runs the whole flow on a phone-sized screen (390×844, touch) and saves shots to tools/screenshots/mobile/.
+const MOBILE = !!process.env.MOBILE;
+const VIEW = MOBILE ? { width: 390, height: 844, deviceScaleFactor: 2, mobile: true } : { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false };
+const resetView = () => send('Emulation.setDeviceMetricsOverride', VIEW);
+async function shot(name, width = VIEW.width, height = VIEW.height, mobile = VIEW.mobile) {
+  await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: mobile ? 2 : 1, mobile });
   await sleep(300);
   const { data } = await send('Page.captureScreenshot', { format: 'png' });
-  writeFileSync(join(shotsDir, name + '.png'), Buffer.from(data, 'base64'));
+  writeFileSync(join(shotsDir, (MOBILE ? 'mobile/' : '') + name + '.png'), Buffer.from(data, 'base64'));
 }
 const go = async (hash) => { await evaluate(`location.hash = ${JSON.stringify(hash)};`); await sleep(500); };
 const waitFor = async (expr, ms = 5000) => {
@@ -98,6 +102,8 @@ try {
   };
   await send('Runtime.enable');
   await send('Page.enable');
+  await send('Emulation.setFocusEmulationEnabled', { enabled: true });
+  await resetView();
   await send('Page.navigate', { url: `http://localhost:${PORT}/` });
   await sleep(1500);
   await evaluate(HELPERS);
@@ -127,7 +133,7 @@ try {
   check(await evaluate(`return $$('.test-row').length`) === 36, 'student sees 36 tests');
   await shot('02-student-home');
   await shot('02m-student-home', 390, 844, true);
-  await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+  await resetView();
 
   // Every test renders 40 items over 4 pages, with a text as the last item of each page.
   const codes = await evaluate(`return $$('.test-row .tr-code').map(e => e.textContent)`);
@@ -173,9 +179,49 @@ try {
   await sleep(100);
   const gapId = await evaluate(`return $('.item[data-type=gap] .gap-inp').closest('.item').id`);
   await evaluate(`typeInto($('#${gapId} .gap-inp'), 'am');`);
+
+  if (MOBILE) {
+    console.log('Phone comfort');
+    check(await evaluate(`const t = $('.page-tabs'); return t.scrollWidth <= t.clientWidth + 1`), 'all 5 page tabs fit on the screen');
+    check(await evaluate(`return document.documentElement.scrollWidth <= innerWidth + 1`), 'no sideways page scroll');
+    // Enter moves to the next text field.
+    const moved = await evaluate(`
+      const fields = $$('.lesson-body .gap-inp:not([disabled]), .lesson-body .fix .inp:not([disabled])');
+      if (fields.length < 2) return 'skip';
+      fields[0].focus();
+      fields[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      const ok = document.activeElement === fields[1];
+      const typing = document.body.classList.contains('typing');
+      document.activeElement.blur();
+      return ok && typing;`);
+    check(moved === true || moved === 'skip', 'Enter jumps to the next field and hides the bottom bar while typing');
+    // Swipe left → next page.
+    const swipe = async (x1, x2) => {
+      const y = 600;
+      await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: x1, y }] });
+      await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: (x1 + x2) / 2, y }] });
+      await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x2, y }] });
+      await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await sleep(400);
+    };
+    await evaluate(`$('.lesson-body').scrollIntoView({ block: 'start' }); window.scrollBy(0, 80);`);
+    await sleep(200);
+    await swipe(330, 60);
+    check(await evaluate(`return $$('.ptab').findIndex(t => t.classList.contains('active'))`) === 1, 'swipe left opens the next page');
+    await swipe(60, 330);
+    check(await evaluate(`return $$('.ptab').findIndex(t => t.classList.contains('active'))`) === 0, 'swipe right goes back');
+    // "к пропущенному" jumps to the first unanswered item.
+    const jumped = await evaluate(`
+      $('.jump-btn').click(); await new Promise(r => setTimeout(r, 600));
+      const items = $$('.lesson-body .item');
+      return items.length > 0;`);
+    check(jumped, 'jump-to-unanswered button works');
+    await evaluate(`$$('.ptab')[0].click(); window.scrollTo(0, 0);`);
+    await sleep(200);
+  }
   await shot('03-test-page');
   await shot('03m-test-page', 390, 844, true);
-  await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+  await resetView();
   await sleep(1800);
   const SUBS = `Object.values(JSON.parse(localStorage.getItem('efp_subs2')))[0]`;
   const choiceKey = choiceId.replace('item-', '');
@@ -219,6 +265,7 @@ try {
   await evaluate(`$$('.ptab')[0].click();`);
   await sleep(100);
   check(await evaluate(`return $$('.review-ctl').length === 10`), 'review controls on every item of the page');
+  check(await evaluate(`return !$('.lessons').textContent.includes('Правильный ответ')`), 'teacher review shows no answer key');
   await shot('06-review');
   await evaluate(`$$('#${gapId} .review-ctl .seg-btn')[1].click();`);
   await sleep(100);

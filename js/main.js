@@ -27,6 +27,21 @@ const STATUS = {
 const statusChip = (s) => h('span', { class: 'chip-st ' + STATUS[s || 'none'].c }, STATUS[s || 'none'].t);
 const fmtNum = (n) => (n == null ? '—' : String(Math.round(n * 100) / 100).replace('.', ','));
 
+// Small per-tab flags (e.g. a dismissed banner). Storage may be unavailable.
+function sessionFlag(name, value) {
+  try {
+    if (value === undefined) return sessionStorage.getItem('efp-' + name) === '1';
+    sessionStorage.setItem('efp-' + name, value ? '1' : '0');
+  } catch { return false; }
+}
+
+// While the phone keyboard is open, the fixed bottom bar would cover the input.
+const TYPING_FIELDS = 'input:not([type=checkbox]):not([type=file]), textarea';
+document.addEventListener('focusin', (e) => { if (e.target.matches?.(TYPING_FIELDS)) document.body.classList.add('typing'); });
+document.addEventListener('focusout', () => setTimeout(() => {
+  if (!document.activeElement?.matches?.(TYPING_FIELDS)) document.body.classList.remove('typing');
+}, 50));
+
 // Leave-page guard for unsaved work.
 let pendingSave = null;
 window.addEventListener('beforeunload', (e) => {
@@ -85,7 +100,10 @@ function shell(...content) {
         h('button', { class: 'btn ghost small', onclick: logout, title: 'Выйти' }, 'Выйти'),
       ] : null));
   const banner = store?.mode === 'local'
-    ? h('div', { class: 'demo-banner' }, '🧪 Демо-режим: данные хранятся только в этом браузере. Чтобы ученик и учитель работали с разных устройств, подключите Supabase (см. README.md).')
+    && !sessionFlag('hide-demo')
+    ? h('div', { class: 'demo-banner' },
+      h('span', null, '🧪 Демо-режим: данные хранятся только в этом браузере. Для работы с разных устройств подключите Supabase (см. README.md).'),
+      h('button', { class: 'x', title: 'Скрыть', 'aria-label': 'Скрыть', onclick: (e) => { sessionFlag('hide-demo', true); e.currentTarget.parentElement.remove(); } }, '✕'))
     : null;
   app.replaceChildren(header, banner || '', h('main', { class: 'page' }, ...content));
 }
@@ -216,7 +234,7 @@ function loginView() {
       h('div', { class: 'login-cover' },
         h('div', { class: 'cover-dots' }, UNITS.map((u) => h('span', { style: { background: u.color } }))),
         h('h1', null, CONFIG.SITE_TITLE),
-        h('p', null, `${TESTS.length} тестов по ${TEST_LEN} заданий: грамматика, лексика, произношение, аудирование, тексты и теория.`)),
+        h('p', null, `${TESTS.length} уроков по ${TEST_LEN} заданий: грамматика, лексика, произношение, аудирование, тексты и теория.`)),
       body)));
 }
 
@@ -249,14 +267,14 @@ async function studentHome() {
     h('div', { class: 'hero' },
       h('div', null,
         h('h1', null, 'Привет, ', user.name.split(' ')[0], '! 👋'),
-        h('p', { class: 'muted' }, `Выберите урок. В каждом тесте ${TEST_LEN} заданий вперемешку: практика, тексты и теория грамматики.`),
+        h('p', { class: 'muted' }, `Выберите урок. В каждом уроке ${TEST_LEN} заданий вперемешку: практика, тексты и теория грамматики.`),
         h('p', { class: 'teacher-line' }, teacher
           ? ['🧑‍🏫 Ваш учитель: ', h('b', null, teacher)]
           : '⏳ Учитель ещё не добавил вас в свой класс. Задания можно делать уже сейчас — учитель увидит их, когда добавит вас.')),
       h('div', { class: 'hero-stats' },
         h('div', null, h('b', null, subs.length), h('small', null, 'начато')),
         h('div', null, h('b', null, graded), h('small', null, 'проверено')),
-        h('div', null, h('b', null, TESTS.length), h('small', null, 'всего тестов')))),
+        h('div', null, h('b', null, TESTS.length), h('small', null, 'всего уроков')))),
     unitBlocks(byTest, (l) => '#/test/' + l.code));
 }
 
@@ -270,12 +288,18 @@ async function testView(code) {
 
   const saveState = h('span', { class: 'save-state muted small' });
   const progress = h('div', { class: 'progress' }, h('div', { class: 'bar' }));
-  const progressText = h('span', { class: 'small' });
+  // Tapping the counter jumps to the first unanswered item.
+  const progressText = h('button', { type: 'button', class: 'jump-btn', onclick: () => {
+    const next = entries.find((e) => !isAnswered(e.item, sub.answers[e.id]));
+    if (next) pager?.goTo(next.id);
+  } });
   let pager;
   const updProgress = () => {
     const done = entries.filter((e) => isAnswered(e.item, sub.answers[e.id])).length;
     progress.firstChild.style.width = (done / entries.length) * 100 + '%';
-    progressText.textContent = `Выполнено ${done} из ${entries.length}`;
+    const left = entries.length - done;
+    progressText.textContent = left ? `${done}/${entries.length} · к пропущенному ↓` : `Все ${entries.length} выполнены ✓`;
+    progressText.disabled = !left;
     pager?.refresh();
   };
 
@@ -327,7 +351,7 @@ async function testView(code) {
       saver.cancel();
       pendingSave = null;
       if (await doSave('submitted')) { toast('Работа отправлена учителю! 🎉', 'ok'); route(); }
-    } }, 'Отправить учителю');
+    } }, 'Отправить', h('span', { class: 'hide-sm' }, ' учителю'));
     parts.push(h('div', { class: 'sticky-bar' }, h('div', { class: 'sb-left' }, progress, h('div', { class: 'sb-row' }, progressText, saveState)), submitBtn));
   }
   shell(...parts);
@@ -367,22 +391,58 @@ function paged(test, entries, renderEntry, isDone) {
     }
   });
 
-  function show(k, scroll) {
+  function show(k, scroll, dir) {
+    if (k < 0 || k >= pages.length) return;
     active = k;
     try { sessionStorage.setItem('page-' + test.code, String(k)); } catch {}
     clear(body);
+    body.classList.remove('swipe-left', 'swipe-right');
+    if (dir) { void body.offsetWidth; body.classList.add(dir > 0 ? 'swipe-left' : 'swipe-right'); }
     body.append(...pages[k].map(renderEntry));
     const nav = h('div', { class: 'page-nav' });
-    if (k > 0) nav.append(h('button', { class: 'btn', onclick: () => show(k - 1, true) }, '← Назад'));
-    if (k < pages.length - 1) nav.append(h('button', { class: 'btn soft', onclick: () => show(k + 1, true) }, `Дальше: ${pages[k + 1][0].num}–${pages[k + 1][pages[k + 1].length - 1].num} →`));
+    if (k > 0) nav.append(h('button', { class: 'btn', onclick: () => show(k - 1, true, -1) }, '← Назад'));
+    if (k < pages.length - 1) nav.append(h('button', { class: 'btn soft', onclick: () => show(k + 1, true, 1) }, `Дальше: ${pages[k + 1][0].num}–${pages[k + 1][pages[k + 1].length - 1].num} →`));
     body.append(nav);
     refresh();
+    tabBtns[k].scrollIntoView?.({ block: 'nearest', inline: 'center' });
     if (scroll) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  wrap.append(tabs, body);
+  // Swipe left/right on a phone to change page. Ignored when the swipe starts on
+  // something that scrolls or is draggable, or when the gesture is mostly vertical.
+  let sx = 0, sy = 0, st = 0, ok = false;
+  body.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    ok = e.touches.length === 1 && !e.target.closest('input, textarea, select, audio, .order, .table-wrap, .syllables');
+    sx = t.clientX; sy = t.clientY; st = Date.now();
+  }, { passive: true });
+  // A clearly horizontal drag is ours: stop the browser from treating it as "go back".
+  body.addEventListener('touchmove', (e) => {
+    if (!ok) return;
+    const t = e.touches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 16 && Math.abs(dx) > Math.abs(dy) * 1.8 && e.cancelable) e.preventDefault();
+  }, { passive: false });
+  body.addEventListener('touchend', (e) => {
+    if (!ok) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.8 && Date.now() - st < 700) show(active + (dx < 0 ? 1 : -1), true, dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  // Opens the page with this item and scrolls to it.
+  function goTo(id) {
+    const k = pages.findIndex((p) => p.some((e) => e.id === id));
+    if (k < 0) return;
+    if (k !== active) show(k, false, k > active ? 1 : -1);
+    const el = document.getElementById('item-' + id);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el?.querySelector('input:not([disabled]), textarea:not([disabled]), button:not([disabled])')?.focus({ preventScroll: true });
+  }
+
+  wrap.append(tabs, h('p', { class: 'swipe-hint' }, '← листайте страницы свайпом →'), body);
   show(active, false);
-  return { el: wrap, refresh };
+  return { el: wrap, refresh, goTo };
 }
 
 function scoreSummary(sc, grade) {
@@ -466,7 +526,7 @@ async function teacherHome() {
     h('section', { class: 'card' }, h('h2', null, 'На проверку ', h('span', { class: 'count' }, toCheck.length)), queue),
     h('section', { class: 'card' }, h('h2', null, 'Журнал'),
       h('p', { class: 'muted small' }, 'В каждой клетке три урока (A, B, C). Цифра — оценка, «!» — ждёт проверки, «…» — ученик делает, «↺» — на доработке.'), matrix),
-    h('section', { class: 'card' }, h('h2', null, 'Все тесты'), h('p', { class: 'muted small' }, 'Посмотреть задания с ответами.'),
+    h('section', { class: 'card' }, h('h2', null, 'Все задания с ответами'), h('p', { class: 'muted small' }, 'Выберите урок, чтобы посмотреть его задания и правильные ответы.'),
       h('div', { class: 'unit-links' }, TESTS.map((t) => h('a', { class: 'unit-link', href: '#/preview/' + t.code, style: { '--uc': t.unit.color } }, t.code)))));
 }
 
@@ -485,7 +545,7 @@ async function previewView(code) {
   const test = testByCode(code);
   if (!test) return go('/');
   const entries = buildTest(test);
-  const ctx = { mode: 'review', status: 'graded', answers: {}, review: {}, onAnswer() {}, onReview() {} };
+  const ctx = { mode: 'review', status: 'graded', showKey: true, answers: {}, review: {}, onAnswer() {}, onReview() {} };
   shell(
     testHeader(test, [h('span', { class: 'chip-st st-none' }, 'Просмотр с ответами')]),
     paged(test, entries, (e) => {
@@ -500,7 +560,7 @@ async function reviewView(subId) {
   let sub = await store.getSubmissionById(subId);
   if (!sub) throw new Error('Работа не найдена.');
   const test = testByCode(sub.test);
-  if (!test) throw new Error('Тест ' + sub.test + ' не найден.');
+  if (!test) throw new Error('Урок ' + sub.test + ' не найден.');
   const entries = buildTest(test);
   sub.review ||= {};
   sub.answers ||= {};

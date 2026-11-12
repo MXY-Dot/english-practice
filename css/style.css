@@ -186,6 +186,7 @@ body {
   color: var(--ink);
   font: 16.5px/1.55 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-x: none; /* our page swipe must not trigger the browser's back gesture */
 }
 a { color: inherit; }
 h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .4em; font-weight: 900; }
@@ -601,7 +602,7 @@ button.chip:disabled { cursor: default; color: var(--ink); }
 
 #toast {
   position: fixed; left: 50%; bottom: 96px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
-  background: var(--ink); color: #fff; padding: 12px 20px; border-radius: 999px; font-weight: 800; z-index: 50;
+  background: #2a2840; color: #fff; padding: 12px 20px; border-radius: 999px; font-weight: 800; z-index: 50; text-align: center;
   transition: opacity .25s, transform .25s; max-width: calc(100vw - 32px); box-shadow: var(--shadow-hover);
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
@@ -638,3 +639,69 @@ button.chip:disabled { cursor: default; color: var(--ink); }
   .syl { padding: 10px 14px; }
   .theme-panel { position: fixed; left: 12px; right: 12px; top: 62px; width: auto; }
 }
+
+/* ---------- touch & small screens: comfort layer ---------- */
+.sticky-bar { transition: transform .25s ease, opacity .25s; }
+.jump-btn {
+  border: 0; background: none; padding: 0; color: var(--accent); font-weight: 800; font-size: .82rem; cursor: pointer; text-align: left;
+}
+.jump-btn:disabled { color: var(--ok); cursor: default; }
+.demo-banner { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.demo-banner .x { border: 0; background: none; font-size: 1.1rem; cursor: pointer; color: inherit; padding: 4px 8px; }
+.swipe-hint { text-align: center; font-size: .75rem; color: var(--muted); margin: 0; padding: 0 0 6px; display: none; }
+.lesson-body.swipe-left { animation: slide-l .22s ease; }
+.lesson-body.swipe-right { animation: slide-r .22s ease; }
+@keyframes slide-l { from { transform: translateX(28px); opacity: .4; } to { transform: none; opacity: 1; } }
+@keyframes slide-r { from { transform: translateX(-28px); opacity: .4; } to { transform: none; opacity: 1; } }
+
+@media (hover: none) {
+  .opt:hover:not(:disabled), button.chip:hover:not(:disabled), .theme-btn:hover { transform: none; }
+}
+
+@media (max-width: 640px) {
+  .topbar { padding-top: max(8px, env(safe-area-inset-top)); }
+  .role { padding: 3px 8px; font-size: .66rem; }
+  .theme-btn { min-width: 36px; height: 36px; font-size: .95rem; }
+  .demo-banner { font-size: .76rem; padding: 6px 10px; text-align: left; }
+
+  /* 5 page tabs fit on one row */
+  .page-tabs { gap: 3px; padding: 6px; }
+  .ptab { min-width: 0; padding: 7px 2px; border-radius: 12px; }
+  .ptab b { font-size: .86rem; letter-spacing: -.3px; }
+  .ptab small { font-size: .66rem; }
+  .swipe-hint { display: block; }
+
+  .item { padding: 16px 0; }
+  .num { width: 30px; height: 30px; font-size: .85rem; border-radius: 10px; }
+  .q { font-size: 1rem; }
+  .say { width: 40px; height: 40px; }
+  .btn-audio { padding: 10px 16px; }
+  .audio-bar { gap: 6px; }
+  .gap-text { line-height: 2.6; }
+  .tf-row .seg { width: 100%; }
+  .tf-row .seg .seg-btn { flex: 1; padding: 10px; }
+  .syl { padding: 12px 14px; min-width: 52px; justify-content: center; }
+  .model { display: flex; font-size: 1rem; }
+  .btn.rec { width: 100%; padding: 14px; }
+
+  /* teacher review: three equal buttons */
+  .review-ctl .seg { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; }
+  .review-ctl .seg .seg-btn { padding: 10px 4px; font-size: .86rem; }
+  .review-ctl .seg .link { grid-column: 1 / -1; justify-self: start; }
+  .grade-row { flex-wrap: wrap; }
+  .grade-seg { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; }
+  .grade-seg .seg-btn { width: auto; }
+  .actions .btn { flex: 1 1 100%; }
+  .score-summary { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .ss-cell { min-width: 0; }
+
+  .sticky-bar { bottom: calc(10px + env(safe-area-inset-bottom)); }
+  /* The on-screen keyboard needs the space: hide the bottom bar while typing. */
+  body.typing .sticky-bar { transform: translate(-50%, 160%); opacity: 0; }
+  #toast { bottom: calc(92px + env(safe-area-inset-bottom)); border-radius: 18px; max-width: calc(100vw - 40px); }
+  .page { padding-bottom: calc(150px + env(safe-area-inset-bottom)); }
+  .card { padding: 16px; }
+  .card h2 { font-size: 1.25rem; }
+  .queue-row { padding: 8px; }
+}
+@media (max-width: 640px) { .hide-sm { display: none; } .jump-btn { white-space: nowrap; } }

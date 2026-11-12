@@ -23,6 +23,7 @@ export function renderItem(entry, ctx) {
   const set = (v) => {
     ctx.onAnswer(id, v);
     if (CLICK_TYPES.has(item.type)) {
+      try { navigator.vibrate?.(8); } catch {} // tiny haptic tick on phones
       const fresh = renderItem(entry, ctx);
       card.replaceWith(fresh);
       card = fresh;
@@ -46,6 +47,16 @@ export function renderItem(entry, ctx) {
   if (ctx.mode !== 'do') card.append(feedback(entry, ans, rev, ctx));
   else if (rev && (rev.comment || rev.correction)) card.append(teacherNote(rev));
   return card;
+}
+
+// "Next" / Enter on the keyboard moves to the next typing field on the page.
+const TEXT_FIELDS = '.lesson-body .gap-inp:not([disabled]), .lesson-body .fix .inp:not([disabled])';
+function nextOnEnter(e) {
+  if (e.key !== 'Enter' || e.isComposing) return;
+  e.preventDefault();
+  const all = [...document.querySelectorAll(TEXT_FIELDS)];
+  const next = all[all.indexOf(e.target) + 1];
+  if (next) { next.focus(); next.scrollIntoView({ block: 'center', behavior: 'smooth' }); } else e.target.blur();
 }
 
 // ---------- text helpers ----------
@@ -153,7 +164,9 @@ function feedback(entry, ans, rev, ctx) {
   ));
 
   const key = keyText(item);
-  const showKey = ctx.mode === 'review' || ctx.status === 'graded';
+  // The teacher grades without the key (they know the answers); the student sees it once graded;
+  // the "all tasks with answers" preview passes showKey.
+  const showKey = ctx.showKey || (ctx.mode === 'result' && ctx.status === 'graded');
   if (key && showKey && item.type !== 'write') {
     box.append(h('div', { class: 'key' }, h('b', null, item.type === 'speak' ? 'Образец: ' : 'Правильный ответ: '), key));
   }
@@ -231,7 +244,7 @@ const RENDER = {
           const width = Math.max(5, ...[].concat(item.answer[k]).map((a) => String(a).length)) + 2;
           p.append(h('input', {
             class: 'gap-inp', value: vals[k], disabled: !editable, autocomplete: 'off', spellcheck: false,
-            autocapitalize: 'off', placeholder: '…', style: { width: width + 'ch' },
+            autocapitalize: 'off', placeholder: '…', style: { width: width + 'ch' }, enterKeyHint: 'next', onkeydown: nextOnEnter,
             oninput: (e) => { vals[k] = e.target.value; set(vals.slice()); },
           }));
         }
@@ -246,7 +259,7 @@ const RENDER = {
   fix(item, ans, set, editable) {
     return h('div', { class: 'fix' },
       h('p', { class: 'given-sentence' }, item.text),
-      h('input', { class: 'inp', value: ans ?? '', disabled: !editable, placeholder: 'Напишите ответ здесь…', spellcheck: false, autocapitalize: 'off',
+      h('input', { class: 'inp', value: ans ?? '', disabled: !editable, placeholder: 'Напишите ответ здесь…', spellcheck: false, autocapitalize: 'off', enterKeyHint: 'next', onkeydown: nextOnEnter,
         oninput: (e) => set(e.target.value) }));
   },
 
