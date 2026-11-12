@@ -26,7 +26,8 @@ if (!browserPath) { console.error('Chrome/Edge not found. Set CHROME_PATH.'); pr
 const server = spawn(process.execPath, [join(ROOT, 'tools', 'serve.mjs')], { env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore' });
 const browser = spawn(browserPath, [
   '--headless=new', `--remote-debugging-port=${DEBUG_PORT}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), 'e2e-'))}`,
-  '--no-first-run', '--no-default-browser-check', '--window-size=1280,900', 'about:blank',
+  '--no-first-run', '--no-default-browser-check', '--window-size=1280,900',
+  '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', '--autoplay-policy=no-user-gesture-required', 'about:blank',
 ], { stdio: 'ignore' });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -269,6 +270,18 @@ try {
   check(await evaluate(`return !$('.lessons').textContent.includes('Правильный ответ')`), 'teacher review shows no answer key');
   check(await evaluate(`return $$('.review-ctl .note-panels > *').every(el => el.hidden) && $$('.note-toggle').length === 30`), 'teacher notes are optional and collapsed');
   check(await evaluate(`return !!$('.review-ctl .voice-note') && !!$('.overall-voice .voice-note')`), 'voice comment available for items and the whole work');
+  // Record a voice comment on the first item with the fake microphone.
+  await evaluate(`
+    const card = $('#${choiceId}');
+    [...card.querySelectorAll('.note-toggle')].find(b => b.textContent.includes('Голосовое')).click();
+    card.querySelector('.vn-rec').click();`);
+  await sleep(1500);
+  check(await evaluate(`return !!$('#${choiceId} .vn-recording .vn-dot')`), 'recording shows a red dot and timer');
+  await shot('06b-voice-recording');
+  await evaluate(`[...$('#${choiceId}').querySelectorAll('.vn-btn')].find(b => b.textContent.includes('Готово')).click();`);
+  await sleep(1200);
+  check(await evaluate(`return !!$('#${choiceId} .voice-note .apill') && !!$('#${choiceId} .vn-btn.icon')`), 'after recording: player with re-record and delete');
+  await shot('06c-voice-recorded');
   await shot('06-review');
   await evaluate(`$$('#${gapId} .review-ctl .seg-btn')[1].click();`);
   await sleep(100);
@@ -279,6 +292,7 @@ try {
   check(graded.status === 'graded' && graded.grade === 4, 'graded with 4');
   check(graded.review[gapKey]?.points === 0.5 && graded.review[gapKey]?.correction === 'I am a student.', 'override + correction saved');
   check(graded.review[choiceKey]?.comment === 'Well done!', 'item comment saved');
+  check(String(graded.review[choiceKey]?.voice || '').startsWith('data:audio'), 'voice comment saved');
 
   console.log('Student sees result');
   await logout();
@@ -290,6 +304,14 @@ try {
   await sleep(200);
   check(await evaluate(`return document.body.textContent.includes('Well done!')`), 'student sees teacher comment');
   check(await evaluate(`return document.body.textContent.includes('I am a student.')`), 'student sees correction');
+  check(await evaluate(`return !!$('#${choiceId} .teacher-note .apill')`), 'student gets the voice comment player');
+  // Play it: the button switches to pause and the time runs.
+  const played = await evaluate(`
+    const pill = $('#${choiceId} .teacher-note .apill');
+    pill.querySelector('.ap-play').click();
+    await new Promise(r => setTimeout(r, 700));
+    return pill.classList.contains('playing') || pill.querySelector('.ap-time').textContent.includes('/');`);
+  check(played, 'voice comment plays');
   await shot('07-student-result');
 
   console.log('Voices');

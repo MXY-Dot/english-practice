@@ -148,36 +148,117 @@ export function teacherNote(rev, title = 'Комментарий учителя'
     h('div', { class: 'tn-title' }, title),
     rev.correction ? h('div', null, h('b', null, 'Исправление: '), rev.correction) : null,
     rev.comment ? h('div', null, rev.comment) : null,
-    rev.voice ? h('div', { class: 'tn-voice' }, h('span', null, '🎙 '), h('audio', { controls: true, src: rev.voice, preload: 'none' })) : null,
+    rev.voice ? h('div', { class: 'tn-voice' }, audioPill(rev.voice)) : null,
   );
 }
 
 // Record / re-record / delete a short voice note. `value` is a data URL or empty.
-export function voiceNote(value, onChange, { label = '🎙 Записать голосовое', maxSeconds = 60 } = {}) {
-  const wrap = h('div', { class: 'voice-note' });
-  const draw = (v) => {
+const fmtTime = (s) => {
+  if (!isFinite(s) || s < 0) s = 0;
+  const m = Math.floor(s / 60);
+  return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+};
+
+// Compact audio player: ▶/❚❚ button, seekable progress bar, time.
+let playingPill = null;
+export function audioPill(src) {
+  const audio = new Audio();
+  audio.preload = 'metadata';
+  audio.src = src;
+  const icon = h('span', { class: 'ap-icon' }, '▶');
+  const play = h('button', { type: 'button', class: 'ap-play', title: 'Слушать', 'aria-label': 'Слушать' }, icon);
+  const fill = h('div', { class: 'ap-fill' });
+  const track = h('div', { class: 'ap-track', role: 'slider', 'aria-label': 'Позиция' }, fill);
+  const time = h('span', { class: 'ap-time' }, '0:00');
+  const pill = h('div', { class: 'apill' }, play, track, time);
+
+  let dur = 0;
+  const update = () => {
+    const d = dur || audio.duration;
+    fill.style.width = d && isFinite(d) ? Math.min(100, (audio.currentTime / d) * 100) + '%' : '0%';
+    time.textContent = audio.paused && !audio.currentTime ? fmtTime(d) : `${fmtTime(audio.currentTime)} / ${fmtTime(d)}`;
+  };
+  // Recordings from MediaRecorder often report duration = Infinity until scanned; force a scan.
+  audio.addEventListener('loadedmetadata', () => {
+    if (audio.duration === Infinity) {
+      audio.currentTime = 1e7;
+      audio.addEventListener('timeupdate', function fix() {
+        audio.removeEventListener('timeupdate', fix);
+        dur = audio.duration;
+        audio.currentTime = 0;
+        update();
+      });
+    } else { dur = audio.duration; update(); }
+  });
+  audio.addEventListener('timeupdate', update);
+  audio.addEventListener('play', () => { icon.textContent = '❚❚'; pill.classList.add('playing'); });
+  audio.addEventListener('pause', () => { icon.textContent = '▶'; pill.classList.remove('playing'); });
+  audio.addEventListener('ended', () => { audio.currentTime = 0; update(); });
+  play.onclick = () => {
+    if (audio.paused) {
+      if (playingPill && playingPill !== audio) playingPill.pause();
+      playingPill = audio;
+      audio.play().catch(() => {});
+    } else audio.pause();
+  };
+  track.onclick = (e) => {
+    const d = dur || audio.duration;
+    if (!d || !isFinite(d)) return;
+    const r = track.getBoundingClientRect();
+    audio.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * d;
+    update();
+  };
+  return pill;
+}
+
+// Voice recorder: record → (red dot + timer, Done / Cancel) → player + Re-record / Delete.
+// onChange receives { audio, transcript } or null when deleted.
+export function voiceNote(value, onChange, { label = 'Записать голосовое', maxSeconds = 60, big = false } = {}) {
+  const wrap = h('div', { class: 'voice-note' + (big ? ' big' : '') });
+  let current = value || null; // data URL
+  const error = (msg) => h('span', { class: 'vn-error small' }, msg);
+
+  function idle(msg) {
     wrap.replaceChildren();
-    if (v) {
-      wrap.append(
-        h('audio', { controls: true, src: v, preload: 'none' }),
-        h('button', { type: 'button', class: 'btn small ghost', title: 'Удалить запись', onclick: () => { onChange(null); draw(null); } }, '🗑'));
+    if (current) {
+      wrap.append(audioPill(current));
+      if (recordingSupported) {
+        wrap.append(
+          h('button', { type: 'button', class: 'vn-btn', title: 'Перезаписать', onclick: start }, '↻', h('span', null, 'Перезаписать')),
+          h('button', { type: 'button', class: 'vn-btn icon danger', title: 'Удалить запись', 'aria-label': 'Удалить запись',
+            onclick: () => { current = null; onChange(null); idle(); } }, '🗑'));
+      }
+    } else if (recordingSupported) {
+      wrap.append(h('button', { type: 'button', class: 'vn-rec', onclick: start }, h('span', { class: 'vn-mic' }, '🎙'), label));
+    } else {
+      wrap.append(h('span', { class: 'muted small' }, 'Запись голоса недоступна в этом браузере. Откройте сайт в Chrome.'));
     }
-    if (!recordingSupported) {
-      if (!v) wrap.append(h('span', { class: 'muted small' }, 'Запись голоса недоступна в этом браузере.'));
+    if (msg) wrap.append(error(msg));
+  }
+
+  async function start() {
+    let rec;
+    try { rec = await startRecording(maxSeconds * 1000); } catch {
+      idle('Нет доступа к микрофону. Разрешите его в настройках браузера.');
       return;
     }
-    let rec = null;
-    const btn = h('button', { type: 'button', class: 'btn small rec' }, v ? '🎙 Перезаписать' : label);
-    btn.onclick = async () => {
-      if (rec) { rec.stop(); return; }
-      try { rec = await startRecording(maxSeconds * 1000); } catch { alert('Нет доступа к микрофону. Разрешите доступ в настройках браузера.'); return; }
-      btn.textContent = '■ Остановить';
-      btn.classList.add('recording');
-      rec.done.then((res) => { rec = null; onChange(res.audio); draw(res.audio); });
-    };
-    wrap.append(btn);
-  };
-  draw(value);
+    let cancelled = false;
+    const t0 = Date.now();
+    const clock = h('span', { class: 'vn-clock' }, '0:00');
+    const timer = setInterval(() => { clock.textContent = fmtTime((Date.now() - t0) / 1000); }, 250);
+    wrap.replaceChildren(
+      h('div', { class: 'vn-recording' }, h('span', { class: 'vn-dot' }), 'Запись ', clock, h('small', null, ` / ${fmtTime(maxSeconds)}`)),
+      h('button', { type: 'button', class: 'vn-btn primary', onclick: () => rec.stop() }, '■', h('span', null, 'Готово')),
+      h('button', { type: 'button', class: 'vn-btn', onclick: () => { cancelled = true; rec.stop(); } }, '✕', h('span', null, 'Отмена')));
+    const res = await rec.done;
+    clearInterval(timer);
+    if (cancelled) { idle(); return; }
+    current = res.audio;
+    onChange(res);
+    idle();
+  }
+
+  idle();
   return wrap;
 }
 
@@ -236,7 +317,7 @@ function reviewControls(id, rev = {}, auto, ctx) {
     class: 'inp', rows: 2, placeholder: 'Комментарий для ученика…', value: rev.comment || '',
     oninput: (e) => ctx.onReview(id, { comment: e.target.value }, true),
   });
-  const voice = voiceNote(rev.voice, (v) => ctx.onReview(id, { voice: v || undefined }, true));
+  const voice = voiceNote(rev.voice, (res) => ctx.onReview(id, { voice: res?.audio || undefined }, true));
   const slots = [
     ['correction', '✏️ Исправление', correction],
     ['comment', '💬 Комментарий', comment],
@@ -422,44 +503,18 @@ const RENDER = {
   speak(item, ans, set, editable) {
     const wrap = h('div', { class: 'speak' });
     if (item.model) wrap.append(h('p', { class: 'model' }, h('span', null, rich(item.model)), sayBtn(item.model)));
-    const player = h('div', { class: 'rec-result' });
-    const showAns = (a) => {
-      player.replaceChildren();
-      if (a?.audio) {
-        player.append(h('audio', { controls: true, src: a.audio, preload: 'none' }));
-        if (a.transcript) player.append(h('p', { class: 'small muted' }, 'Распознано: «', a.transcript, '»'));
-      } else if (!editable) player.append(h('span', { class: 'muted' }, 'Запись не сделана.'));
-    };
-    showAns(ans);
+    const transcript = h('p', { class: 'small muted transcript-line' });
+    const showTranscript = (a) => { transcript.textContent = a?.transcript ? `Распознано: «${a.transcript}»` : ''; };
     if (editable) {
-      if (!recordingSupported) {
-        wrap.append(h('p', { class: 'muted' }, 'Запись голоса недоступна в этом браузере. Откройте сайт в Chrome по адресу https://…'));
-      } else {
-        let rec = null;
-        const btn = h('button', { type: 'button', class: 'btn rec' }, ans?.audio ? '🎙 Записать заново' : '🎙 Записать');
-        btn.onclick = async () => {
-          if (!rec) {
-            try {
-              rec = await startRecording(item.maxSeconds ? item.maxSeconds * 1000 : 20000);
-            } catch {
-              alert('Нет доступа к микрофону. Разрешите доступ в настройках браузера.');
-              return;
-            }
-            btn.textContent = '■ Остановить';
-            btn.classList.add('recording');
-            rec.done.then((res) => {
-              rec = null;
-              btn.textContent = '🎙 Записать заново';
-              btn.classList.remove('recording');
-              set(res);
-              showAns(res);
-            });
-          } else rec.stop();
-        };
-        wrap.append(btn);
-      }
+      wrap.append(voiceNote(ans?.audio, (res) => { set(res); showTranscript(res); },
+        { label: 'Записать ответ', maxSeconds: item.maxSeconds || 30, big: true }));
+    } else if (ans?.audio) {
+      wrap.append(audioPill(ans.audio));
+    } else {
+      wrap.append(h('span', { class: 'muted' }, 'Запись не сделана.'));
     }
-    wrap.append(player);
+    showTranscript(ans);
+    wrap.append(transcript);
     return wrap;
   },
 };
