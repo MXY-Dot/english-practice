@@ -62,6 +62,35 @@
   --chip-bg: linear-gradient(135deg, #fde6d2, #f6e2cf); --chip-ink: #a9461a; --fx-color: #d98b4a;
 }
 
+:root[data-season="newyear"] {
+  --bg: #fbf4f1; --glow1: #ffd3d3; --glow2: #d3efdc; --soft: #fbf7f4; --line: #f0e3dc;
+  --accent: #d6283b; --accent2: #e8a317; --accent3: #1f8a4c; --accent-soft: #fde4e6;
+  --chip-bg: linear-gradient(135deg, #ffe1e4, #dff3e6); --chip-ink: #b51f31; --fx-color: #c9d8f2;
+}
+:root[data-season="newyear"] .brand-mark { background: linear-gradient(135deg, #d6283b, #1f8a4c); }
+
+/* ---------- New Year garland ---------- */
+#season-garland {
+  position: fixed; top: 58px; left: 0; right: 0; z-index: 19; height: 22px; pointer-events: none;
+  display: flex; justify-content: space-around; align-items: flex-start;
+  background: radial-gradient(120% 22px at 50% -6px, transparent 60%, color-mix(in srgb, var(--accent3) 70%, #000) 61%, transparent 66%) repeat-x;
+  background-size: calc(100% / 14) 22px;
+}
+body:has(.login-page) #season-garland { top: 0; }
+@media (max-width: 640px) { #season-garland { top: 56px; } }
+.bulb {
+  width: 9px; height: 13px; margin-top: 7px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: bulb-glow 1.4s ease-in-out infinite alternate;
+}
+.bulb.b0 { background: #ff4757; --glow: #ff4757; }
+.bulb.b1 { background: #ffd23f; --glow: #ffd23f; }
+.bulb.b2 { background: #2ed573; --glow: #2ed573; }
+.bulb.b3 { background: #3ea6ff; --glow: #3ea6ff; }
+@keyframes bulb-glow {
+  from { opacity: .45; box-shadow: none; }
+  to { opacity: 1; box-shadow: 0 0 10px 2px var(--glow); }
+}
+
 /* ---------- night (works with every season: keeps its accent colors) ---------- */
 :root[data-time="night"] {
   --bg: #13121c;

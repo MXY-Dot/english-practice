@@ -212,16 +212,17 @@ try {
   await evaluate(`$('.theme-btn').click();`);
   await sleep(150);
   check(await evaluate(`return !$('.theme-panel').hidden`), 'theme menu opens');
-  for (const season of ['winter', 'spring', 'summer', 'autumn']) {
+  for (const season of ['winter', 'spring', 'summer', 'autumn', 'newyear']) {
     for (const time of ['day', 'night']) {
       await evaluate(`
         const panel = $('.theme-panel');
         const segs = panel.querySelectorAll('.theme-seg');
-        [...segs[0].children].find(b => b.textContent.includes(${JSON.stringify({ winter: 'Зима', spring: 'Весна', summer: 'Лето', autumn: 'Осень' }[season])})).click();
+        [...segs[0].children].find(b => b.textContent.includes(${JSON.stringify({ winter: 'Зима', spring: 'Весна', summer: 'Лето', autumn: 'Осень', newyear: 'Новый год' }[season])})).click();
         [...segs[1].children].find(b => b.textContent.includes(${JSON.stringify(time === 'day' ? 'День' : 'Ночь')})).click();`);
       await sleep(250);
       const ok = await evaluate(`return document.documentElement.dataset.season === '${season}' && document.documentElement.dataset.time === '${time}' && !!document.getElementById('season-fx')`);
       check(ok, `theme ${season} / ${time} applied`);
+      if (season === 'newyear') check(await evaluate(`return $$('#season-garland .bulb').length > 0`), `New Year garland shown (${time})`);
       await shot(`theme-${season}-${time}`);
     }
   }

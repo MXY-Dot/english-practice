@@ -11,7 +11,10 @@ export const SEASONS = {
   spring: { label: 'Весна', icon: '🌸', particles: ['🌸', '✿', '🌱', '❀'] },
   summer: { label: 'Лето', icon: '☀️', particles: ['✦', '•', '☀', '✧'] },
   autumn: { label: 'Осень', icon: '🍂', particles: ['🍂', '🍁', '🍃', '🍂'] },
+  newyear: { label: 'Новый год', icon: '🎄', particles: ['❄', '🎄', '❅', '✨', '🎁', '❆'] },
 };
+
+const GARLAND_BULBS = 28;
 
 export function loadSettings() {
   try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY)) }; } catch { return { ...DEFAULTS }; }
@@ -23,6 +26,9 @@ function saveSettings(s) {
 
 export function seasonFor(date = new Date()) {
   const m = date.getMonth(); // 0 = January
+  const d = date.getDate();
+  // New Year holidays: 20 December – 14 January.
+  if ((m === 11 && d >= 20) || (m === 0 && d <= 14)) return 'newyear';
   if (m === 11 || m <= 1) return 'winter';
   if (m <= 4) return 'spring';
   if (m <= 7) return 'summer';
@@ -55,6 +61,7 @@ export function applyTheme() {
 // Gentle falling snow / petals / leaves, or rising sparkles in summer. Purely decorative.
 function drawParticles({ season, night, fx }) {
   document.getElementById('season-fx')?.remove();
+  document.getElementById('season-garland')?.remove();
   if (!fx) return;
   const set = SEASONS[season].particles;
   const layer = h('div', { id: 'season-fx', 'aria-hidden': 'true', class: 'fx-' + season });
@@ -72,6 +79,11 @@ function drawParticles({ season, night, fx }) {
         '--drift': (Math.random() * 80 - 40) + 'px',
       },
     }, set[i % set.length]));
+  }
+  // The garland sits above the content (its own layer), just under the top bar.
+  if (season === 'newyear') {
+    document.body.append(h('div', { id: 'season-garland', 'aria-hidden': 'true' }, Array.from({ length: GARLAND_BULBS }, (_, i) =>
+      h('span', { class: 'bulb b' + (i % 4), style: { animationDelay: (i % 4) * 0.35 + 's' } }))));
   }
   if (night) {
     for (let i = 0; i < 18; i++) {
