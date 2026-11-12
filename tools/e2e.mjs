@@ -105,7 +105,12 @@ try {
   await send('Page.enable');
   await send('Emulation.setFocusEmulationEnabled', { enabled: true });
   await resetView();
+  // Real (Supabase) mode: the login page loads and offers registration. No account is created.
   await send('Page.navigate', { url: `http://localhost:${PORT}/` });
+  await sleep(2500);
+  check(await evaluate(`return !!document.querySelector('.login-card') && [...document.querySelectorAll('.seg-btn')].some(b => b.textContent.includes('Регистрация'))`), 'live site connects to Supabase (login page with registration)');
+  // Everything below runs in demo mode.
+  await send('Page.navigate', { url: `http://localhost:${PORT}/?demo` });
   await sleep(1500);
   await evaluate(HELPERS);
 

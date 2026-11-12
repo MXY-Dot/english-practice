@@ -14,7 +14,9 @@ const SUPABASE_ESM = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/
 const SUMMARY_COLS = 'id,student_id,test,status,auto_score,max_score,grade,submitted_at,graded_at,updated_at';
 
 export async function createStore(cfg) {
-  if (cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) return supabaseStore(cfg);
+  // "?demo" in the address forces the local demo mode (used by tools/e2e.mjs so tests never touch real data).
+  const demo = typeof location !== 'undefined' && new URLSearchParams(location.search).has('demo');
+  if (!demo && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) return supabaseStore(cfg);
   return localStore();
 }
 
