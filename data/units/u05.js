@@ -26,7 +26,7 @@ export default {
           gap('Complete with a verb.', "Don't ___ your keys! Put them in your bag.", ['forget', 'lose']),
           gap('Complete with a verb.', 'Can you ___ the piano? (p _ _ y)', 'play'),
           gap('Complete with a verb.', "I can't ___ — I don't have a licence. (d _ _ _ e)", 'drive'),
-          gap('Complete with a verb.', "Can you ___ me your pen, please? (g _ _ e)", 'give'),
+          gap('Complete with a verb.', "Can you ___ me your pen, please? (g _ _ e)", ['give', 'lend']),
           ch('Can you ___ me with my homework?', ['help', 'call', 'come'], 0),
           ch('I can ___ well — I sing in a choir.', ['sing', 'dance', 'paint'], 0),
         ]),
@@ -96,7 +96,7 @@ export default {
           tr('Make a question.', 'He is working.', 'Is he working?'),
           gap('Complete the short answer.', '"Is it raining?" "No, it ___."', ["isn't", 'is not']),
           fix('He is runing to the bus stop.', 'He is running to the bus stop.', "He's running to the bus stop."),
-          fix('Look! The children play in the garden.', 'Look! The children are playing in the garden.', "Look! The children're playing in the garden."),
+          fix('Look! The children play in the garden.', 'Look! The children are playing in the garden.'),
           ord('you doing What are', 'What are you doing?'),
         ]),
         ...sec('vocabulary', [

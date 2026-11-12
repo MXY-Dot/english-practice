@@ -77,7 +77,7 @@ export default {
       texts: [
         rd('Visit Samarkand!', "Samarkand is one of the oldest cities in Central Asia. Its most famous place is the Registan, a square with three beautiful old buildings. The best time to visit is spring or autumn — summer is the hottest season. Don't miss the Siyob Bazaar, the biggest market in the city.",
           [['What is the Registan?', ['a market', 'a square', 'a museum'], 1], ['When is the best time to visit?', ['summer', 'winter', 'spring or autumn'], 2], ['What is the biggest market?', ['Siyob Bazaar', 'the Registan', 'Chorsu'], 0]]),
-        cloze('World records', 'The Burj Khalifa in Dubai is the ___ (tall) building in the world. Russia is the ___ (big) country. The Sahara is the ___ (hot) desert. And Antarctica is the ___ (cold) place on Earth.', 'tallest', 'biggest', 'hottest', 'coldest'),
+        cloze('World records', 'The Burj Khalifa in Dubai is the ___ (tall) building in the world. Russia is the ___ (big) country. Death Valley in the USA is the ___ (hot) place in the world. And Antarctica is the ___ (cold) place on Earth.', 'tallest', 'biggest', 'hottest', 'coldest'),
         tf('Read. True or false?', "Our town is small, but it's the friendliest town in the region! The oldest building is the library — it's 300 years old. The most popular place for young people is the new shopping centre. The best pizza is at Mario's.",
           [['The town is very big.', false], ['The library is the oldest building.', true], ["The best pizza is at Mario's.", true]]),
         rd('The best and the worst', "We asked tourists about London. The best thing? The museums — most of them are free! The worst thing? The weather. The most expensive thing? Hotels and taxis. The most surprising thing? People always say 'sorry'!",
@@ -181,7 +181,7 @@ export default {
           mt('Match to make verb phrases.', [['fall in', 'love'], ['get', 'married'], ['have', 'children'], ['become', 'famous'], ['win', 'the lottery']]),
           gap('Complete.', 'You are going to ___ a lot of money. (w _ n)', 'win'),
           gap('Complete.', 'You are going to meet a tall, dark ___. (s _ _ _ _ _ _ r)', 'stranger'),
-          gap('Complete.', 'They are going to ___ a new house. (m _ _ e = go to live in)', 'move'),
+          gap('Complete.', 'They are going to ___ house next month. (m _ _ e = go to live in a new home)', 'move'),
           gap('Complete.', "I'm going to ___ a new job in September. (s _ _ _ t)", 'start'),
           ch("You can't walk there. It's too far. Let's ___ a taxi.", ['get', 'go', 'make'], 0),
           ch('A person who says what will happen in the future is a…', ['fortune teller', 'tour guide', 'receptionist'], 0),

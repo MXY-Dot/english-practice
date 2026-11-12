@@ -28,7 +28,7 @@ export default {
           gap('Complete the word.', 'You put money in your ___. (w _ _ _ _ t)', 'wallet'),
           ch("It's raining. You need…", ['an umbrella', 'sunglasses', 'a stamp'], 0),
           ch('Which is **not** usually in a bag?', ['a phone', 'a fridge', 'a pen'], 1),
-          gap('Write the singular.', 'glasses → ___ · watches → ___', 'glass', 'watch'),
+          gap('Write the singular.', 'boxes → ___ · watches → ___', 'box', 'watch'),
         ]),
         ...sec('pronunciation', [
           odd('Listen. Which plural ends in /ɪz/?', ['books', 'keys', 'watches'], 2),
@@ -77,7 +77,7 @@ export default {
       texts: [
         rd('My bag', "My bag is quite small, but there are a lot of things in it. There's my phone, my keys and a wallet. There are also two pens, a notebook and a pair of sunglasses. My favourite thing is an old watch. It's from my grandmother.",
           [['The bag is…', ['very big', 'quite small', 'new'], 1], ['How many pens are there?', ['one', 'two', 'three'], 1], ['The watch is from her…', ['mother', 'grandmother', 'friend'], 1]]),
-        cloze('At the lost property office', 'A: Good morning. I have ___ umbrella here. Is it yours?\nB: No, it isn\'t. My umbrella is blue.\nA: What about ___ glasses here, on the table?\nB: Yes! ___ are my glasses. Thank you!\nA: And here is ___ ID card. Is it yours too?', 'an', 'these', ['Those', 'These', 'They'], 'an'),
+        cloze('At the lost property office', 'A: Good morning. I have ___ umbrella here. Is it yours?\nB: No, it isn\'t. My umbrella is blue.\nA: What about ___ glasses here, on the table?\nB: Yes! ___ are my glasses. Thank you!\nA: And here is ___ ID card. Is it yours too?', 'an', ['these', 'those'], ['Those', 'These', 'They'], 'an'),
         tf('Read. True or false?', "Things in a teenager's room: a laptop, two posters on the wall, a lot of books and a guitar. There aren't any photos. There's a small TV, but it's very old. The room is small but it's nice.",
           [['There is a guitar.', true], ['There are some photos.', false], ['The TV is new.', false]]),
         rd('Shopping list', "Dad's list: three apples, an onion, two boxes of tea, a loaf of bread and some potatoes. And don't forget batteries for the clock! Please buy everything at the small shop on Green Street, not at the supermarket.",
@@ -96,7 +96,7 @@ export default {
           gap('Complete with **very** or **quite** (60% = quite, 90% = very).', "The film is OK. It's ___ good. The pizza is fantastic! It's ___ good.", 'quite', 'very'),
           tr('Rewrite. Put the adjective before the noun.', 'The bag is black. → It\'s a…', "It's a black bag.", 'It is a black bag.'),
           ch('Choose the correct sentence.', ['The shoes are black.', 'The shoes are blacks.', 'The blacks shoes.'], 0),
-          tr('Make one sentence.', 'It is a phone. It is new. It is expensive.', "It's a new expensive phone.", "It's an expensive new phone.", 'It is a new expensive phone.', 'It is an expensive new phone.'),
+          tr('Make one sentence. Put the adjective before the noun.', 'It is a car. It is new.', "It's a new car.", 'It is a new car.'),
           gap('Complete with **a** or **an**.', "It's ___ old house. It's ___ new car.", 'an', 'a'),
         ]),
         ...sec('vocabulary', [

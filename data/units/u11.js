@@ -173,7 +173,7 @@ export default {
           gap('Complete with **a, an** or **the**.', '___ sun is very hot today.', 'The'),
           fix('She is the teacher at my school.', 'She is a teacher at my school.', "She's a teacher at my school."),
           fix('I go to the work by bus.', 'I go to work by bus.'),
-          fix('I love the music.', 'I love music.'),
+          fix('I love the classical music. (= all classical music)', 'I love classical music.'),
           fix('He plays a piano very well.', 'He plays the piano very well.'),
           ch('I love ___ music.', ['the', 'a', '— (no article)'], 2),
         ]),
@@ -203,7 +203,7 @@ export default {
         ...sec('grammar', [
           gap('Complete with **a, an** or **the**.', 'I watched ___ interesting video. ___ video was about cats.', 'an', 'The'),
           gap('Complete with **a, an, the** or **—** (write — for no article).', 'She goes to ___ school by bus.', ['—', '-', 'no article']),
-          fix('The children love the ice cream.', 'Children love ice cream.'),
+          fix('I go to the bed at 10 p.m.', 'I go to bed at 10 p.m.'),
         ]),
         ...sec('vocabulary', [
           gap('Complete.', 'You ___ in to your account with a password. (l _ g)', 'log'),

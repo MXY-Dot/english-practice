@@ -55,19 +55,23 @@ function castDialogue(lines) {
   return voice;
 }
 
-function monologueVoice(text) {
+// One speaker: guess the gender from the audio ("I'm Tom") and from the task text
+// around it ("How does he go to work?", "He works from home.").
+function monologueVoice(text, context = '') {
   if (MALE_INTRO.test(text)) return VOICES.male[0];
   if (FEMALE_INTRO.test(text)) return VOICES.female[0];
-  return VOICES.female[0];
+  const he = (context.match(/\b(he|his|him|the man|the boy|a man)\b/gi) || []).length;
+  const she = (context.match(/\b(she|her|hers|the woman|the girl|a woman)\b/gi) || []).length;
+  return he > she ? VOICES.male[0] : VOICES.female[0];
 }
 
 // ---------- collect every clip the site can play ----------
 const clips = new Map(); // key → { lines: [[voice, text]] }
-const addSay = (say) => {
+const addSay = (say, context = '') => {
   if (!say) return;
   const key = audioKey(say);
   if (clips.has(key)) return;
-  if (typeof say === 'string') clips.set(key, { lines: [[monologueVoice(say), say]] });
+  if (typeof say === 'string') clips.set(key, { lines: [[monologueVoice(say, context), say]] });
   else {
     const cast = castDialogue(say);
     clips.set(key, { lines: say.map(([s, t]) => [cast[s], t]) });
@@ -81,7 +85,7 @@ const addWord = (w) => {
 for (const unit of UNITS) {
   for (const lesson of unit.lessons) {
     for (const item of [...lesson.practice, ...lesson.theory, ...lesson.texts]) {
-      if (item.say) addSay(item.say);
+      if (item.say) addSay(item.say, `${item.q} ${item.text || ''} ${(item.options || []).join(' ')}`);
       if (item.type === 'speak' && item.model) addSay(item.model);
       if (item.sayOptions) item.options.forEach(addWord);
       if (item.type === 'stress') addWord(item.word.join(''));

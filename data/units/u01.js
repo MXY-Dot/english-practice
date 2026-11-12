@@ -55,7 +55,7 @@ export default {
           gap('Write the day after Friday.', 'Friday → ___', 'Saturday'),
         ]),
         ...sec('pronunciation', [
-          st('Wed-nes-day', 0),
+          st('fif-teen', 1),
         ]),
         ...sec('listening', [
           lch('My name is Ali and this is my sister Lola. She is ten.', 'Listen. How old is Lola?', ['ten', 'two', 'twelve'], 0),

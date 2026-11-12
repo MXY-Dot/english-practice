@@ -189,7 +189,7 @@ export default {
         ...sec('pronunciation', [
           st('mu-si-cian', 1),
           st('clas-si-cal', 0),
-          ch('Which word starts with the sound /dʒ/?', ['jazz', 'guitar', 'gym'], 0),
+          ch('Which word starts with the sound /dʒ/?', ['jazz', 'guitar', 'game'], 0),
           odd('Listen. Which word has the sound /j/ as in **yes**?', ['music', 'must', 'much'], 0),
         ]),
         ...sec('listening', [

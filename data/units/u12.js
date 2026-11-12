@@ -153,8 +153,8 @@ export default {
         ch('**just** means…', ['a very short time ago', 'never', 'tomorrow'], 0),
       ],
       texts: [
-        rd('A travel blog', "I've visited 15 countries, but my favourite trip was to Japan. I went there in April 2023. I saw the cherry blossoms in Kyoto and I climbed Mount Fuji. I've eaten a lot of different food on my travels, but Japanese food is the best I've ever tried!",
-          [['How many countries has the blogger visited?', ['5', '15', '50'], 1], ['When did they go to Japan?', ['April 2023', 'April 2013', 'last month'], 0], ['What did they climb?', ['Everest', 'Mount Fuji', 'Kilimanjaro'], 1]]),
+        rd('A travel blog', "I've visited 15 countries, but my favourite trip was to Japan. I went there in April 2023. I saw the cherry blossoms in Kyoto and I visited Mount Fuji. I've eaten a lot of different food on my travels, but Japanese food is the best I've ever tried!",
+          [['How many countries has the blogger visited?', ['5', '15', '50'], 1], ['When did they go to Japan?', ['April 2023', 'April 2013', 'last month'], 0], ['What did they visit?', ['Everest', 'Mount Fuji', 'Kilimanjaro'], 1]]),
         cloze('A conversation', "A: Have you ever ___ (be) to Turkey?\nB: Yes, I ___.\nA: When ___ you go?\nB: I ___ (go) two years ago, with my parents.\nA: Did you ___ (like) it?\nB: Yes, I loved it!", 'been', 'have', 'did', 'went', 'like'),
         tf('Read. True or false?', "Ben has worked as a tour guide for ten years. He has taken tourists to more than 30 countries. Last year he went to Uzbekistan for the first time. He visited Samarkand and Bukhara and he loved the food.",
           [['Ben has worked as a tour guide for ten years.', true], ['He has visited Uzbekistan many times.', false], ['He went to Uzbekistan last year.', true]]),

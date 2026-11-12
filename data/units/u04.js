@@ -101,7 +101,7 @@ export default {
         ]),
         ...sec('vocabulary', [
           mt('Match to make daily routine phrases.', [['get', 'up'], ['have', 'breakfast'], ['go to', 'bed'], ['take', 'a shower'], ['do', 'homework']]),
-          ord('wake up|get up|get dressed|have breakfast', 'wake up get up get dressed have breakfast', 'Put the morning routine in order.'),
+          ord('wake up|get up|get dressed|have breakfast', ['wake up get up get dressed have breakfast', 'wake up get up have breakfast get dressed'], 'Put the morning routine in order.'),
           gap('Write the time in words.', '7:30 = half past ___', 'seven'),
           gap('Write the time in words.', '8:15 = quarter ___ eight', 'past'),
           gap('Write the time in words.', '9:45 = quarter ___ ten', 'to'),

@@ -188,7 +188,7 @@ export default {
         ]),
         ...sec('pronunciation', [
           odd('Listen. Which word has a **different** vowel sound?', ['got', 'not', 'go', 'stop'], 2),
-          ch('Which word has the sound /æ/?', ['had', 'have', 'got'], 0),
+          ch('Which word has the sound /æ/?', ['had', 'hard', 'got'], 0),
           odd('Listen. Which word has the sound /e/ as in **bed**?', ['went', 'want', 'what'], 0),
           sp('Say what you did last night. Use **go, have, get**.', 'Last night I got home at six. I had dinner with my family and then I went to bed at eleven.'),
         ]),
