@@ -109,7 +109,8 @@ try {
   await resetView();
   // Real (Supabase) mode: the login page loads and offers registration. No account is created.
   await send('Page.navigate', { url: BASE });
-  await sleep(2500);
+  // The Supabase client loads from a CDN, so the first render takes 1–3 s: wait for it.
+  for (let i = 0; i < 100 && !(await evaluate(`return !!document.querySelector('.login-card')`)); i++) await sleep(100);
   check(await evaluate(`return !!document.querySelector('.login-card') && [...document.querySelectorAll('.seg-btn')].some(b => b.textContent.includes('Регистрация'))`), 'live site connects to Supabase (login page with registration)');
   // Everything below runs in demo mode.
   await send('Page.navigate', { url: BASE + '?demo' });

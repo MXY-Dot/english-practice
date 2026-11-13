@@ -2,9 +2,9 @@
 //  - Supabase (shared online database) when config has URL + key
 //  - localStorage demo mode otherwise
 //
-// User:       { id, name, role: 'student' | 'teacher', email?, teacher_id? }
-// Student:    { id, name, teacher_id }   (teacher_id = the teacher who picked this student)
-// Submission: { id, student_id, student_name, test, answers, status, auto_score, max_score,
+// User:       { id, name, role: 'student' | 'teacher', gender: 'm' | 'f' | null, email?, teacher_id? }
+// Student:    { id, name, gender, teacher_id }   (teacher_id = the teacher who picked this student)
+// Submission: { id, student_id, student_name, student_gender, test, answers, status, auto_score, max_score,
 //               review, grade, teacher_comment, submitted_at, graded_at, updated_at }
 // status: 'draft' | 'submitted' | 'returned' | 'graded'
 //
@@ -29,14 +29,15 @@ async function supabaseStore(cfg) {
     if (error) throw new Error(error.message);
     return data;
   };
-  const withName = (row) => row && { ...row, student_name: row.profiles?.full_name ?? '', profiles: undefined };
+  // profiles(*) / select('*') (not a column list) so the site still works before the gender column is added.
+  const withName = (row) => row && { ...row, student_name: row.profiles?.full_name ?? '', student_gender: row.profiles?.gender ?? null, profiles: undefined };
 
   async function currentUser() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) return null;
     const p = check(await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle());
     if (!p) return null;
-    return { id: p.id, name: p.full_name, role: p.role, email: session.user.email, teacher_id: p.teacher_id };
+    return { id: p.id, name: p.full_name, role: p.role, gender: p.gender ?? null, email: session.user.email, teacher_id: p.teacher_id };
   }
 
   return {
@@ -48,12 +49,12 @@ async function supabaseStore(cfg) {
     },
     // role 'teacher' needs the teacher code that the site owner set in the database.
     // Returns null when the project requires e-mail confirmation first.
-    async signUp({ name, email, password, role, teacherCode }) {
+    async signUp({ name, email, password, role, teacherCode, gender }) {
       if (role === 'teacher') {
         const ok = check(await sb.rpc('check_teacher_code', { code: teacherCode || '' }));
         if (!ok) throw new Error('Неверный код учителя.');
       }
-      const meta = { full_name: name, ...(role === 'teacher' ? { teacher_code: teacherCode } : {}) };
+      const meta = { full_name: name, ...(gender ? { gender } : {}), ...(role === 'teacher' ? { teacher_code: teacherCode } : {}) };
       const data = check(await sb.auth.signUp({ email, password, options: { data: meta } }));
       if (data.session) return currentUser();
       // "Confirm email" may still be on, but the database confirms new accounts itself
@@ -65,10 +66,10 @@ async function supabaseStore(cfg) {
       await sb.auth.signOut();
     },
     async getSubmission(studentId, test) {
-      return withName(check(await sb.from('submissions').select('*, profiles(full_name)').eq('student_id', studentId).eq('test', test).maybeSingle()));
+      return withName(check(await sb.from('submissions').select('*, profiles(*)').eq('student_id', studentId).eq('test', test).maybeSingle()));
     },
     async getSubmissionById(id) {
-      return withName(check(await sb.from('submissions').select('*, profiles(full_name)').eq('id', id).maybeSingle()));
+      return withName(check(await sb.from('submissions').select('*, profiles(*)').eq('id', id).maybeSingle()));
     },
     // Student save: only the student's own fields.
     async saveSubmission(sub) {
@@ -77,18 +78,18 @@ async function supabaseStore(cfg) {
         status: sub.status, auto_score: sub.auto_score, max_score: sub.max_score,
         submitted_at: sub.submitted_at ?? null, updated_at: new Date().toISOString(),
       };
-      return withName(check(await sb.from('submissions').upsert(row, { onConflict: 'student_id,test' }).select('*, profiles(full_name)').single()));
+      return withName(check(await sb.from('submissions').upsert(row, { onConflict: 'student_id,test' }).select('*, profiles(*)').single()));
     },
     // Student: own work. Teacher: work of their own students (enforced by RLS).
     async listSubmissions(studentId) {
-      let q = sb.from('submissions').select(SUMMARY_COLS + ', profiles(full_name)').order('updated_at', { ascending: false });
+      let q = sb.from('submissions').select(SUMMARY_COLS + ', profiles(*)').order('updated_at', { ascending: false });
       if (studentId) q = q.eq('student_id', studentId);
       return check(await q).map(withName);
     },
     // All students (teachers can see names to pick their own students).
     async listStudents() {
-      return check(await sb.from('profiles').select('id, full_name, teacher_id').eq('role', 'student').order('full_name'))
-        .map((p) => ({ id: p.id, name: p.full_name, teacher_id: p.teacher_id }));
+      return check(await sb.from('profiles').select('*').eq('role', 'student').order('full_name'))
+        .map((p) => ({ id: p.id, name: p.full_name, gender: p.gender ?? null, teacher_id: p.teacher_id }));
     },
     async claimStudent(studentId) {
       check(await sb.rpc('claim_student', { sid: studentId }));
@@ -96,14 +97,21 @@ async function supabaseStore(cfg) {
     async releaseStudent(studentId) {
       check(await sb.rpc('release_student', { sid: studentId }));
     },
-    async teacherName(teacherId) {
-      if (!teacherId) return '';
-      const p = check(await sb.from('profiles').select('full_name').eq('id', teacherId).maybeSingle());
-      return p?.full_name ?? '';
+    // { name, gender } of a teacher, or null.
+    async teacherInfo(teacherId) {
+      if (!teacherId) return null;
+      const p = check(await sb.from('profiles').select('*').eq('id', teacherId).maybeSingle());
+      return p ? { name: p.full_name, gender: p.gender ?? null } : null;
+    },
+    async setGender(gender) {
+      const { error } = await sb.rpc('set_my_gender', { g: gender });
+      if (error) throw new Error(/set_my_gender|function/i.test(error.message)
+        ? 'Сначала обновите базу: выполните supabase/schema.sql в Supabase (SQL Editor).' : error.message);
+      return currentUser();
     },
     // Teacher save: review, grade, comment, status.
     async saveReview(id, patch) {
-      return withName(check(await sb.from('submissions').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id).select('*, profiles(full_name)').single()));
+      return withName(check(await sb.from('submissions').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id).select('*, profiles(*)').single()));
     },
   };
 }
@@ -125,6 +133,8 @@ function localStore() {
   const users = () => read(K.users, []);
   const subs = () => read(K.subs, {});
   const nameOf = (id) => users().find((u) => u.id === id)?.name ?? '';
+  const genderOf = (id) => users().find((u) => u.id === id)?.gender ?? null;
+  const withName = (s) => ({ ...s, student_name: nameOf(s.student_id), student_gender: genderOf(s.student_id) });
   const me = () => users().find((u) => u.id === read(K.session, null)) ?? null;
   const summary = ({ answers, review, teacher_comment, ...rest }) => rest;
   const publicUser = ({ pass, ...u }) => u;
@@ -149,7 +159,7 @@ function localStore() {
       return u ? publicUser(u) : null;
     },
     // Logs in, or creates the account the first time this name is used.
-    async localLogin(name, role, password) {
+    async localLogin(name, role, password, gender) {
       name = name.trim();
       if (!name) throw new Error('Введите имя.');
       if (!password || password.length < 4) throw new Error('Пароль должен быть не короче 4 символов.');
@@ -158,8 +168,12 @@ function localStore() {
       const h = await hash(password);
       if (u && u.pass !== h) throw new Error('Неверный пароль.');
       if (!u) {
-        u = { id: uid(), name, role, pass: h, teacher_id: null };
+        u = { id: uid(), name, role, gender: gender || null, pass: h, teacher_id: null };
         list.push(u);
+        write(K.users, list);
+      } else if (gender && !u.gender) {
+        // Old account without gender: fill it in, nothing else changes.
+        u.gender = gender;
         write(K.users, list);
       }
       write(K.session, u.id);
@@ -170,11 +184,11 @@ function localStore() {
     },
     async getSubmission(studentId, test) {
       const s = Object.values(subs()).find((x) => x.student_id === studentId && x.test === test);
-      return s && visible(s) ? { ...s, student_name: nameOf(s.student_id) } : null;
+      return s && visible(s) ? withName(s) : null;
     },
     async getSubmissionById(id) {
       const s = subs()[id];
-      return s && visible(s) ? { ...s, student_name: nameOf(s.student_id) } : null;
+      return s && visible(s) ? withName(s) : null;
     },
     async saveSubmission(sub) {
       const all = subs();
@@ -190,16 +204,16 @@ function localStore() {
       all[row.id] = row;
       write(K.subs, all);
       // Return a copy, like the real server does (keeps demo mode honest for tests).
-      return structuredClone({ ...row, student_name: nameOf(row.student_id) });
+      return structuredClone(withName(row));
     },
     async listSubmissions(studentId) {
       return Object.values(subs())
         .filter((s) => visible(s) && (!studentId || s.student_id === studentId))
         .sort((a, b) => String(b.updated_at).localeCompare(String(a.updated_at)))
-        .map((s) => ({ ...summary(s), student_name: nameOf(s.student_id) }));
+        .map((s) => withName(summary(s)));
     },
     async listStudents() {
-      return users().filter((u) => u.role === 'student').map((u) => ({ id: u.id, name: u.name, teacher_id: u.teacher_id ?? null }))
+      return users().filter((u) => u.role === 'student').map((u) => ({ id: u.id, name: u.name, gender: u.gender ?? null, teacher_id: u.teacher_id ?? null }))
         .sort((a, b) => a.name.localeCompare(b.name));
     },
     async claimStudent(studentId) {
@@ -217,15 +231,24 @@ function localStore() {
       const s = list.find((u) => u.id === studentId);
       if (s && s.teacher_id === t?.id) { s.teacher_id = null; write(K.users, list); }
     },
-    async teacherName(teacherId) {
-      return nameOf(teacherId);
+    async teacherInfo(teacherId) {
+      const t = users().find((u) => u.id === teacherId);
+      return t ? { name: t.name, gender: t.gender ?? null } : null;
+    },
+    async setGender(gender) {
+      const list = users();
+      const u = list.find((x) => x.id === read(K.session, null));
+      if (!u) throw new Error('Войдите снова.');
+      u.gender = gender;
+      write(K.users, list);
+      return publicUser(u);
     },
     async saveReview(id, patch) {
       const all = subs();
       if (!all[id] || !visible(all[id])) throw new Error('Работа не найдена.');
       all[id] = { ...all[id], ...patch, updated_at: new Date().toISOString() };
       write(K.subs, all);
-      return { ...all[id], student_name: nameOf(all[id].student_id) };
+      return withName(all[id]);
     },
   };
 }

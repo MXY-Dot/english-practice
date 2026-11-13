@@ -26,6 +26,8 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now()
 );
 alter table public.profiles add column if not exists teacher_id uuid references public.profiles (id) on delete set null;
+-- 'm' / 'f' for the words учитель/учительница, ученик/ученица. Empty for old accounts until the user picks.
+alter table public.profiles add column if not exists gender text check (gender in ('m', 'f'));
 
 -- The sign-up form can check the code before creating the account.
 create or replace function public.check_teacher_code(code text)
@@ -39,11 +41,12 @@ grant execute on function public.check_teacher_code(text) to anon, authenticated
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  insert into public.profiles (id, full_name, role)
+  insert into public.profiles (id, full_name, role, gender)
   values (
     new.id,
     coalesce(new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)),
-    case when public.check_teacher_code(coalesce(new.raw_user_meta_data ->> 'teacher_code', '')) then 'teacher' else 'student' end
+    case when public.check_teacher_code(coalesce(new.raw_user_meta_data ->> 'teacher_code', '')) then 'teacher' else 'student' end,
+    case when new.raw_user_meta_data ->> 'gender' in ('m', 'f') then new.raw_user_meta_data ->> 'gender' end
   );
   return new;
 end;
@@ -103,6 +106,16 @@ begin
 end;
 $$;
 grant execute on function public.claim_student(uuid), public.release_student(uuid) to authenticated;
+
+-- Anyone sets their own gender (only this one column of their own profile).
+create or replace function public.set_my_gender(g text)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if g not in ('m', 'f') then raise exception 'Неверное значение.'; end if;
+  update public.profiles set gender = g where id = auth.uid();
+end;
+$$;
+grant execute on function public.set_my_gender(text) to authenticated;
 
 -- ---------- submissions ----------
 create table if not exists public.submissions (

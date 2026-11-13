@@ -14,6 +14,8 @@ export function h(tag, props, ...children) {
       }
     }
     else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+    // <textarea> ignores a value attribute; its text must be set as a property.
+    else if (k === 'value' && tag === 'textarea') el.value = String(v);
     else if (k in el && typeof v !== 'string') el[k] = v;
     else el.setAttribute(k, v === true ? '' : v);
   }

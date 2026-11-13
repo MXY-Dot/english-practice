@@ -213,7 +213,9 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 .who { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .who-name { font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 28vw; }
-.role { font-size: .72rem; font-weight: 900; text-transform: uppercase; letter-spacing: .6px; padding: 4px 10px; border-radius: 99px; }
+.role { font-size: .72rem; font-weight: 900; text-transform: uppercase; letter-spacing: .6px; padding: 4px 10px; border-radius: 99px; border: 0; font-family: inherit; cursor: pointer; }
+.gender-wrap { display: grid; gap: 6px; }
+.gender-ask { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .role.student { background: #e6efff; color: #3d6be0; }
 .role.teacher { background: #ffe6ef; color: #d23c74; }
 .demo-banner { background: var(--banner-bg); color: var(--banner-ink); padding: 8px 20px; font-size: .86rem; text-align: center; border-bottom: 1px solid var(--line); }

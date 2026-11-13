@@ -7,6 +7,7 @@ import { speak, stopSpeaking, ttsSupported, startRecording, recordingSupported, 
 import { gradeItem, keyText, MANUAL_TYPES, gapCount } from './grading.js';
 import { SECTIONS } from './content.js';
 import { SOUNDS, SOUND_RE } from './sounds.js';
+import { teacherWord, roleWord } from './words.js';
 
 const LETTERS = 'abcdefghij';
 
@@ -143,7 +144,7 @@ function sayBtn(text) {
 
 const hasNote = (rev) => !!(rev && (rev.comment || rev.correction || rev.voice));
 
-export function teacherNote(rev, title = 'Комментарий учителя') {
+export function teacherNote(rev, title = 'Комментарий ' + teacherWord('gen')) {
   return h('div', { class: 'teacher-note' },
     h('div', { class: 'tn-title' }, title),
     rev.correction ? h('div', null, h('b', null, 'Исправление: '), rev.correction) : null,
@@ -270,7 +271,7 @@ function feedback(entry, ans, rev, ctx) {
   const box = h('div', { class: 'feedback' });
 
   const status = final == null ? 'pending' : final >= 1 ? 'ok' : final <= 0 ? 'bad' : 'part';
-  const label = { pending: 'Ждёт проверки учителя', ok: 'Верно', bad: 'Неверно', part: 'Частично верно' }[status];
+  const label = { pending: 'Ждёт проверки ' + teacherWord('gen'), ok: 'Верно', bad: 'Неверно', part: 'Частично верно' }[status];
   box.classList.add(status);
   box.append(h('div', { class: 'fb-row' },
     h('span', { class: 'badge ' + status }, label),
@@ -314,7 +315,7 @@ function reviewControls(id, rev = {}, auto, ctx) {
     oninput: (e) => ctx.onReview(id, { correction: e.target.value }, true),
   });
   const comment = h('textarea', {
-    class: 'inp', rows: 2, placeholder: 'Комментарий для ученика…', value: rev.comment || '',
+    class: 'inp', rows: 2, placeholder: `Комментарий для ${roleWord('student', ctx.studentGender, 'gen')}…`, value: rev.comment || '',
     oninput: (e) => ctx.onReview(id, { comment: e.target.value }, true),
   });
   const voice = voiceNote(rev.voice, (res) => ctx.onReview(id, { voice: res?.audio || undefined }, true));

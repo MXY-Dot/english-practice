@@ -7,6 +7,7 @@ import { renderItem, voiceNote, audioPill } from './tasks.js';
 import { scoreUnit, suggestGrade, isAnswered } from './grading.js';
 import { stopSpeaking } from './audio.js';
 import { startThemeClock, themeButton } from './theme.js';
+import { roleWord, pastEnd, setTeacherGender, teacherWord, teacherPast } from './words.js';
 
 startThemeClock();
 
@@ -75,6 +76,7 @@ async function route() {
   if (parts[0] === 'login') return go('/');
   try {
     if (user.role === 'teacher') {
+      setTeacherGender(user.gender);
       if (parts[0] === 'review' && parts[1]) return await reviewView(parts[1]);
       if (parts[0] === 'student' && parts[1]) return await studentProgressView(parts[1]);
       if (parts[0] === 'preview' && parts[1]) return await previewView(parts[1]);
@@ -94,7 +96,8 @@ function shell(...content) {
     h('div', { class: 'who' },
       themeButton(),
       user ? [
-        h('span', { class: 'role ' + user.role }, user.role === 'teacher' ? 'Учитель' : 'Ученик'),
+        h('button', { type: 'button', class: 'role ' + user.role, title: 'Изменить на «' + roleWord(user.role, user.gender === 'f' ? 'm' : 'f') + '»',
+          onclick: () => changeGender(user.gender === 'f' ? 'm' : 'f', true) }, roleWord(user.role, user.gender, 'nom', true)),
         h('span', { class: 'who-name' }, user.name),
         h('button', { class: 'btn ghost small', onclick: logout, title: 'Выйти' }, 'Выйти'),
       ] : null));
@@ -105,6 +108,31 @@ function shell(...content) {
       h('button', { class: 'x', title: 'Скрыть', 'aria-label': 'Скрыть', onclick: (e) => { sessionFlag('hide-demo', true); e.currentTarget.parentElement.remove(); } }, '✕'))
     : null;
   app.replaceChildren(header, banner || '', h('main', { class: 'page' }, ...content));
+}
+
+// Saves the user's gender (only words on the site change; no work is touched).
+async function changeGender(g, ask) {
+  if (ask && !confirm(`Обращаться к вам «${roleWord(user.role, g, 'nom', true)}»?`)) return;
+  try {
+    user = (await store.setGender(g)) || { ...user, gender: g };
+    toast('Сохранено: ' + roleWord(user.role, g, 'nom', true), 'ok');
+    route();
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+// Asks old accounts (made before this choice existed) once: учитель/учительница, ученик/ученица.
+function genderPrompt() {
+  if (user.gender) return null;
+  return h('div', { class: 'notice gender-ask' },
+    h('b', null, 'Как к вам обращаться? '),
+    h('span', { class: 'seg' }, ['m', 'f'].map((g) => h('button', { type: 'button', class: 'seg-btn', onclick: () => changeGender(g) }, roleWord(user.role, g, 'nom', true)))));
+}
+
+// Student: loads the teacher's name and gender (for "учитель / учительница").
+async function loadTeacher() {
+  const t = user.teacher_id ? await store.teacherInfo(user.teacher_id) : null;
+  setTeacherGender(t?.gender);
+  return t;
 }
 
 async function logout() {
@@ -157,19 +185,34 @@ function loginView() {
   let role = 'student';
   const roleTabs = h('div', { class: 'seg wide' });
   const roleBtn = (r, label) => h('button', { type: 'button', class: 'seg-btn' + (r === role ? ' active' : ''), 'data-r': r, onclick: () => setRole(r) }, label);
-  roleTabs.append(roleBtn('student', '🎒 Я ученик'), roleBtn('teacher', '🧑‍🏫 Я учитель'));
+  roleTabs.append(roleBtn('student', ''), roleBtn('teacher', ''));
+  // Gender: only changes the words (учитель/учительница, ученик/ученица).
+  let gender = null;
+  const genderTabs = h('div', { class: 'seg wide gender-seg' });
+  ['m', 'f'].forEach((g) => genderTabs.append(h('button', { type: 'button', class: 'seg-btn', 'data-g': g, onclick: () => setGender(g) }, g === 'm' ? '👨 Мужской' : '👩 Женский')));
+  const genderWrap = h('div', { class: 'gender-wrap' }, h('div', { class: 'muted small' }, 'Пол (чтобы правильно обращаться к вам):'), genderTabs);
+  const roleLabels = () => roleTabs.querySelectorAll('button').forEach((b) => {
+    b.textContent = (b.dataset.r === 'teacher' ? '🧑‍🏫 Я ' : '🎒 Я ') + roleWord(b.dataset.r, gender);
+  });
   let onRole = () => {};
   function setRole(r) {
     role = r;
     roleTabs.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.r === r));
     onRole();
   }
+  function setGender(g) {
+    gender = g;
+    genderTabs.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.g === g));
+    roleLabels();
+    onRole();
+  }
+  roleLabels();
 
   if (store.mode === 'local') {
     const name = h('input', { class: 'inp', placeholder: 'Имя и фамилия', autocomplete: 'username' });
     const pass = h('input', { class: 'inp', placeholder: 'Пароль (придумайте при первом входе)', type: 'password', autocomplete: 'current-password' });
-    body = h('form', { class: 'form', onsubmit: (e) => { e.preventDefault(); store.localLogin(name.value, role, pass.value).then(done, fail); } },
-      roleTabs, name, passwordField(pass, { generate: true }), err, h('button', { class: 'btn primary', type: 'submit' }, 'Войти'),
+    body = h('form', { class: 'form', onsubmit: (e) => { e.preventDefault(); store.localLogin(name.value, role, pass.value, gender).then(done, fail); } },
+      roleTabs, genderWrap, name, passwordField(pass, { generate: true }), err, h('button', { class: 'btn primary', type: 'submit' }, 'Войти'),
       h('p', { class: 'muted small' }, 'Демо-режим. При первом входе аккаунт создаётся с этим паролем; потом входите с тем же паролем.'));
   } else {
     let mode = 'in';
@@ -179,7 +222,7 @@ function loginView() {
     const code = h('input', { class: 'inp', placeholder: 'Код учителя', type: 'password', autocomplete: 'off' });
     const passWrap = passwordField(pass);
     const codeWrap = passwordField(code);
-    const roleWrap = h('div', { style: { display: 'none' } }, roleTabs);
+    const roleWrap = h('div', { style: { display: 'none' } }, roleTabs, genderWrap);
     const submit = h('button', { class: 'btn primary', type: 'submit' }, 'Войти');
     const hint = h('p', { class: 'muted small' });
     const tabs = h('div', { class: 'seg wide' });
@@ -192,7 +235,7 @@ function loginView() {
       pass.autocomplete = up ? 'new-password' : 'current-password';
       submit.textContent = up ? 'Зарегистрироваться' : 'Войти';
       hint.textContent = up
-        ? (role === 'teacher' ? 'Придумайте пароль. Код учителя даёт владелец сайта.' : 'Придумайте пароль. После регистрации учитель добавит вас в свой класс.')
+        ? (role === 'teacher' ? 'Придумайте пароль. Код учителя даёт владелец сайта.' : 'Придумайте пароль. После регистрации учитель или учительница добавит вас в свой класс.')
         : '';
     };
     onRole = sync;
@@ -212,8 +255,9 @@ function loginView() {
       try {
         if (mode === 'up') {
           if (!name.value.trim()) throw new Error('Введите имя и фамилию.');
+          if (!gender) throw new Error('Выберите пол.');
           if (role === 'teacher' && !code.value.trim()) throw new Error('Введите код учителя.');
-          const u = await store.signUp({ name: name.value.trim(), email: email.value.trim(), password: pass.value, role, teacherCode: code.value.trim() });
+          const u = await store.signUp({ name: name.value.trim(), email: email.value.trim(), password: pass.value, role, teacherCode: code.value.trim(), gender });
           if (!u) { err.className = 'form-ok'; err.textContent = 'Мы отправили письмо для подтверждения. Подтвердите e-mail и войдите.'; setMode('in'); return; }
           done(u);
         } else {
@@ -261,15 +305,16 @@ async function studentHome() {
   const graded = subs.filter((s) => s.status === 'graded').length;
   // Refresh: the teacher may have added this student after they logged in.
   user = (await store.currentUser()) || user;
-  const teacher = user.teacher_id ? await store.teacherName(user.teacher_id) : '';
+  const teacher = await loadTeacher();
   shell(
+    genderPrompt(),
     h('div', { class: 'hero' },
       h('div', null,
         h('h1', null, 'Привет, ', user.name.split(' ')[0], '! 👋'),
         h('p', { class: 'muted' }, `Выберите урок. В каждом уроке ${TEST_LEN} заданий вперемешку: практика, тексты и теория грамматики.`),
         h('p', { class: 'teacher-line' }, teacher
-          ? ['🧑‍🏫 Ваш учитель: ', h('b', null, teacher)]
-          : '⏳ Учитель ещё не добавил вас в свой класс. Задания можно делать уже сейчас — учитель увидит их, когда добавит вас.')),
+          ? [teacher.gender === 'f' ? '🧑‍🏫 Ваша учительница: ' : '🧑‍🏫 Ваш учитель: ', h('b', null, teacher.name)]
+          : '⏳ Учитель ещё не добавил вас в свой класс. Задания можно делать уже сейчас — их увидят, когда вас добавят.')),
       h('div', { class: 'hero-stats' },
         h('div', null, h('b', null, subs.length), h('small', null, 'начато')),
         h('div', null, h('b', null, graded), h('small', null, 'проверено')),
@@ -281,6 +326,7 @@ async function testView(code) {
   const test = testByCode(code);
   if (!test) return go('/');
   const entries = buildTest(test);
+  await loadTeacher();
   let sub = (await store.getSubmission(user.id, code)) || { student_id: user.id, test: code, answers: {}, status: 'draft', review: {} };
   sub.answers ||= {};
   const mode = ['draft', 'returned'].includes(sub.status) ? 'do' : 'result';
@@ -334,15 +380,15 @@ async function testView(code) {
     statusChip(sub.status),
     sub.grade ? h('span', { class: 'grade-big' }, 'Оценка: ', h('b', null, sub.grade)) : null,
   ])];
-  if (sub.status === 'returned') parts.push(h('div', { class: 'notice warn' }, h('b', null, 'Работа возвращена на доработку. '), 'Исправьте задания с комментариями учителя и отправьте снова.'));
+  if (sub.status === 'returned') parts.push(h('div', { class: 'notice warn' }, h('b', null, 'Работа возвращена на доработку. '), `Исправьте задания с комментариями ${teacherWord('gen')} и отправьте снова.`));
   const overall = sub.review?._overall || {};
   if ((sub.teacher_comment || overall.voice) && ['graded', 'returned'].includes(sub.status)) {
     parts.push(h('div', { class: 'notice teacher' },
-      sub.teacher_comment ? [h('b', null, '💬 Учитель: '), sub.teacher_comment] : h('b', null, '💬 Учитель оставил голосовой комментарий:'),
+      sub.teacher_comment ? [h('b', null, `💬 ${teacherWord('nom', true)}: `), sub.teacher_comment] : h('b', null, `💬 ${teacherWord('nom', true)} оставил${teacherPast()} голосовой комментарий:`),
       overall.voice ? h('div', { class: 'tn-voice' }, audioPill(overall.voice)) : null));
   }
   if (sub.status === 'graded') parts.push(scoreSummary(scoreUnit(entries, sub.answers, sub.review || {}), sub.grade));
-  else if (sub.status === 'submitted') parts.push(h('div', { class: 'notice' }, '📨 Работа отправлена ', fmtDate(sub.submitted_at), '. Учитель скоро её проверит.'));
+  else if (sub.status === 'submitted') parts.push(h('div', { class: 'notice' }, '📨 Работа отправлена ', fmtDate(sub.submitted_at), `. ${teacherWord('nom', true)} скоро её проверит.`));
 
   pager = paged(test, entries, (e) => renderItem(e, ctx), mode === 'do' ? (e) => isAnswered(e.item, sub.answers[e.id]) : null);
   parts.push(pager.el);
@@ -352,12 +398,12 @@ async function testView(code) {
     const submitBtn = h('button', { class: 'btn primary', onclick: async () => {
       const sc = scoreUnit(entries, sub.answers);
       const missing = entries.length - sc.answered;
-      const msg = missing ? `Не выполнено заданий: ${missing}. Всё равно отправить учителю?` : 'Отправить работу учителю? После отправки изменить ответы будет нельзя.';
+      const msg = missing ? `Не выполнено заданий: ${missing}. Всё равно отправить ${teacherWord('dat')}?` : `Отправить работу ${teacherWord('dat')}? После отправки изменить ответы будет нельзя.`;
       if (!confirm(msg)) return;
       saver.cancel();
       pendingSave = null;
-      if (await doSave('submitted')) { toast('Работа отправлена учителю! 🎉', 'ok'); route(); }
-    } }, 'Отправить', h('span', { class: 'hide-sm' }, ' учителю'));
+      if (await doSave('submitted')) { toast(`Работа отправлена ${teacherWord('dat')}! 🎉`, 'ok'); route(); }
+    } }, 'Отправить', h('span', { class: 'hide-sm' }, ' ' + teacherWord('dat')));
     parts.push(h('div', { class: 'sticky-bar' }, h('div', { class: 'sb-left' }, progress, h('div', { class: 'sb-row' }, progressText, saveState)), submitBtn));
   }
   shell(...parts);
@@ -507,7 +553,7 @@ async function teacherHome() {
     freeList.replaceChildren(...(found.length
       ? found.map((s) => h('div', { class: 'pick-row' },
         h('span', { class: 'avatar' }, s.name.slice(0, 1).toUpperCase()), h('span', { class: 'pick-name' }, s.name),
-        h('button', { class: 'btn small soft', onclick: () => run(() => store.claimStudent(s.id), `${s.name} добавлен(а) в ваш класс.`) }, '+ Добавить')))
+        h('button', { class: 'btn small soft', onclick: () => run(() => store.claimStudent(s.id), `${s.name} добавлен${pastEnd(s.gender)} в ваш класс.`) }, '+ Добавить')))
       : [h('p', { class: 'muted small' }, free.length ? 'Никого не нашлось.' : 'Свободных учеников нет. Попросите учеников зарегистрироваться на сайте.')]));
   }
   drawFree();
@@ -518,7 +564,7 @@ async function teacherHome() {
         h('span', { class: 'avatar mine' }, s.name.slice(0, 1).toUpperCase()),
         h('a', { class: 'pick-name', href: '#/student/' + s.id }, s.name),
         h('button', { class: 'btn small ghost', title: 'Убрать из класса', onclick: () => {
-          if (confirm(`Убрать ${s.name} из вашего класса? Работы ученика сохранятся.`)) run(() => store.releaseStudent(s.id), `${s.name} убран(а) из класса.`);
+          if (confirm(`Убрать ${s.name} из вашего класса? Работы ${roleWord('student', s.gender, 'gen')} сохранятся.`)) run(() => store.releaseStudent(s.id), `${s.name} убран${pastEnd(s.gender)} из класса.`);
         } }, '✕'))))
       : h('p', { class: 'muted' }, 'У вас пока нет учеников.'),
     h('details', { class: 'add-students', open: !students.length },
@@ -527,7 +573,8 @@ async function teacherHome() {
       search, freeList));
 
   shell(
-    h('div', { class: 'hero' }, h('div', null, h('h1', null, 'Кабинет учителя'), h('p', { class: 'muted' }, 'Добавляйте учеников, проверяйте их работы, исправляйте ошибки и оставляйте комментарии.'))),
+    genderPrompt(),
+    h('div', { class: 'hero' }, h('div', null, h('h1', null, 'Кабинет ' + roleWord('teacher', user.gender, 'gen')), h('p', { class: 'muted' }, 'Добавляйте учеников, проверяйте их работы, исправляйте ошибки и оставляйте комментарии.'))),
     myStudents,
     h('section', { class: 'card' }, h('h2', null, 'На проверку ', h('span', { class: 'count' }, toCheck.length)), queue),
     h('section', { class: 'card' }, h('h2', null, 'Журнал'),
@@ -608,7 +655,7 @@ async function reviewView(subId) {
 
   // Re-render only the changed card so text inputs keep focus while typing.
   const ctx = {
-    mode: 'review', status: 'graded', answers: sub.answers, review,
+    mode: 'review', status: 'graded', answers: sub.answers, review, studentGender: sub.student_gender,
     onReview: (id, patch, typing) => {
       const r = { ...(review[id] || {}), ...patch };
       if (patch.points === undefined && 'points' in patch) delete r.points;
@@ -641,10 +688,10 @@ async function reviewView(subId) {
           if (await persist('graded', 'Оценка поставлена.')) go('/');
         } }, 'Поставить оценку'),
         h('button', { class: 'btn', onclick: async () => {
-          if (!confirm('Вернуть работу ученику на доработку? Ученик сможет изменить ответы.')) return;
+          if (!confirm(`Вернуть работу ${roleWord('student', sub.student_gender, 'dat')} на доработку? ${roleWord('student', sub.student_gender, 'nom', true)} сможет изменить ответы.`)) return;
           autosave.cancel();
           pendingSave = null;
-          if (await persist('returned', 'Работа возвращена ученику.')) go('/');
+          if (await persist('returned', `Работа возвращена ${roleWord('student', sub.student_gender, 'dat')}.`)) go('/');
         } }, 'Вернуть на доработку'),
         saveState)),
   );
