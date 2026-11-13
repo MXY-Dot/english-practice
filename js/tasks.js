@@ -40,15 +40,17 @@ export function renderItem(entry, ctx) {
         h('span', { class: 'tag' }, meta.label),
         h('div', { class: 'q' }, questionText(item, ans)))),
   );
-  if (item.say) card.append(audioBar(item.say, ctx.mode !== 'do'));
+  // Right/wrong marks, the audio transcript and the IPA give the answers away, so the
+  // student sees them only after the teacher has graded the work (not while it waits).
+  const reveal = ctx.mode === 'review' || (ctx.mode === 'result' && ctx.status === 'graded');
+  if (item.say) card.append(audioBar(item.say, reveal));
 
-  const body = RENDER[item.type]?.(item, ans, set, editable, id);
+  const body = RENDER[item.type]?.(item, ans, set, editable, id, reveal);
   card.append(h('div', { class: 'item-body' }, body ?? h('p', { class: 'muted' }, 'Неизвестный тип задания: ' + item.type)));
 
   // The student sees results only after the teacher has graded the work;
   // while it waits for checking, nothing is marked (no auto "wrong").
-  const showResult = ctx.mode === 'review' || (ctx.mode === 'result' && ctx.status === 'graded');
-  if (showResult) card.append(feedback(entry, ans, rev, ctx));
+  if (reveal) card.append(feedback(entry, ans, rev, ctx));
   else if (hasNote(rev)) card.append(teacherNote(rev));
   return card;
 }
@@ -364,8 +366,8 @@ function passage(title, text, extra) {
 // ---------- renderers per type ----------
 
 const RENDER = {
-  choice(item, ans, set, editable) {
-    const correct = !editable ? item.answer : null;
+  choice(item, ans, set, editable, id, reveal) {
+    const correct = reveal ? item.answer : null;
     return h('div', { class: 'options' + (item.options.some((o) => o.length > 28) ? ' stacked' : '') },
       item.options.map((opt, i) => {
         const cls = ['opt'];
@@ -430,7 +432,7 @@ const RENDER = {
       }, item.words[wi]))));
   },
 
-  match(item, ans = [], set, editable, id) {
+  match(item, ans = [], set, editable, id, reveal) {
     const vals = item.pairs.map((_, i) => ans[i] ?? null);
     const rights = seededShuffle(item.pairs.map((_, i) => i), id);
     return h('div', { class: 'match' }, item.pairs.map(([left], i) => {
@@ -444,13 +446,13 @@ const RENDER = {
       },
       h('option', { value: '' }, '— choose —'),
       rights.map((ri) => h('option', { value: String(ri), selected: vals[i] === ri }, item.pairs[ri][1])));
-      const mark = !editable && vals[i] != null ? (vals[i] === i ? 'right' : 'wrong') : '';
+      const mark = reveal && vals[i] != null ? (vals[i] === i ? 'right' : 'wrong') : '';
       return h('div', { class: 'match-row ' + mark },
         h('span', { class: 'letter' }, i + 1), h('span', { class: 'match-left' }, left), sel);
     }));
   },
 
-  tf(item, ans = [], set, editable) {
+  tf(item, ans = [], set, editable, id, reveal) {
     const vals = item.statements.map((_, i) => ans[i] ?? null);
     const box = h('div', { class: 'tf' });
     if (item.text) box.append(passage(item.title, item.text));
@@ -458,7 +460,7 @@ const RENDER = {
       const mk = (v, t) => {
         const cls = ['seg-btn'];
         if (vals[i] === v) cls.push('active');
-        if (!editable && vals[i] === v) cls.push(v === truth ? 'right' : 'wrong');
+        if (reveal && vals[i] === v) cls.push(v === truth ? 'right' : 'wrong');
         return h('button', { type: 'button', class: cls.join(' '), disabled: !editable,
           onclick: () => { vals[i] = v; set(vals.slice()); } }, t);
       };
@@ -468,23 +470,23 @@ const RENDER = {
     return box;
   },
 
-  stress(item, ans, set, editable) {
+  stress(item, ans, set, editable, id, reveal) {
     const word = item.word.join('');
     const ipa = h('span', { class: 'ipa' });
-    // The IPA shows the stress mark, so only reveal it after the work is submitted.
-    if (!editable) lookupWord(word).then((info) => info?.ipa && (ipa.textContent = info.ipa));
+    // The IPA shows the stress mark, so only reveal it once the work is graded.
+    if (reveal) lookupWord(word).then((info) => info?.ipa && (ipa.textContent = info.ipa));
     return h('div', { class: 'stress' },
       h('div', { class: 'syllables' }, item.word.map((syl, i) => {
         const cls = ['syl'];
         if (ans === i) cls.push('selected');
-        if (!editable && ans === i) cls.push(i === item.answer ? 'right' : 'wrong');
+        if (reveal && ans === i) cls.push(i === item.answer ? 'right' : 'wrong');
         return h('button', { type: 'button', class: cls.join(' '), disabled: !editable, onclick: () => set(i) },
           ans === i ? h('span', { class: 'dot' }, '●') : null, syl);
       })),
       sayBtn(word), ipa);
   },
 
-  reading(item, ans = [], set, editable) {
+  reading(item, ans = [], set, editable, id, reveal) {
     const vals = item.questions.map((_, i) => ans[i] ?? null);
     return h('div', { class: 'reading' },
       passage(item.title, item.text),
@@ -493,7 +495,7 @@ const RENDER = {
         h('div', { class: 'options' }, q.options.map((o, oi) => {
           const cls = ['opt'];
           if (vals[qi] === oi) cls.push('selected');
-          if (!editable && vals[qi] === oi) cls.push(oi === q.answer ? 'right' : 'wrong');
+          if (reveal && vals[qi] === oi) cls.push(oi === q.answer ? 'right' : 'wrong');
           return h('button', { type: 'button', class: cls.join(' '), disabled: !editable,
             onclick: () => { vals[qi] = oi; set(vals.slice()); } }, h('span', { class: 'letter' }, vals[qi] === oi ? '✓' : LETTERS[oi]), o);
         })))));

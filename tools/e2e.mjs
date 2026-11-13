@@ -264,6 +264,9 @@ try {
   check(sent.status === 'submitted' && sent.max_score === 50, 'work submitted (max 50)');
   check(await evaluate(`return $$('.item input:not([disabled]), .item textarea:not([disabled])').length === 0`), 'submitted work is read-only');
   check(await evaluate(`return !$$('.lessons .feedback').length && !$('.lessons').textContent.includes('Неверно')`), 'no marks are shown before the teacher checks');
+  // Nothing may give the answers away until the grade: no green/red, no transcript, no IPA.
+  check(await evaluate(`return !$$('.lessons .right, .lessons .wrong, .lessons .transcript').length && $$('.lessons .ipa').every((e) => !e.textContent)`),
+    'no right/wrong colours, transcripts or IPA before the teacher checks');
   check(await evaluate(`return document.body.textContent.includes('Учитель ещё не добавил')`) || true, 'student page loads without a teacher');
 
   console.log('Accounts');
