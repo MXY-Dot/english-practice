@@ -101,10 +101,15 @@ export function lookupWord(word) {
 
 export const isSingleWord = (t) => /^[a-z][a-z'-]*$/i.test(String(t).trim());
 
-// Plays a real human recording of the word when the dictionary has one,
-// otherwise the generated voice file, otherwise TTS.
+// Single words: our own clip first (one clear American voice for every word);
+// dictionary recordings (mixed accents and quality) only when no clip exists; then TTS.
 export async function playWord(word, { slow = false, onEnd } = {}) {
   stopSpeaking();
+  await manifestReady;
+  const own = clipUrl(String(word).trim().toLowerCase()) || clipUrl(String(word).trim());
+  if (own) {
+    try { await playFile(own, { slow, onEnd }); return; } catch { /* fall through */ }
+  }
   const info = isSingleWord(word) ? await lookupWord(word) : null;
   if (info?.audio) {
     try { await playFile(info.audio, { slow, onEnd }); return; } catch { /* fall through */ }

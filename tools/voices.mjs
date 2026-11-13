@@ -19,6 +19,7 @@ const OUT = join(ROOT, 'audio');
 const args = process.argv.slice(2);
 const LIMIT = args.includes('--limit') ? Number(args[args.indexOf('--limit') + 1]) : Infinity;
 const FORCE = args.includes('--force');
+const WORDS_ONLY = args.includes('--words'); // regenerate only single-word clips
 
 // American voices (Kokoro's best-rated ones). Two of each so dialogues with two women/men still differ.
 const VOICES = { female: ['af_heart', 'af_bella'], male: ['am_michael', 'am_fenrir'] };
@@ -79,7 +80,8 @@ const addSay = (say, context = '') => {
 };
 const addWord = (w) => {
   const key = audioKey(w);
-  if (!clips.has(key)) clips.set(key, { lines: [[WORD_VOICE, w]] });
+  // Capital + full stop gives a natural, complete pronunciation of a single word ("Tree.").
+  if (!clips.has(key)) clips.set(key, { word: true, lines: [[WORD_VOICE, w.charAt(0).toUpperCase() + w.slice(1) + '.']] });
 };
 
 for (const unit of UNITS) {
@@ -121,7 +123,9 @@ if (SAMPLES) {
 
 // ---------- generate ----------
 mkdirSync(OUT, { recursive: true });
-const todo = [...clips.entries()].filter(([key]) => FORCE || !existsSync(join(OUT, key + '.mp3'))).slice(0, LIMIT);
+const todo = [...clips.entries()]
+  .filter(([key, clip]) => (WORDS_ONLY ? clip.word : FORCE || !existsSync(join(OUT, key + '.mp3'))))
+  .slice(0, LIMIT);
 console.log(`Clips: ${clips.size} total, ${todo.length} to generate.`);
 
 if (todo.length) {
@@ -137,7 +141,7 @@ if (todo.length) {
       rate = audio.sampling_rate;
       parts.push(audio.audio, new Float32Array(Math.round(rate * 0.45))); // pause between lines
     }
-    writeFileSync(join(OUT, key + '.mp3'), toMp3(concat(parts), rate));
+    writeFileSync(join(OUT, key + '.mp3'), toMp3(tidy(concat(parts), rate), rate));
     done++;
     if (done % 20 === 0 || done === todo.length) console.log(`  ${done}/${todo.length}`);
   }
@@ -156,7 +160,7 @@ function concat(arrays) {
 }
 
 function toMp3(samples, sampleRate) {
-  const enc = new Mp3Encoder(1, sampleRate, 48);
+  const enc = new Mp3Encoder(1, sampleRate, 64);
   const pcm = new Int16Array(samples.length);
   for (let i = 0; i < samples.length; i++) pcm[i] = Math.max(-1, Math.min(1, samples[i])) * 0x7fff;
   const chunks = [];
@@ -167,4 +171,18 @@ function toMp3(samples, sampleRate) {
   const end = enc.flush();
   if (end.length) chunks.push(Buffer.from(end));
   return Buffer.concat(chunks);
+}
+
+// Cut silence at both ends (keep a short natural pause), then fade in/out a few ms
+// so clips start and stop without clicks.
+function tidy(samples, rate) {
+  const thr = 0.008;
+  let s = 0, e = samples.length - 1;
+  while (s < samples.length && Math.abs(samples[s]) < thr) s++;
+  while (e > s && Math.abs(samples[e]) < thr) e--;
+  const pad = Math.round(rate * 0.08);
+  const out = samples.slice(Math.max(0, s - pad), Math.min(samples.length, e + pad * 2));
+  const fade = Math.min(Math.round(rate * 0.012), out.length >> 2);
+  for (let i = 0; i < fade; i++) { const k = i / fade; out[i] *= k; out[out.length - 1 - i] *= k; }
+  return out;
 }

@@ -352,7 +352,17 @@ try {
     const first = clipUrl(says[0]);
     const ok = first ? (await fetch(first)).ok : false;
     return { files: m.files.length, says: says.length, covered, ok };`);
-  check(voiceInfo.covered === voiceInfo.says && voiceInfo.ok, `natural voice files for all listening items (${voiceInfo.covered}/${voiceInfo.says}, ${voiceInfo.files} files)`);
+  // Single words must play our own clip (one consistent voice), not a dictionary recording.
+  const wordSrc = await evaluate(`
+    const audio = await import('./js/audio.js');
+    const played = [];
+    const OrigAudio = window.Audio;
+    window.Audio = function (src) { played.push(src); const a = new OrigAudio(src); a.play = () => Promise.resolve(); return a; };
+    for (const w of ['tree', 'see', 'up', 'bird']) await audio.playWord(w);
+    window.Audio = OrigAudio;
+    return played;`);
+  check(wordSrc.length === 4 && wordSrc.every((s) => String(s).startsWith('audio/')), 'single words play our own voice clips (' + wordSrc.map((s) => String(s).split('/').pop()).join(', ') + ')');
+  check(voiceInfo.covered === voiceInfo.says && voiceInfo.ok,`natural voice files for all listening items (${voiceInfo.covered}/${voiceInfo.says}, ${voiceInfo.files} files)`);
 
   console.log('Themes');
   check(await evaluate(`return ['winter','spring','summer','autumn'].includes(document.documentElement.dataset.season)`), 'auto season is applied');
