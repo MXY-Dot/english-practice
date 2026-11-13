@@ -343,6 +343,15 @@ function reviewControls(id, rev = {}, auto, ctx) {
   return wrap;
 }
 
+// A gap keeps its normal width and grows when the typed text does not fit (CSS max-width: 100%).
+function fitGap(el, baseCh) {
+  el.style.width = baseCh + 'ch';
+  // scrollWidth leaves out the right padding in some browsers, so check again after growing.
+  for (let i = 0; i < 3 && el.scrollWidth > el.clientWidth; i++) {
+    el.style.width = el.offsetWidth + (el.scrollWidth - el.clientWidth) + 12 + 'px';
+  }
+}
+
 const fmtPts = (p) => (Math.round(p * 100) / 100).toString().replace('.', ',');
 
 function passage(title, text, extra) {
@@ -381,11 +390,14 @@ const RENDER = {
         if (i < arr.length - 1) {
           const k = gi++;
           const width = Math.max(5, ...[].concat(item.answer[k]).map((a) => String(a).length)) + 2;
-          p.append(h('input', {
+          const inp = h('input', {
             class: 'gap-inp', value: vals[k], disabled: !editable, autocomplete: 'off', spellcheck: false,
             autocapitalize: 'off', placeholder: '…', style: { width: width + 'ch' }, enterKeyHint: 'next', onkeydown: nextOnEnter,
-            oninput: (e) => { vals[k] = e.target.value; set(vals.slice()); },
-          }));
+            oninput: (e) => { vals[k] = e.target.value; fitGap(e.target, width); set(vals.slice()); },
+          });
+          // Fit after the card is on the page (scrollWidth is 0 before that).
+          if (vals[k]) requestAnimationFrame(() => fitGap(inp, width));
+          p.append(inp);
         }
       });
       return p;

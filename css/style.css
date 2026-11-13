@@ -458,7 +458,7 @@ a.test-row:hover { background: color-mix(in srgb, var(--uc) 9%, var(--paper)); t
 .gap-inp {
   border: 0; border-radius: 10px; background: color-mix(in srgb, var(--sc) 8%, var(--paper));
   box-shadow: inset 0 -2.5px 0 color-mix(in srgb, var(--sc) 60%, var(--paper));
-  padding: 4px 8px; margin: 0 4px; outline: none; font-weight: 800; text-align: center; max-width: 100%; color: var(--sc);
+  padding: 4px 8px; margin: 0 4px; outline: none; font-weight: 800; text-align: center; max-width: calc(100% - 8px); color: var(--sc);
   transition: box-shadow .15s, background .15s;
 }
 .gap-inp:focus { background: var(--paper); box-shadow: inset 0 0 0 2px var(--sc), 0 0 0 4px color-mix(in srgb, var(--sc) 14%, transparent); }
